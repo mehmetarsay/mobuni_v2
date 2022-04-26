@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:mobuni_v2/core/constants/app/private_constants.dart';
 
 class ApiConstants {
-  static String baseUrl = kReleaseMode ? 'api-develop-mobuni.azurewebsites.net/' : 'api-develop-mobuni.azurewebsites.net/';
+  static String baseUrl = kReleaseMode
+      ? PrivateConstants.productionUrl
+      : PrivateConstants.developmentUrl;
 }

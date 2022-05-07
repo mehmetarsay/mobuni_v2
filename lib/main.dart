@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobuni_v2/app/app.router.dart';
 import 'package:provider/provider.dart';
 import '/feature/views/splash/view/splash_view.dart';
 import '/core/initialize/provider_manager.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       title: 'MobUni',
       debugShowCheckedModeBanner: false,
       home: SplashView(),
+      onGenerateRoute: StackedRouter().onGenerateRoute,
     );
   }
 }

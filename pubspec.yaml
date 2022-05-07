@@ -31,15 +31,17 @@ dependencies:
     sdk: flutter
   json_serializable: ^6.1.5
   json_annotation: ^4.4.0
-  build_runner: ^2.1.8
+
   dio: ^4.0.6
   provider: ^6.0.2
   hive: ^2.1.0
-  stacked: ^2.3.3
+  stacked: ^2.3.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.1.10
+  stacked_generator:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

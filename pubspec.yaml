@@ -36,6 +36,8 @@ dependencies:
   provider: ^6.0.2
   hive: ^2.1.0
   stacked: ^2.3.6
+  stacked_services: ^0.8.22
+  flutter_secure_storage: ^5.0.2
 
 dev_dependencies:
   flutter_test:

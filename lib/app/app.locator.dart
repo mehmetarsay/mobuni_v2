@@ -10,6 +10,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
 import '../core/network/network_manager.dart';
+import '../feature/services/hive/hive_services.dart';
 
 final locator = StackedLocator.instance;
 
@@ -20,4 +21,5 @@ void setupLocator({String? environment, EnvironmentFilter? environmentFilter}) {
 
 // Register dependencies
   locator.registerLazySingleton(() => NetworkManager());
+  locator.registerLazySingleton(() => HiveService());
 }

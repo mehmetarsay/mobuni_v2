@@ -1,12 +1,32 @@
+
+import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
+import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/app/app.router.dart';
+import 'package:mobuni_v2/feature/services/hive/hive_services.dart';
+import 'package:mobuni_v2/feature/services/hive/storage_encryption.dart';
+import 'package:mobuni_v2/feature/views/home/home_view.dart';
 import 'package:provider/provider.dart';
-import '/feature/views/splash/view/splash_view.dart';
+import 'package:stacked/stacked_annotations.dart';
+import 'package:stacked_services/stacked_services.dart';
 import '/core/initialize/provider_manager.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator(environment: Environment.dev);
+
+
+ ///hive initialize and encryption
+  final hiveService = locator<HiveService>();
+  var encryptionKey = await StorageEncryption().getEncryptionKey();
+  await hiveService.init(encryptionKey);
+
+
   await SystemChrome.setPreferredOrientations(
     [
       DeviceOrientation.portraitUp,
@@ -26,8 +46,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MobUni',
       debugShowCheckedModeBanner: false,
-      home: SplashView(),
+      home: HomeView(),
       onGenerateRoute: StackedRouter().onGenerateRoute,
+      navigatorKey: StackedService.navigatorKey,
     );
   }
 }
+

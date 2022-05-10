@@ -13,7 +13,7 @@ import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
 import 'package:mobuni_v2/core/model/theme/theme_model.dart';
 import 'package:mobuni_v2/feature/services/hive/hive_services.dart';
 import 'package:mobuni_v2/feature/services/hive/storage_encryption.dart';
-import 'package:mobuni_v2/feature/views/home/home_view.dart';
+import 'package:mobuni_v2/feature/views/home/bottomnav_view.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -27,8 +27,6 @@ void main() async {
   final hiveService = locator<HiveService>();
   var encryptionKey = await StorageEncryption().getEncryptionKey();
   await hiveService.init(encryptionKey);
-
-
   await SystemChrome.setPreferredOrientations(
     [
       DeviceOrientation.portraitUp,
@@ -52,7 +50,6 @@ class MyApp extends StatelessWidget {
             theme: ThemeModel().lightMode,
             darkTheme: ThemeModel().darkMode,
             themeMode: mode.darkTheme == true ? ThemeMode.dark : ThemeMode.light,
-            home: HomeView(),
             onGenerateRoute: StackedRouter().onGenerateRoute,
             navigatorKey: StackedService.navigatorKey,
           );

@@ -1,12 +1,14 @@
 import 'dart:developer';
 
+import 'package:stacked/stacked_annotations.dart';
+
 import '/core/base/models/base_model/base_model.dart';
 import '/core/base/models/base_response/base_response.dart';
 import '/core/constants/enum/req_types.dart';
 import 'package:dio/dio.dart';
 
+@LazySingleton()
 class NetworkManager {
-  static NetworkManager? instance = NetworkManager.init();
   NetworkManager() {
     NetworkManager.init();
   }

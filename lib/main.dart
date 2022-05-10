@@ -9,6 +9,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/app/app.router.dart';
+import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
+import 'package:mobuni_v2/core/model/theme/theme_model.dart';
 import 'package:mobuni_v2/feature/services/hive/hive_services.dart';
 import 'package:mobuni_v2/feature/services/hive/storage_encryption.dart';
 import 'package:mobuni_v2/feature/views/home/home_view.dart';
@@ -33,22 +35,29 @@ void main() async {
       DeviceOrientation.portraitDown,
     ],
   );
-  runApp(MultiProvider(
-    child: MyApp(),
-    providers: ProviderManager.instance!.dependItems,
-  ));
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MobUni',
-      debugShowCheckedModeBanner: false,
-      home: HomeView(),
-      onGenerateRoute: StackedRouter().onGenerateRoute,
-      navigatorKey: StackedService.navigatorKey,
+    return ChangeNotifierProvider(
+      create: (_)=>ThemeNotifier(),
+      child: Consumer<ThemeNotifier>(
+        builder: (_,mode,child) {
+          return MaterialApp(
+            title: 'MobUni',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeModel().lightMode,
+            darkTheme: ThemeModel().darkMode,
+            themeMode: mode.darkTheme == true ? ThemeMode.dark : ThemeMode.light,
+            home: HomeView(),
+            onGenerateRoute: StackedRouter().onGenerateRoute,
+            navigatorKey: StackedService.navigatorKey,
+          );
+        }
+      ),
     );
   }
 }

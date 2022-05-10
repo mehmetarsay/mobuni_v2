@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
+import 'package:stacked/stacked.dart';
 import '/core/components/text/custom_text.dart';
 
 class SplashView extends StatelessWidget {
@@ -6,10 +8,16 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: CustomText('MobUni'),
+    return ViewModelBuilder<SplashViewModel>.reactive(
+      onModelReady: (model)=>model.init(),
+      builder: (context, model, child) => Scaffold(
+        body: Scaffold(
+          body: Center(
+            child: Text('Mobuni'),
+          ),
+        ),
       ),
+      viewModelBuilder: () => SplashViewModel(),
     );
   }
 }

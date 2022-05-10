@@ -10,12 +10,12 @@ class StorageEncryption {
 
    Future<Uint8List> getEncryptionKey() async {
      final secureStorage = const FlutterSecureStorage();
-     var containsEncryptionKey = await secureStorage.containsKey(key: 'key');
-     if (!containsEncryptionKey) {
+     var containsEncryptionKey = await secureStorage.containsKey(key: 'key1');
+     if (containsEncryptionKey) {
        var key = Hive.generateSecureKey();
-       await secureStorage.write(key: 'key', value: base64UrlEncode(key));
+       await secureStorage.write(key: 'key1', value: base64UrlEncode(key));
      }
-     var a  = await secureStorage.read(key: 'key');
+     var a  = await secureStorage.read(key: 'key1');
      return  base64Url.decode(a!);
 
   }

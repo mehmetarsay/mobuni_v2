@@ -20,6 +20,7 @@ class _BottomNavViewState extends State<BottomNavView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BottomNavViewModel>.reactive(
       builder: (context, viewModel, child) => Scaffold(
+        appBar: AppBar(title: Text('AppBar', style: TextStyle(color: Colors.red),)),
         body: getViewForIndex(viewModel.currentTabIndex),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 6,

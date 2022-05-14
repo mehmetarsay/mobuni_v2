@@ -34,6 +34,9 @@ class ThemeModel {
       ),
     ),
     textTheme: TextTheme(
+      headline1: TextStyle(
+        fontWeight: FontWeight.bold,fontSize: 14,color:Colors.black
+      ),
       subtitle1: TextStyle(
           fontWeight: FontWeight.w500, fontSize: 16, color: Colors.grey[900]),
     ),
@@ -79,6 +82,9 @@ class ThemeModel {
         ),
       ),
       textTheme: TextTheme(
+        headline1: TextStyle(
+            fontWeight: FontWeight.bold,fontSize: 14,color:Colors.white
+        ),
         subtitle1: TextStyle(
             fontWeight: FontWeight.w500, fontSize: 16, color: Colors.white),
       ),

@@ -12,6 +12,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../core/network/network_manager.dart';
 import '../feature/services/hive/hive_services.dart';
+import '../feature/services/question/question_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -23,6 +24,7 @@ void setupLocator({String? environment, EnvironmentFilter? environmentFilter}) {
 // Register dependencies
   locator.registerLazySingleton(() => NetworkManager());
   locator.registerLazySingleton(() => HiveService());
+  locator.registerLazySingleton(() => QuestionService());
   locator
       .registerLazySingleton(() => NavigationService(), registerFor: {"dev"});
 }

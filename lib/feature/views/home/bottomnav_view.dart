@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/feature/views/home/bottomnav_view_model.dart';
-import 'package:mobuni_v2/feature/views/tab1/tab1_view.dart';
+import 'package:mobuni_v2/feature/views/question/question_view.dart';
 import 'package:mobuni_v2/feature/views/tab2/tab2_view.dart';
 import 'package:mobuni_v2/feature/views/tab3/tab3_view.dart';
 import 'package:stacked/stacked.dart';
@@ -51,7 +51,7 @@ class _BottomNavViewState extends State<BottomNavView> {
     if (!_viewCache.containsKey(index)) {
       switch (index) {
         case 0:
-          _viewCache[index] = Tab1View();
+          _viewCache[index] = QuestionView();
           break;
         case 1:
           _viewCache[index] = Tab2View();

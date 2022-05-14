@@ -9,7 +9,7 @@ class SplashViewModel extends BaseViewModel {
 
   init(){
     Future.delayed(Duration(seconds: 3)).then((value) {
-      navigationService.pushNamedAndRemoveUntil(Routes.homeView);
+      navigationService.pushNamedAndRemoveUntil(Routes.loginView);
     });
   }
 }

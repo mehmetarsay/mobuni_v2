@@ -74,13 +74,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             autofocus: false,
             obscureText: passwordVisible,
             readOnly: widget.readOnly!,
-            // inputFormatters: [if(widget.isNumber!) Helper.NumberFormatter],
             onChanged: (value) {
               setState(() {
                 isEmpty = value.isEmpty;
               });
             },
             decoration: InputDecoration(
+              fillColor: Colors.white,
+
               errorStyle: TextStyle(fontSize: 16),
               // fillColor: widget.fillColor ??
               //     (isEmpty
@@ -135,7 +136,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               //       )
               //     : null,
               isDense: true,
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: EdgeInsets.all(5),
             ),
             keyboardType: widget.textInputType ?? TextInputType.text,
             controller: widget.controller,

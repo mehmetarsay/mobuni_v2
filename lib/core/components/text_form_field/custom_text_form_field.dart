@@ -28,7 +28,7 @@ class CustomTextFormField extends StatefulWidget {
     this.onTap,
     this.readOnly = false,
     this.fillColor,
-    this.insideHint = false,
+    this.insideHint = true,
     this.focusNode,
     this.validator,
     this.isNumber = false,
@@ -51,7 +51,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       isEmpty = false;
     }
     // KeyboardVisibilityController().onChange.listen((event) {
-    //   // print(event);
+    // print(event);
     //   if (!event) {
     //     focus.unfocus();
     //   }
@@ -62,6 +62,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 12),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -90,6 +91,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               hintText: widget.insideHint! ? widget.hintText ?? '' : '',
               // hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant),
               border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey.shade100),
                 borderRadius: BorderRadius.all(
                   Radius.circular(8.0),
                 ),
@@ -100,7 +102,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   Radius.circular(8.0),
                 ),
                 borderSide: BorderSide(
-                    // color: themeData.colorScheme.primary.withOpacity(0.3),
+                    color: Colors.grey,
                     ),
               ),
               errorBorder: OutlineInputBorder(
@@ -136,7 +138,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               //       )
               //     : null,
               isDense: true,
-              contentPadding: EdgeInsets.all(5),
+              // contentPadding: EdgeInsets.all(10),
             ),
             keyboardType: widget.textInputType ?? TextInputType.text,
             controller: widget.controller,

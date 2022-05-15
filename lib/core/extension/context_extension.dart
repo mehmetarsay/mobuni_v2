@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/app/app.locator.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 extension ContextExtension on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
@@ -60,22 +62,24 @@ extension ThemeExtension on BuildContext {
 }
 
 extension NavigateExtension on BuildContext {
-  Future navigate(Widget widget) async =>
-      Navigator.push(this, MaterialPageRoute(builder: (context) => widget));
+  get navigationService => locator<NavigationService>();
+  
+  // Future navigate(Widget widget) async =>
+  //     Navigator.push(this, MaterialPageRoute(builder: (context) => widget));
 
-  Future navigateReplacement(Widget widget) async => Navigator.pushReplacement(
-      this, MaterialPageRoute(builder: (context) => widget));
+  // Future navigateReplacement(Widget widget) async => Navigator.pushReplacement(
+  //     this, MaterialPageRoute(builder: (context) => widget));
 
-  Future navigateRemoveUntil(Widget widget) async =>
-      Navigator.pushAndRemoveUntil(
-          this, MaterialPageRoute(builder: (context) => widget), (r) => false);
+  // Future navigateRemoveUntil(Widget widget) async =>
+  //     Navigator.pushAndRemoveUntil(
+  //         this, MaterialPageRoute(builder: (context) => widget), (r) => false);
 
-  Future navigateNamed(String routeName) async =>
-      Navigator.pushNamed(this, routeName);
+  // Future navigateNamed(String routeName) async =>
+  //     Navigator.pushNamed(this, routeName);
 
-  Future navigateReplacementName(String routeName) async =>
-      Navigator.pushReplacementNamed(this, routeName);
+  // Future navigateReplacementName(String routeName) async =>
+  //     Navigator.pushReplacementNamed(this, routeName);
 
-  Future navigateNamedAndRemoveUntil(String routeName) async =>
-      Navigator.pushNamedAndRemoveUntil(this, routeName, (r) => false);
+  // Future navigateNamedAndRemoveUntil(String routeName) async =>
+  //     Navigator.pushNamedAndRemoveUntil(this, routeName, (r) => false);
 }

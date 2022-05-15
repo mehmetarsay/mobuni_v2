@@ -11,6 +11,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
 import '../feature/views/auth/login/login_view.dart';
+import '../feature/views/auth/register/register_view.dart';
 import '../feature/views/home/bottomnav_view.dart';
 import '../feature/views/splash/view/splash_view.dart';
 
@@ -18,10 +19,12 @@ class Routes {
   static const String splashView = '/';
   static const String bottomNavView = '/bottom-nav-view';
   static const String loginView = '/login-view';
+  static const String registerView = '/register-view';
   static const all = <String>{
     splashView,
     bottomNavView,
     loginView,
+    registerView,
   };
 }
 
@@ -32,6 +35,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.splashView, page: SplashView),
     RouteDef(Routes.bottomNavView, page: BottomNavView),
     RouteDef(Routes.loginView, page: LoginView),
+    RouteDef(Routes.registerView, page: RegisterView),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -51,6 +55,12 @@ class StackedRouter extends RouterBase {
     LoginView: (data) {
       return MaterialPageRoute<dynamic>(
         builder: (context) => const LoginView(),
+        settings: data,
+      );
+    },
+    RegisterView: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => const RegisterView(),
         settings: data,
       );
     },

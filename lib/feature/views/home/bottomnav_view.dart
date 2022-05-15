@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
+import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/feature/views/home/bottomnav_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view.dart';
 import 'package:mobuni_v2/feature/views/tab2/tab2_view.dart';
 import 'package:mobuni_v2/feature/views/tab3/tab3_view.dart';
-import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 class BottomNavView extends StatefulWidget {
@@ -21,18 +20,7 @@ class _BottomNavViewState extends State<BottomNavView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BottomNavViewModel>.reactive(
       builder: (context, viewModel, child) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'AppBar',
-            style: TextStyle(color: Colors.red),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.star,),
-            onPressed: (){
-              context.read<ThemeNotifier>().toggleTheme();
-            },
-          ),
-        ),
+        appBar: CustomAppBar(title: 'MobUni'),
         body: getViewForIndex(viewModel.currentTabIndex),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 6,

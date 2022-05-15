@@ -10,7 +10,7 @@ const CustomBackButton({ Key? key }) : super(key: key);
       onTap: () => context.navigationService.back(),
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xffE6ECF3),
+          color: context.colors.primary.withOpacity(0.25),
           borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10))
         ),
         child: Icon(Icons.arrow_back_ios, color: Color(0xff40668B)),

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/core/extension/context_extension.dart';
 // import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import '/core/components/text/custom_text.dart';
 
@@ -81,7 +82,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               });
             },
             decoration: InputDecoration(
-              fillColor: Colors.white,
+              fillColor: context.theme.primaryColorLight,
 
               errorStyle: TextStyle(fontSize: 16),
               // fillColor: widget.fillColor ??
@@ -89,9 +90,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               //         ? themeData.colorScheme.primary.withAlpha(80)
               //         : themeData.colorScheme.onSecondary),
               hintText: widget.insideHint! ? widget.hintText ?? '' : '',
-              // hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant),
+              hintStyle: TextStyle(color: context.theme.secondaryHeaderColor),
               border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade100),
+                borderSide: BorderSide(),
                 borderRadius: BorderRadius.all(
                   Radius.circular(8.0),
                 ),
@@ -102,7 +103,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   Radius.circular(8.0),
                 ),
                 borderSide: BorderSide(
-                    color: Colors.grey,
+                    color: context.theme.secondaryHeaderColor,
                     ),
               ),
               errorBorder: OutlineInputBorder(

@@ -1,11 +1,11 @@
-
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
 import 'package:mobuni_v2/feature/views/home/bottomnav_view_model.dart';
-import 'package:mobuni_v2/feature/views/tab1/tab1_view.dart';
+import 'package:mobuni_v2/feature/views/question/questions_view.dart';
 import 'package:mobuni_v2/feature/views/tab2/tab2_view.dart';
 import 'package:mobuni_v2/feature/views/tab3/tab3_view.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
-
 
 class BottomNavView extends StatefulWidget {
   const BottomNavView({Key? key}) : super(key: key);
@@ -16,15 +16,26 @@ class BottomNavView extends StatefulWidget {
 
 class _BottomNavViewState extends State<BottomNavView> {
   final Map<int, Widget> _viewCache = Map<int, Widget>();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<BottomNavViewModel>.reactive(
       builder: (context, viewModel, child) => Scaffold(
-        appBar: AppBar(title: Text('AppBar', style: TextStyle(color: Colors.red),)),
+        appBar: AppBar(
+          title: Text(
+            'AppBar',
+            style: TextStyle(color: Colors.red),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.star,),
+            onPressed: (){
+              context.read<ThemeNotifier>().toggleTheme();
+            },
+          ),
+        ),
         body: getViewForIndex(viewModel.currentTabIndex),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 6,
-          backgroundColor: Colors.white,
           currentIndex: viewModel.currentTabIndex,
           onTap: viewModel.setTabIndex,
           items: [
@@ -51,7 +62,7 @@ class _BottomNavViewState extends State<BottomNavView> {
     if (!_viewCache.containsKey(index)) {
       switch (index) {
         case 0:
-          _viewCache[index] = Tab1View();
+          _viewCache[index] = QuestionsView();
           break;
         case 1:
           _viewCache[index] = Tab2View();

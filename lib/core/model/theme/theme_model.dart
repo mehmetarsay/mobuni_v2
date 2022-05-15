@@ -9,7 +9,7 @@ class ThemeModel {
     fontFamily: 'Manrope',
     scaffoldBackgroundColor: Colors.grey[100],
     brightness: Brightness.light,
-    primaryColorDark: Colors.grey[800],
+    primaryColorDark: Colors.black,
     primaryColorLight: Colors.white,
     secondaryHeaderColor: Colors.grey[600],
     shadowColor: Colors.grey[200],
@@ -34,6 +34,9 @@ class ThemeModel {
       ),
     ),
     textTheme: TextTheme(
+      headline1: TextStyle(
+        fontWeight: FontWeight.bold,fontSize: 14,color:Colors.black
+      ),
       subtitle1: TextStyle(
           fontWeight: FontWeight.w500, fontSize: 16, color: Colors.grey[900]),
     ),
@@ -54,7 +57,7 @@ class ThemeModel {
       fontFamily: 'Manrope',
       scaffoldBackgroundColor: Color(0xff303030),
       brightness: Brightness.dark,
-      primaryColorDark: Colors.grey[300],
+      primaryColorDark: Colors.white,
       primaryColorLight: Colors.grey[800],
       secondaryHeaderColor: Colors.grey[400],
       shadowColor: Color(0xff282828),
@@ -79,6 +82,9 @@ class ThemeModel {
         ),
       ),
       textTheme: TextTheme(
+        headline1: TextStyle(
+            fontWeight: FontWeight.bold,fontSize: 14,color:Colors.white
+        ),
         subtitle1: TextStyle(
             fontWeight: FontWeight.w500, fontSize: 16, color: Colors.white),
       ),

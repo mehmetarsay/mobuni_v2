@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
@@ -56,10 +57,35 @@ class QuestionSingleView extends StatelessWidget {
                           ),
                         ),
                       ),
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              LikeButton(
+                                onTap: vm.onLikeButtonTapped,
+                                size: 20,
+                                circleColor: CircleColor(start: Theme.of(context).primaryColor, end: Theme.of(context).primaryColor),
+                                bubblesColor: BubblesColor(dotPrimaryColor: Theme.of(context).primaryColor, dotSecondaryColor: Colors.grey),
+                              ),
+                              SizedBox(width: 4,),
+                              if(questionModel.likeCount>0)CustomText('${questionModel.likeCount} beğenme',color: Colors.grey)
+                            ],
+                          ),
+                          SizedBox(width: 10,),
+                          Row(
+                            children: [
+                              Icon(Icons.messenger_outlined,size: 20,color: Colors.grey,),
+                              SizedBox(width: 4,),
+                              if(questionModel.commentCount>0)CustomText('${questionModel.commentCount} cevap',color: Colors.grey)
+                            ],
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
-
               ],
             )
       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -18,7 +19,6 @@ class QuestionService {
         createdTime: DateTime.now(),
         universityId: 2,
         text: 'Mobuni için ikinci faz çalışmaları başlamıştır',
-        image: 'https://ogimgs.apkcombo.org/eyJsb2dvIjoiaHR0cHM6Ly9wbGF5LWxoLmdvb2dsZXVzZXJjb250ZW50LmNvbS9oM3gtOFAwSnpZNFRScTNVUDVCSDBRQnp6V2ZPUkVVSkhHSHZZeXB0WDJXNUdQWmxoTHNXVi1HQUZ5MGE4V3l4T0c3bj1zMjAwIiwidGl0bGUiOiAi2KrYrdmF2YrZhCBNb2JVbmkgQVBLIn0=/thmyl-mobuni-apk'
     ),
     QuestionModel(
         id: 1,
@@ -34,7 +34,6 @@ class QuestionService {
         createdTime: DateTime.now(),
         universityId: 2,
         text: 'Mobuni için ikinci faz çalışmaları başlamıştır',
-        image: 'https://ogimgs.apkcombo.org/eyJsb2dvIjoiaHR0cHM6Ly9wbGF5LWxoLmdvb2dsZXVzZXJjb250ZW50LmNvbS9oM3gtOFAwSnpZNFRScTNVUDVCSDBRQnp6V2ZPUkVVSkhHSHZZeXB0WDJXNUdQWmxoTHNXVi1HQUZ5MGE4V3l4T0c3bj1zMjAwIiwidGl0bGUiOiAi2KrYrdmF2YrZhCBNb2JVbmkgQVBLIn0=/thmyl-mobuni-apk'
     ),
     QuestionModel(
         id: 1,
@@ -246,4 +245,7 @@ class QuestionService {
     ),
 
   ];
+
+
+  ScrollController scrollController = ScrollController();
 }

@@ -7,12 +7,14 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../feature/services/question/question_service.dart';
+import '../feature/views/question/subviews/question_add/question_add_view.dart';
 
 @StackedApp(
   routes: [
     MaterialRoute(page: SplashView, initial: true),
     MaterialRoute(page: BottomNavView),
     MaterialRoute(page: LoginView),
+    MaterialRoute(page: QuestionAddView),
   ],
   dependencies: [
     LazySingleton(classType: NetworkManager),

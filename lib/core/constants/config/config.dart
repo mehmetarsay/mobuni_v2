@@ -15,7 +15,9 @@ class Config {
   static const String twitterUrl = '';
 
   //app theme color
-  final Color appColor = Colors.deepPurpleAccent;
+  final Color appColor = Color(0xff204F83);
+  final Color appColor1 = Color(0xffE6ECF3);
+  final Color appColor2 = Color(0xffBCBCBC);
 
 
 

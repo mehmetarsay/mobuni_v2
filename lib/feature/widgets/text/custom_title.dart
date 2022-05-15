@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
+import 'package:mobuni_v2/core/extension/context_extension.dart';
 
 class CustomTitle extends StatelessWidget {
   final String? title;
@@ -16,7 +17,7 @@ class CustomTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomText(
       title ?? 'Title',
-      color: Color(0xff204F83),
+      color: context.colors.primary,
       fontSize: size ?? 24,
       fontWeight: FontWeight.bold,
       shadows: Constants.titleShadows,

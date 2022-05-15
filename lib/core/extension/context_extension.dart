@@ -62,7 +62,7 @@ extension ThemeExtension on BuildContext {
 }
 
 extension NavigateExtension on BuildContext {
-  get navigationService => locator<NavigationService>();
+  NavigationService get navigationService => locator<NavigationService>();
   
   // Future navigate(Widget widget) async =>
   //     Navigator.push(this, MaterialPageRoute(builder: (context) => widget));

@@ -4,6 +4,7 @@ import 'package:mobuni_v2/core/components/button/custom_button.dart';
 import 'package:mobuni_v2/core/components/dropdown/custom_dropdown.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/components/text_form_field/custom_text_form_field.dart';
+import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/widgets/text/custom_title.dart';
 
 class RegisterView extends StatefulWidget {
@@ -20,7 +21,6 @@ var isHighSchool = false;
   Widget build(BuildContext context){
     return Scaffold(
       appBar: CustomAppBar(),
-      backgroundColor: Colors.white,
       body: Column(
         children: [
           Padding(
@@ -53,8 +53,8 @@ var isHighSchool = false;
           ),
           CheckboxListTile(
             title: CustomText(
-              'Lise Öğrencisiyim', 
-              color: Color(0xff204F83), 
+              'I am high school student', 
+              color: context.colors.primary, 
               fontWeight: FontWeight.bold, 
               fontSize: 16,
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
+import 'package:mobuni_v2/core/extension/context_extension.dart';
 
 class CustomDropdown extends StatelessWidget {
   const CustomDropdown({
@@ -16,7 +17,8 @@ class CustomDropdown extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
+          color: context.theme.primaryColorLight,
+          border: Border.all(color: context.theme.secondaryHeaderColor),
           borderRadius: BorderRadius.all(
                   Radius.circular(8.0),
                 )
@@ -28,7 +30,7 @@ class CustomDropdown extends StatelessWidget {
             // value: viewModel.selectedIndex ?? null,
             hint: CustomText(
               labelText.toUpperCase(),
-              color: Color(0xff204F83),
+              color: context.colors.primary,
               fontWeight: FontWeight.bold,
             ),
             items: items.map(

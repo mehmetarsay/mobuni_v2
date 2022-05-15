@@ -10,10 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
+import '../feature/models/questions/question_model.dart';
 import '../feature/views/auth/login/login_view.dart';
 import '../feature/views/auth/register/register_view.dart';
 import '../feature/views/home/bottomnav_view.dart';
 import '../feature/views/question/subviews/question_add/question_add_view.dart';
+import '../feature/views/question/subviews/question_comments/question_comments_view.dart';
 import '../feature/views/splash/view/splash_view.dart';
 
 class Routes {
@@ -22,12 +24,14 @@ class Routes {
   static const String loginView = '/login-view';
   static const String registerView = '/register-view';
   static const String questionAddView = '/question-add-view';
+  static const String questionCommentsView = '/question-comments-view';
   static const all = <String>{
     splashView,
     bottomNavView,
     loginView,
     registerView,
     questionAddView,
+    questionCommentsView,
   };
 }
 
@@ -40,6 +44,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.loginView, page: LoginView),
     RouteDef(Routes.registerView, page: RegisterView),
     RouteDef(Routes.questionAddView, page: QuestionAddView),
+    RouteDef(Routes.questionCommentsView, page: QuestionCommentsView),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -74,5 +79,26 @@ class StackedRouter extends RouterBase {
         settings: data,
       );
     },
+    QuestionCommentsView: (data) {
+      var args = data.getArgs<QuestionCommentsViewArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => QuestionCommentsView(
+          key: args.key,
+          questionModel: args.questionModel,
+        ),
+        settings: data,
+      );
+    },
   };
+}
+
+/// ************************************************************************
+/// Arguments holder classes
+/// *************************************************************************
+
+/// QuestionCommentsView arguments holder class
+class QuestionCommentsViewArguments {
+  final Key? key;
+  final QuestionModel questionModel;
+  QuestionCommentsViewArguments({this.key, required this.questionModel});
 }

@@ -12,8 +12,8 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../core/network/network_manager.dart';
 import '../feature/services/hive/hive_services.dart';
-import '../feature/services/question/question_service.dart';
 import '../feature/views/auth/service/auth_service.dart';
+import '../feature/views/question/service/question_service.dart';
 
 final locator = StackedLocator.instance;
 

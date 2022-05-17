@@ -7,17 +7,18 @@ part of 'comment_model.dart';
 // **************************************************************************
 
 CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
-      id: json['id'] as int,
-      userId: json['userId'] as int,
-      tableId: json['tableId'] as int,
-      tableType: json['tableType'] as int,
-      content: json['content'] as String,
+      id: json['id'] as int?,
+      userId: json['userId'] as int?,
+      tableId: json['tableId'] as int?,
+      tableType: json['tableType'] as int?,
+      content: json['content'] as String?,
       createdTime: json['createdTime'] == null
           ? null
           : DateTime.parse(json['createdTime'] as String),
       updateTime: json['updateTime'] == null
           ? null
           : DateTime.parse(json['updateTime'] as String),
+      likeCount: json['likeCount'] as int?,
     );
 
 Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
@@ -29,4 +30,5 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
       'content': instance.content,
       'createdTime': instance.createdTime?.toIso8601String(),
       'updateTime': instance.updateTime?.toIso8601String(),
+      'likeCount': instance.likeCount,
     };

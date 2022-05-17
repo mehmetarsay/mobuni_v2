@@ -124,20 +124,20 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               //   widget.iconData ?? MdiIcons.nullIcon,
               //   size: 26,
               // ),
-              // suffixIcon: widget.isPassword!
-              //     ? InkWell(
-              //         onTap: () {
-              //           setState(() {
-              //             passwordVisible = !passwordVisible;
-              //           });
-              //         },
-              //         child: Icon(
-              //           passwordVisible
-              //               ? MdiIcons.eyeOutline
-              //               : MdiIcons.eyeOffOutline,
-              //         ),
-              //       )
-              //     : null,
+              suffixIcon: widget.isPassword!
+                  ? InkWell(
+                      onTap: () {
+                        setState(() {
+                          passwordVisible = !passwordVisible;
+                        });
+                      },
+                      child: Icon(
+                        passwordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility
+                      ),
+                    )
+                  : null,
               isDense: true,
               // contentPadding: EdgeInsets.all(10),
             ),

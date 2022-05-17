@@ -5,4 +5,7 @@ class ApiConstants {
   static String baseUrl = kReleaseMode
       ? PrivateConstants.productionUrl
       : PrivateConstants.developmentUrl;
+  
+  static String login = 'User/Login';
+  static String register = 'User/Register';
 }

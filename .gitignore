@@ -47,3 +47,5 @@ app.*.map.json
 
 # Flutter Project File
 lib/core/constants/app/private_constants.dart
+pubspec.lock
+ios/Podfile.lock

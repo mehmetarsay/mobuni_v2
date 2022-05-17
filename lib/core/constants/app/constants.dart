@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
+  static String authToken = 'authToken';
   static get titleShadows => [
         Shadow(
           offset: Offset(0, 4.0),

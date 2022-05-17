@@ -1,5 +1,10 @@
 import 'dart:developer';
 
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobuni_v2/app/app.locator.dart';
+import 'package:mobuni_v2/core/constants/app/api_constants.dart';
+import 'package:mobuni_v2/core/constants/app/constants.dart';
+import 'package:mobuni_v2/feature/services/hive/hive_services.dart';
 import 'package:stacked/stacked_annotations.dart';
 
 import '/core/base/models/base_model/base_model.dart';
@@ -9,21 +14,30 @@ import 'package:dio/dio.dart';
 
 @LazySingleton()
 class NetworkManager {
-  NetworkManager() {
-    NetworkManager.init();
-  }
-  late final Dio dio;
+  // NetworkManager() {
+  //   NetworkManager.init();
+  // }
 
-  NetworkManager.init() {
-    dio = Dio(BaseOptions(
-      // baseUrl: ApiConstants.baseUrl,
-      contentType: 'application/json',
-      headers: {
-        // 'Authorization': 'Bearer ${SharedPreferencesService.getToken()}',
-        "Accept": "application/json",
-      },
-    ));
-  }
+  final Dio dio = Dio(BaseOptions(
+    baseUrl: ApiConstants.baseUrl,
+    contentType: 'application/json',
+    headers: {
+      'Authorization':
+          'Bearer ${locator<HiveService>().hive.get(Constants.authToken)}',
+      "Accept": "application/json",
+    },
+  ));
+
+  // NetworkManager.init() {
+  //   dio = Dio(BaseOptions(
+  //     baseUrl: ApiConstants.baseUrl,
+  //     contentType: 'application/json',
+  //     headers: {
+  //       // 'Authorization': 'Bearer ${SharedPreferencesService.getToken()}',
+  //       "Accept": "application/json",
+  //     },
+  //   ));
+  // }
 
   Future request<T extends BaseModel>(
       {required ReqTypes method,
@@ -52,22 +66,31 @@ class NetworkManager {
           return model.fromJson(response.data);
         }
       } else {
-        log('$path ${method.name} FAILED | Status Code: ${response.statusCode} | Status Message: ${response.statusMessage}');
-        return null;
+        return _showError('$path ${method.name}', 'Status Code: ${response.statusCode} | Status Message: ${response.statusMessage}', response.data['message']);
+        // log('$path ${method.name} FAILED | Status Code: ${response.statusCode} | Status Message: ${response.statusMessage}');
+        // return null;
       }
     } on DioError catch (dioError) {
+      return _showError('$path ${method.name}', 'Error: ${dioError.error} | Status Message: ${dioError.message}', dioError.response!.data['message']);
       // return _showError(dioError);
-      log('$path ${method.name} FAILED | Error: ${dioError.error} | Status Message: ${dioError.message}');
+      // log('$path ${method.name} FAILED | Error: ${dioError.error} | Status Message: ${dioError.message}');
     } catch (error) {
-      log('$path ${method.name} ERROR | Error : $error');
-      return null;
+      return _showError('$path ${method.name}', error, null);
+      // log('$path ${method.name} ERROR | Error : $error');
+      // return null;
     }
+  }
+
+  void _showError(String errorPoint, dynamic error, String? responseMessage) {
+    log('$errorPoint FAILED | Status Code: $error');
+    if (responseMessage != null) Fluttertoast.showToast(msg: responseMessage);
+    return null;
   }
 
   dynamic _baseResponseConverter<T extends BaseModel>(dynamic data,
       {T? model}) {
     final baseResponse = BaseResponse.fromJson(data);
-    if (baseResponse.status!) {
+    if (baseResponse.success!) {
       if (baseResponse.data != null) {
         if (baseResponse.data is List) {
           var list = <T>[];

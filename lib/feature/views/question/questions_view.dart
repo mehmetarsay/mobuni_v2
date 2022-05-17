@@ -29,17 +29,18 @@ class QuestionsView extends StatelessWidget {
           body: RefreshIndicator(
             key: vm.indicator,
             onRefresh: () async{
+              vm.getData();
               return Future.delayed(Duration(seconds: 2));
             },
-            child: Stack(
+            child: vm.initialised?Stack(
               children: [
                 ListView.separated(
                   key: PageStorageKey<String>('questionController'),
-                  controller: vm.questionService.scrollController,
+                  controller: vm.scrollController,
                   padding: const EdgeInsets.all(8),
-                  itemCount: vm.questionService.questions!.length,
+                  itemCount: vm.questions!.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return QuestionSingleView( questionModel: vm.questionService.questions!.elementAt(index),onTapNavigate: true,);
+                    return QuestionSingleView( questionModel: vm.questions!.elementAt(index),onTapNavigate: true,);
                   },
                   separatorBuilder: (BuildContext context, int index) => const Divider(),
                 ),
@@ -66,7 +67,11 @@ class QuestionsView extends StatelessWidget {
                 ),
 
               ],
-            ),
+            ):
+            Center(
+              child: CircularProgressIndicator(),
+            )
+            ,
           ),
         ),
       ),

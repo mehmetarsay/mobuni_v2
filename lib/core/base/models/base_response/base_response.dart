@@ -4,12 +4,18 @@ part 'base_response.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class BaseResponse extends BaseModel {
-  BaseResponse({this.status, this.data, this.message});
+  BaseResponse({
+    this.success,
+    this.data,
+    this.message,
+    this.statusCode,
+  });
 
   @JsonKey(defaultValue: false)
-  bool? status;
+  bool? success;
   Object? data;
   String? message;
+  int? statusCode;
 
   factory BaseResponse.fromJson(Map<String, dynamic> json) =>
       _$BaseResponseFromJson(json);

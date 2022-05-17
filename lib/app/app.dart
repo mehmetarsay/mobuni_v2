@@ -4,12 +4,11 @@ import 'package:mobuni_v2/feature/views/auth/login/login_view.dart';
 import 'package:mobuni_v2/feature/views/auth/register/register_view.dart';
 import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
 import 'package:mobuni_v2/feature/views/home/bottomnav_view.dart';
+import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
 import 'package:mobuni_v2/feature/views/question/subviews/question_comments/question_comments_view.dart';
 import 'package:mobuni_v2/feature/views/splash/view/splash_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
-
-import '../feature/services/question/question_service.dart';
 import '../feature/views/question/subviews/question_add/question_add_view.dart';
 
 @StackedApp(

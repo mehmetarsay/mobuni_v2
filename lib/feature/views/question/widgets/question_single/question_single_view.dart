@@ -22,79 +22,84 @@ class QuestionSingleView extends StatelessWidget {
         if(onTapNavigate)
           context.navigationService.navigateToView(QuestionCommentsView(questionModel: questionModel),);
       },
-      child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 30.0,
-                backgroundImage:
-                NetworkImage("https://pbs.twimg.com/profile_images/1486436054169268238/-jsp8MLq_400x400.jpg"),
-                backgroundColor: Colors.transparent,
-              ),
-              SizedBox(width: 6,),
-              Container(
-                width: context.width/1.3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Mehmet Arsay',style: Theme.of(context).textTheme.headline1,),
-                    Text(questionModel.text),
-                    if(questionModel.image!=null)Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: ZoomOverlay(
-                        minScale: 1, // Optional
-                        maxScale: 3.0, //
-                        animationDuration: Duration(seconds: 1),// Optional
-                        twoTouchOnly: true, // Defaults to false
-                        child: CachedNetworkImage(
-                          imageUrl: questionModel.image!,
-                          imageBuilder: (context, imageProvider) => Container(
-                            height:context.height/5 ,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.cover),
+      child: Padding(
+        padding: const EdgeInsets.only(top:5),
+        child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 25.0,
+                  backgroundImage:
+                  questionModel.user!.image==null||questionModel.user!.image==''?Image.asset('assets/empty_profile.png').image
+                  :NetworkImage(questionModel.user!.image!,),
+                  backgroundColor: Colors.transparent,
+                ),
+                SizedBox(width: 6,),
+                Container(
+                  width: context.width/1.3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(questionModel.user!.userName!,style: Theme.of(context).textTheme.headline1,),
+                      Text(questionModel.text!),
+                      if(questionModel.image!=null)Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: ZoomOverlay(
+                          minScale: 1, // Optional
+                          maxScale: 3.0, //
+                          animationDuration: Duration(seconds: 1),// Optional
+                          twoTouchOnly: true, // Defaults to false
+                          child: CachedNetworkImage(
+                            imageUrl: questionModel.image!,
+                            imageBuilder: (context, imageProvider) => Container(
+                              height:context.height/5 ,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                              ),
                             ),
+                            placeholder: (context, url) => CircularProgressIndicator(),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
                           ),
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            LikeButton(
-                              onTap: onLikeButtonTapped,
-                              size: 20,
-                              circleColor: CircleColor(start: Theme.of(context).primaryColor, end: Theme.of(context).primaryColor),
-                              bubblesColor: BubblesColor(dotPrimaryColor: Theme.of(context).primaryColor, dotSecondaryColor: Colors.grey),
-                            ),
-                            SizedBox(width: 4,),
-                            if(questionModel.likeCount>0)CustomText('${questionModel.likeCount} beğenme',color: Colors.grey)
-                          ],
-                        ),
-                        SizedBox(width: 10,),
-                        Row(
-                          children: [
-                            Icon(Icons.messenger_outlined,size: 20,color: Colors.grey,),
-                            SizedBox(width: 4,),
-                            if(questionModel.commentCount>0)CustomText('${questionModel.commentCount} cevap',color: Colors.grey)
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
+                      SizedBox(height: 25,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              LikeButton(
+                                onTap: onLikeButtonTapped,
+                                size: 20,
+                                circleColor: CircleColor(start: Theme.of(context).primaryColor, end: Theme.of(context).primaryColor),
+                                bubblesColor: BubblesColor(dotPrimaryColor: Theme.of(context).primaryColor, dotSecondaryColor: Colors.grey),
+                              ),
+                              SizedBox(width: 4,),
+                              if(questionModel.likeCount>0)CustomText('${questionModel.likeCount} beğenme',color: Colors.grey)
+                            ],
+                          ),
+                          SizedBox(width: 10,),
+                          Row(
+                            children: [
+                              Icon(Icons.messenger_outlined,size: 20,color: Colors.grey,),
+                              SizedBox(width: 4,),
+                              if(questionModel.commentCount>0)CustomText('${questionModel.commentCount} cevap',color: Colors.grey)
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 25,),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          )
+              ],
+            )
+        ),
       ),
     );
 

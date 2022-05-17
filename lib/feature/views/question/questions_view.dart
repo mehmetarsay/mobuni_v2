@@ -39,7 +39,7 @@ class QuestionsView extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   itemCount: vm.questionService.questions!.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return QuestionSingleView( questionModel: vm.questionService.questions!.elementAt(index),);
+                    return QuestionSingleView( questionModel: vm.questionService.questions!.elementAt(index),onTapNavigate: true,);
                   },
                   separatorBuilder: (BuildContext context, int index) => const Divider(),
                 ),

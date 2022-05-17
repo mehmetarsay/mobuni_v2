@@ -33,7 +33,7 @@ class QuestionModel extends BaseModel{
   @override
   fromJson(Map<String, dynamic> json) {
     // TODO: implement fromJson
-    return JsonSerializable.fromJson(json);
+    return _$QuestionModelFromJson(json);
   }
 
   @override

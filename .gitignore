@@ -49,3 +49,6 @@ app.*.map.json
 lib/core/constants/app/private_constants.dart
 pubspec.lock
 ios/Podfile.lock
+android/app/google-services.json
+ios/firebase_app_id_file.json
+lib/firebase_options.dart

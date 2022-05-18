@@ -1,4 +1,3 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
 import 'package:stacked/stacked.dart';
@@ -19,7 +18,7 @@ class QuestionsViewModel extends BaseViewModel {
 
   init()async{
     newQuestionCalculate();
-   await questionService.questionGetByUniversityId(universityId: 1);
+    await questionService.questionGetByUniversityId(universityId: 1);
     notifyListeners();
   }
 

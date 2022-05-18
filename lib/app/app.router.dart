@@ -14,6 +14,7 @@ import '../feature/models/questions/question_model.dart';
 import '../feature/views/auth/login/login_view.dart';
 import '../feature/views/auth/register/register_view.dart';
 import '../feature/views/home/bottomnav_view.dart';
+import '../feature/views/profile/subviews/profile_redesign/profile_redesign_view.dart';
 import '../feature/views/question/subviews/question_add/question_add_view.dart';
 import '../feature/views/question/subviews/question_comments/question_comments_view.dart';
 import '../feature/views/splash/view/splash_view.dart';
@@ -25,6 +26,7 @@ class Routes {
   static const String registerView = '/register-view';
   static const String questionAddView = '/question-add-view';
   static const String questionCommentsView = '/question-comments-view';
+  static const String profileRedesignView = '/profile-redesign-view';
   static const all = <String>{
     splashView,
     bottomNavView,
@@ -32,6 +34,7 @@ class Routes {
     registerView,
     questionAddView,
     questionCommentsView,
+    profileRedesignView,
   };
 }
 
@@ -45,6 +48,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.registerView, page: RegisterView),
     RouteDef(Routes.questionAddView, page: QuestionAddView),
     RouteDef(Routes.questionCommentsView, page: QuestionCommentsView),
+    RouteDef(Routes.profileRedesignView, page: ProfileRedesignView),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -86,6 +90,12 @@ class StackedRouter extends RouterBase {
           key: args.key,
           questionModel: args.questionModel,
         ),
+        settings: data,
+      );
+    },
+    ProfileRedesignView: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => const ProfileRedesignView(),
         settings: data,
       );
     },

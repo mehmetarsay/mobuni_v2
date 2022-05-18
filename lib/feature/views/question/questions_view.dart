@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
-import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
-import 'package:mobuni_v2/core/model/theme/theme_model.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
-import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -16,10 +13,10 @@ class QuestionsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<QuestionsViewModel>.reactive(
       onModelReady: (vm)=>vm.init(),
+      viewModelBuilder: () => QuestionsViewModel(),
       builder: (context, vm, child) => Scaffold(
         body: Scaffold(
           floatingActionButton: FloatingActionButton(
-
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () {
               NavigationService().navigateTo(Routes.questionAddView);
@@ -64,13 +61,12 @@ class QuestionsView extends StatelessWidget {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
         ),
       ),
-      viewModelBuilder: () => QuestionsViewModel(),
+      
     );
   }
 }

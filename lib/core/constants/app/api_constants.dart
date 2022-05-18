@@ -11,5 +11,5 @@ class ApiConstants {
   static String questionGetByUniversityId = 'Question/GetByUniversityId';
   static String universityAll = 'University/GetAll';
   static String departmentAll = 'Department/ALL';
-  
+  static String question = 'Question';
 }

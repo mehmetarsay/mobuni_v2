@@ -1,10 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
-import 'package:mobuni_v2/core/components/text_form_field/custom_text_form_field.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/views/question/subviews/question_add/question_add_view_model.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -39,14 +34,17 @@ class QuestionAddView extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30)), color: Theme.of(context).primaryColor),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CustomText(
-                            'Soru Sor',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
+                      InkWell(
+                        onTap: () => vm.shareQuestion(context),
+                        child: Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30)), color: Theme.of(context).primaryColor),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CustomText(
+                              'Soru Sor',
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),

@@ -25,4 +25,12 @@ class QuestionService {
     );
   }
 
+  Future questionPost(dynamic data) => _networkManager!.request(
+      method: ReqTypes.post,
+      path: ApiConstants.question,
+      model: QuestionModel(),
+      data: data,
+      isFile: true,
+    );
+
 }

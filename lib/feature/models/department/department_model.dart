@@ -13,6 +13,9 @@ class DeaprtmentModel extends BaseModel {
   int? id;
   String? name;
 
+  String get dropdownText => name ?? '';
+  int? get dropdownValue => id;
+
   factory DeaprtmentModel.fromJson(Map<String, dynamic> json) =>
       _$DeaprtmentModelFromJson(json);
 

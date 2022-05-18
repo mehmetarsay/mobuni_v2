@@ -2,14 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 
-class CustomDropdown extends StatelessWidget {
+class CustomDropdown extends StatefulWidget {
   const CustomDropdown({
     Key? key,
     required this.labelText,
     required this.items,
+    this.isLoading = true,
+    this.voidCallback,
   }) : super(key: key);
+
   final String labelText;
   final List items;
+  final isLoading;
+  final Function(Object? value)? voidCallback;
+
+  @override
+  State<CustomDropdown> createState() => _CustomDropdownState();
+}
+
+class _CustomDropdownState extends State<CustomDropdown> {
+  var index;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -19,38 +31,43 @@ class CustomDropdown extends StatelessWidget {
         decoration: BoxDecoration(
           color: context.theme.primaryColorLight,
           border: Border.all(color: context.theme.secondaryHeaderColor),
-          borderRadius: BorderRadius.all(
-                  Radius.circular(8.0),
-                )
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton(
-            isExpanded: true,
-            isDense: true,
-            // value: viewModel.selectedIndex ?? null,
-            hint: CustomText(
-              labelText.toUpperCase(),
-              color: context.colors.primary,
-              fontWeight: FontWeight.bold,
-            ),
-            items: items.map(
-              (item) {
-                return DropdownMenuItem<int>(
-                  child: CustomText(item),
-                  value: 0,
-                );
-              },
-            ).toList(),
-            onChanged: (val) {
-              // viewModel.selectOrder(int.parse(val.toString()));
-              // viewModel.sortPortfolios();
-            },
-            icon: Icon(
-              Icons.keyboard_arrow_up_sharp,
-              size: 26,
-            ),
-          ),
-        ),
+        child: widget.isLoading
+            ? Center(child: CircularProgressIndicator())
+            : DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  isExpanded: true,
+                  isDense: true,
+                  value: index,
+                  hint: CustomText(
+                    widget.labelText.toUpperCase(),
+                    color: context.colors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  items: widget.items.map(
+                    (item) {
+                      return DropdownMenuItem<int>(
+                        child: CustomText(
+                          item.dropdownText,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        value: item.dropdownValue,
+                      );
+                    },
+                  ).toList(),
+                  onChanged: (val) {
+                    print(val);
+                    if (widget.voidCallback != null) {
+                      widget.voidCallback!.call(val);
+                    }
+                    setState(() {
+                      index = val;
+                    });
+                  },
+                  icon: Icon(Icons.keyboard_arrow_up_sharp, size: 26),
+                ),
+              ),
       ),
     );
   }

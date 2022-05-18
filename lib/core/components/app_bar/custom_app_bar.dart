@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/app/app.locator.dart';
+import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/button/custom_back_button.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
+import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({
@@ -32,13 +36,24 @@ class _AuthAppBarState extends State<CustomAppBar> {
               color: context.colors.primary,
             )
           : null,
-      leading: Navigator.canPop(context) ? Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: CustomBackButton(),
-      ) : null,
+      leading: Navigator.canPop(context)
+          ? Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10), 
+              child: CustomBackButton(),
+            )
+          : null,
       elevation: 0,
       automaticallyImplyLeading: false,
       actions: [
+        Visibility(
+          visible: true,
+          child: IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                locator<AuthService>().deleteToken;
+                locator<NavigationService>().pushNamedAndRemoveUntil(Routes.loginView);
+              }),
+        ),
         IconButton(
           icon: Icon(
             context.watch<ThemeNotifier>().darkTheme!

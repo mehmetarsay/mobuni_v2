@@ -23,6 +23,9 @@ class UniversityModel extends BaseModel {
   String? foundationYear;
   String? description;
 
+  String get dropdownText => name ?? '';
+  int? get dropdownValue => id;
+
   factory UniversityModel.fromJson(Map<String, dynamic> json) =>
       _$UniversityModelFromJson(json);
 

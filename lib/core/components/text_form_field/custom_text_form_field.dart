@@ -40,13 +40,14 @@ class CustomTextFormField extends StatefulWidget {
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  bool passwordVisible = false;
+  late bool passwordVisible;
   late FocusNode focus;
   bool isEmpty = true;
 
   @override
   void initState() {
     super.initState();
+    passwordVisible = widget.isPassword! ? true : false;
     focus = widget.focusNode ?? FocusNode();
     if (widget.controller!.text.isNotEmpty) {
       isEmpty = false;
@@ -148,7 +149,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             focusNode: focus,
             onTap: widget.onTap,
             validator: widget.validator,
-            autovalidateMode: AutovalidateMode.always,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             //textCapitalization: TextCapitalization.sentences,
           ),
         ],

@@ -9,10 +9,13 @@ import 'package:stacked/stacked_annotations.dart';
 @LazySingleton()
 class QuestionService {
 
+  List<QuestionModel>? questions = [];
+  ScrollController scrollController = ScrollController();
+
   final NetworkManager? _networkManager = locator<NetworkManager>();
 
   Future questionGetByUniversityId({required int universityId}) async {
-   return await _networkManager!.request(
+   questions =  await _networkManager!.request(
       method: ReqTypes.get,
       path: ApiConstants.questionGetByUniversityId,
       queryParameters:{

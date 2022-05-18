@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
@@ -27,6 +28,13 @@ class NetworkManager {
       "Accept": "application/json",
     },
   ));
+  
+  void setHeaderToken(String authToken) {
+    dio.options.headers = {
+      'Authorization': 'Bearer $authToken',
+      "Accept": "application/json",
+    };
+  }
 
   // NetworkManager.init() {
   //   dio = Dio(BaseOptions(
@@ -47,6 +55,7 @@ class NetworkManager {
       Map<String, dynamic>? queryParameters,
       bool isBaseResponse = true,
       isFile = false}) async {
+    var time = DateTime.now();
     data ??= {};
     try {
       var body = data is Map || data is FormData ? data : data.toJson();
@@ -58,7 +67,10 @@ class NetworkManager {
             contentType: isFile ? "multipart/form-data" : "application/json",
             method: method.name,
           ));
-      // print(response.realUri.toString());
+
+      if (kDebugMode) {
+        print('$path -> ${(DateTime.now().difference(time)).inMilliseconds} ms');
+      }
       if (response.statusCode == 200) {
         if (isBaseResponse) {
           return _baseResponseConverter(response.data, model: model);
@@ -66,23 +78,34 @@ class NetworkManager {
           return model.fromJson(response.data);
         }
       } else {
-        return _showError('$path ${method.name}', 'Status Code: ${response.statusCode} | Status Message: ${response.statusMessage}', response.data['message']);
-        // log('$path ${method.name} FAILED | Status Code: ${response.statusCode} | Status Message: ${response.statusMessage}');
-        // return null;
+        return _showError(
+          '$path ${method.name}',
+          'Status Code: ${response.statusCode} | Status Message: ${response.statusMessage}',
+          response.data['message'],
+          time,
+        );
       }
     } on DioError catch (dioError) {
-      return _showError('$path ${method.name}', 'Error: ${dioError.error} | Status Message: ${dioError.message}', dioError.response!.data['message']);
-      // return _showError(dioError);
-      // log('$path ${method.name} FAILED | Error: ${dioError.error} | Status Message: ${dioError.message}');
+      return _showError(
+        '$path ${method.name}',
+        'Error: ${dioError.error} | Status Message: ${dioError.message}',
+        dioError.response!.data['message'],
+        time,
+      );
     } catch (error) {
-      return _showError('$path ${method.name}', error, null);
-      // log('$path ${method.name} ERROR | Error : $error');
-      // return null;
+      return _showError(
+        '$path ${method.name}',
+        error,
+        null,
+        time,
+      );
     }
   }
 
-  void _showError(String errorPoint, dynamic error, String? responseMessage) {
+  void _showError(String errorPoint, dynamic error, String? responseMessage,
+      DateTime time) {
     log('$errorPoint FAILED | Status Code: $error');
+    print('$errorPoint -> ${(DateTime.now().difference(time)).inMilliseconds} ms');
     if (responseMessage != null) Fluttertoast.showToast(msg: responseMessage);
     return null;
   }
@@ -107,39 +130,4 @@ class NetworkManager {
       return null;
     }
   }
-
-  // ErrorMessage _showError(DioError dioError) {
-  //   Object errorModel;
-  //   dynamic data = dioError.response!.data;
-  //   switch (dioError.response!.statusCode) {
-  //     case 400:
-  //       errorModel = BadRequestErrorModel.fromJson(data);
-  //       break;
-  //     case 401:
-  //       errorModel = UnauthorizedErrorModel.fromJson(data);
-  //       break;
-  //     case 403:
-  //       errorModel = UnauthorizedErrorModel.fromJson(data); //Forbidden
-  //       break;
-  //     case 405:
-  //       errorModel = UnauthorizedErrorModel.fromJson(data); //Wrong Method
-  //       break;
-  //     case 419:
-  //       errorModel = CustomErrorModel.fromJson(data);
-  //       break;
-  //     case 422:
-  //       errorModel = ValidationErrorModel.fromJson(data);
-  //       break;
-  //     case 500:
-  //       errorModel = ServerErrorModel.fromJson(data);
-  //       break;
-  //     default:
-  //       errorModel = CustomErrorModel.fromJson(data);
-  //   }
-  //   return ErrorMessage(
-  //     errorModel: errorModel,
-  //     statusCode: dioError.response!.statusCode,
-  //   );
-  // }
-
 }

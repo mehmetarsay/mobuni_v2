@@ -28,6 +28,13 @@ class NetworkManager {
       "Accept": "application/json",
     },
   ));
+  
+  void setHeaderToken(String authToken) {
+    dio.options.headers = {
+      'Authorization': 'Bearer $authToken',
+      "Accept": "application/json",
+    };
+  }
 
   // NetworkManager.init() {
   //   dio = Dio(BaseOptions(
@@ -123,39 +130,4 @@ class NetworkManager {
       return null;
     }
   }
-
-  // ErrorMessage _showError(DioError dioError) {
-  //   Object errorModel;
-  //   dynamic data = dioError.response!.data;
-  //   switch (dioError.response!.statusCode) {
-  //     case 400:
-  //       errorModel = BadRequestErrorModel.fromJson(data);
-  //       break;
-  //     case 401:
-  //       errorModel = UnauthorizedErrorModel.fromJson(data);
-  //       break;
-  //     case 403:
-  //       errorModel = UnauthorizedErrorModel.fromJson(data); //Forbidden
-  //       break;
-  //     case 405:
-  //       errorModel = UnauthorizedErrorModel.fromJson(data); //Wrong Method
-  //       break;
-  //     case 419:
-  //       errorModel = CustomErrorModel.fromJson(data);
-  //       break;
-  //     case 422:
-  //       errorModel = ValidationErrorModel.fromJson(data);
-  //       break;
-  //     case 500:
-  //       errorModel = ServerErrorModel.fromJson(data);
-  //       break;
-  //     default:
-  //       errorModel = CustomErrorModel.fromJson(data);
-  //   }
-  //   return ErrorMessage(
-  //     errorModel: errorModel,
-  //     statusCode: dioError.response!.statusCode,
-  //   );
-  // }
-
 }

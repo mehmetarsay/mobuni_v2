@@ -9,7 +9,7 @@ class ThemeModel {
       fontFamily: 'Manrope',
       scaffoldBackgroundColor: Colors.white,
       brightness: Brightness.light,
-      primaryColorDark: Colors.black,
+      primaryColorDark:Colors.grey[800],
       primaryColorLight: Colors.white,
       secondaryHeaderColor: Colors.grey[600],
       shadowColor: Colors.grey[200],

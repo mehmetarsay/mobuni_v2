@@ -12,6 +12,7 @@ class CustomText extends StatefulWidget {
   final TextOverflow? textOverflow;
   final bool lineThrough;
   final List<Shadow>? shadows;
+  final TextStyle? style;
 
   const CustomText(
     this.data, {
@@ -23,6 +24,7 @@ class CustomText extends StatefulWidget {
     this.textOverflow = TextOverflow.visible,
     this.lineThrough = false,
     this.shadows,
+        this.style
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _CustomTextState extends State<CustomText> {
     return Text(
       widget.data ?? '',
       textAlign: widget.textAlign ?? TextAlign.start,
-      style: TextStyle(
+      style:widget.style==null? TextStyle(
           fontSize: widget.fontSize ?? 12,
           fontWeight: widget.fontWeight ?? FontWeight.normal,
           color: widget.color ?? context.colors.primary,
@@ -43,7 +45,7 @@ class _CustomTextState extends State<CustomText> {
               ? TextDecoration.lineThrough
               : TextDecoration.none,
           decorationThickness: 2,
-          shadows: widget.shadows),
+          shadows: widget.shadows):widget.style,
       overflow: widget.textOverflow,
     );
   }

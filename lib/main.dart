@@ -10,12 +10,9 @@ import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
 import 'package:mobuni_v2/core/model/theme/theme_model.dart';
 import 'package:mobuni_v2/feature/services/hive/hive_services.dart';
 import 'package:mobuni_v2/feature/services/hive/storage_encryption.dart';
-import 'package:mobuni_v2/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:firebase_core/firebase_core.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,16 +28,11 @@ void main() async {
       DeviceOrientation.portraitDown,
     ],
   );
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

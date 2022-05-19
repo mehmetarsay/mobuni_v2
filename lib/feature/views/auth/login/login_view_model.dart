@@ -27,7 +27,7 @@ class LoginViewModel extends BaseViewModel {
     print(data);
     var response = await _authService.login(data);
     if(response is LoginModel){
-      _authService.saveToken(response.accessToken);
+      _authService.saveToken(response.accessToken, response.user!);
       context.navigationService.pushNamedAndRemoveUntil(Routes.bottomNavView);
     }
     context.loaderOverlay.hide();

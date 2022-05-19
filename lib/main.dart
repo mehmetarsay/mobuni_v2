@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -6,20 +5,22 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
-import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
-import 'package:mobuni_v2/core/model/theme/theme_model.dart';
-import 'package:mobuni_v2/feature/services/hive/hive_services.dart';
-import 'package:mobuni_v2/feature/services/hive/storage_encryption.dart';
+import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
+import 'package:mobuni_v2/core/manager/hive/storage_encryption.dart';
+import 'package:mobuni_v2/core/theme/theme_model.dart';
+import 'package:mobuni_v2/core/theme/theme_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator(environment: Environment.dev);
 
   ///hive initialize and encryption
-  final hiveService = locator<HiveService>();
+  final hiveService = locator<HiveManager>();
   var encryptionKey = await StorageEncryption().getEncryptionKey();
   await hiveService.init(encryptionKey);
   await SystemChrome.setPreferredOrientations(

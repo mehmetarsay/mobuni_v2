@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
-import 'package:mobuni_v2/feature/services/hive/hive_services.dart';
+import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
 import 'package:stacked/stacked_annotations.dart';
 
 import '/core/base/models/base_model/base_model.dart';
@@ -24,7 +24,7 @@ class NetworkManager {
     contentType: 'application/json',
     headers: {
       'Authorization':
-          'Bearer ${locator<HiveService>().hive.get(Constants.authToken)}',
+          'Bearer ${locator<HiveManager>().hive.get(Constants.authToken)}',
       "Accept": "application/json",
     },
   ));

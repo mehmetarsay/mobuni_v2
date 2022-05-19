@@ -7,7 +7,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:hive/hive.dart';
 
 @LazySingleton()
-class HiveService{
+class HiveManager{
   late Box _hive;
 
   Box get hive => _hive;

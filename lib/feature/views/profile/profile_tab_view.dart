@@ -6,7 +6,6 @@ import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_tab_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
-import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
 import 'package:stacked/stacked.dart';
 
 class ProfileTabView extends StatelessWidget {

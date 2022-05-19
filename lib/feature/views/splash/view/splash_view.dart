@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
 import 'package:stacked/stacked.dart';
-import '/core/components/text/custom_text.dart';
 
 class SplashView extends StatelessWidget {
   const SplashView({Key? key}) : super(key: key);

@@ -18,12 +18,12 @@ class QuestionsViewModel extends BaseViewModel {
 
   init()async{
     newQuestionCalculate();
-    await questionService.questionGetByUniversityId(universityId: 1);
+    // await questionService.questionGetByUniversityId(universityId: 1);
     notifyListeners();
   }
 
   newQuestionCalculate()async{
-    ///TODO buraya güncel data sayısı gönderilecek
+    /// Buraya güncel data sayısı gönderilecek
     newQuestionSize = 3;
   }
   onTapNewQuestions()async{

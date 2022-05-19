@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
 import 'package:stacked/stacked.dart';
-import '/core/components/text/custom_text.dart';
 import 'profile_redesign_view_model.dart';
 
 class ProfileRedesignView extends StatelessWidget {

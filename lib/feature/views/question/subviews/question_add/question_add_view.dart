@@ -111,7 +111,7 @@ class QuestionAddView extends StatelessWidget {
                   ),
                 ),
               ),
-              if (vm.imagesInit && vm.images != null)
+              if (vm.imagesInit)
                 Positioned(
                   bottom: 0,
                   child: Container(

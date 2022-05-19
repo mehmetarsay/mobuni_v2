@@ -4,7 +4,7 @@ import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/button/custom_back_button.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
-import 'package:mobuni_v2/core/initialize/theme/theme_notifier.dart';
+import 'package:mobuni_v2/core/theme/theme_notifier.dart';
 import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked_services/stacked_services.dart';

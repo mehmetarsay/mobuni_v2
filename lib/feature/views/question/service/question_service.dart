@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/enum/req_types.dart';
@@ -23,6 +24,8 @@ class QuestionService {
       } ,
       model: QuestionModel(),
     );
+   Fluttertoast.showToast(msg: 'Sorular güncel');
+
   }
 
   Future questionPost(dynamic data) => _networkManager!.request(
@@ -32,5 +35,24 @@ class QuestionService {
       data: data,
       isFile: true,
     );
+
+  getQuestionSize({required int universityId})async{
+    return  await _networkManager!.requestDirectData(
+      method: ReqTypes.get,
+      path: ApiConstants.questionCountsByUniversityId,
+      queryParameters:{
+        'universityId':universityId
+      } ,
+    );
+  }
+  setQuestionLike({required int questionId})async{
+    return  await _networkManager!.requestDirectData(
+      method: ReqTypes.put,
+      path: ApiConstants.likeQuestion,
+      queryParameters:{
+        'questionId':questionId
+      } ,
+    );
+  }
 
 }

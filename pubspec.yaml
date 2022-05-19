@@ -52,6 +52,8 @@ dependencies:
   firebase_core: ^1.17.0
   cloud_firestore: ^3.1.15
   firebase_storage: ^10.2.16
+  timeago: ^3.2.2
+  awesome_dialog: ^2.2.1
   
 
 dev_dependencies:

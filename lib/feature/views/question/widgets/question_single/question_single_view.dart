@@ -1,31 +1,36 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
+import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
+import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
 import 'package:zoom_pinch_overlay/zoom_pinch_overlay.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../../subviews/question_comments/question_comments_view.dart';
 
 // ignore: must_be_immutable
-class QuestionSingleView extends StatelessWidget {
-  QuestionSingleView({
-    Key? key,
-    required this.questionModel,
-    this.onTapNavigate = false,
-  }) : super(key: key);
+class QuestionSingleView extends StatefulWidget {
+  QuestionSingleView({Key? key, required this.questionModel, this.onTap}) : super(key: key);
   final QuestionModel questionModel;
-  bool onTapNavigate = false;
+  Function()? onTap;
 
+  @override
+  State<QuestionSingleView> createState() => _QuestionSingleViewState();
+}
+
+class _QuestionSingleViewState extends State<QuestionSingleView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (onTapNavigate)
-          context.navigationService.navigateToView(
-            QuestionCommentsView(questionModel: questionModel),
-          );
+      onTap: widget.onTap ?? () {},
+      onDoubleTap: () async {
+        widget.questionModel.isLiked = !widget.questionModel.isLiked;
+        await locator<QuestionService>().setQuestionLike(questionId: widget.questionModel.id!);
+        setState(() {});
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 5),
@@ -36,11 +41,10 @@ class QuestionSingleView extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 25.0,
-              backgroundImage: questionModel.user!.image == null ||
-                      questionModel.user!.image == ''
+              backgroundImage: widget.questionModel.user!.image == null || widget.questionModel.user!.image == ''
                   ? Image.asset('assets/empty_profile.png').image
                   : NetworkImage(
-                      questionModel.user!.image!,
+                      widget.questionModel.user!.image!,
                     ),
               backgroundColor: Colors.transparent,
             ),
@@ -53,34 +57,34 @@ class QuestionSingleView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    questionModel.user!.userName!,
+                    widget.questionModel.user!.userName!,
                     style: Theme.of(context).textTheme.headline1,
                   ),
-                  Text(questionModel.text!),
-                  if (questionModel.image != null)
+                  Text(widget.questionModel.text!),
+                  if (widget.questionModel.image != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: ZoomOverlay(
-                        minScale: 1, // Optional
-                        maxScale: 3.0, //
-                        animationDuration: Duration(seconds: 1), // Optional
-                        twoTouchOnly: true, // Defaults to false
+                        minScale: 1,
+                        // Optional
+                        maxScale: 3.0,
+                        //
+                        animationDuration: Duration(seconds: 1),
+                        // Optional
+                        twoTouchOnly: true,
+                        // Defaults to false
                         child: CachedNetworkImage(
-                          imageUrl: questionModel.image!,
+                          imageUrl: widget.questionModel.image!,
                           imageBuilder: (context, imageProvider) => Container(
                             height: context.height / 5,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.cover),
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                             ),
                           ),
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
                         ),
                       ),
                     ),
@@ -93,21 +97,20 @@ class QuestionSingleView extends StatelessWidget {
                       Row(
                         children: [
                           LikeButton(
-                            onTap: onLikeButtonTapped,
+                            onTap: (val) async {
+                              widget.questionModel.isLiked = !widget.questionModel.isLiked;
+                              await locator<QuestionService>().setQuestionLike(questionId: widget.questionModel.id!);
+                              return widget.questionModel.isLiked;
+                            },
                             size: 20,
-                            circleColor: CircleColor(
-                                start: Theme.of(context).primaryColor,
-                                end: Theme.of(context).primaryColor),
-                            bubblesColor: BubblesColor(
-                                dotPrimaryColor: Theme.of(context).primaryColor,
-                                dotSecondaryColor: Colors.grey),
+                            isLiked: widget.questionModel.isLiked,
+                            circleColor: CircleColor(start: Theme.of(context).primaryColor, end: Theme.of(context).primaryColor),
+                            bubblesColor: BubblesColor(dotPrimaryColor: Theme.of(context).primaryColor, dotSecondaryColor: Colors.grey),
                           ),
                           SizedBox(
                             width: 4,
                           ),
-                          if (questionModel.likeCount > 0)
-                            CustomText('${questionModel.likeCount} beğenme',
-                                color: Colors.grey)
+                          if (widget.questionModel.likeCount > 0) CustomText('${widget.questionModel.likeCount} beğenme', color: Colors.grey)
                         ],
                       ),
                       SizedBox(
@@ -123,15 +126,27 @@ class QuestionSingleView extends StatelessWidget {
                           SizedBox(
                             width: 4,
                           ),
-                          if (questionModel.commentCount > 0)
-                            CustomText('${questionModel.commentCount} cevap',
-                                color: Colors.grey)
+                          if (widget.questionModel.commentCount > 0) CustomText('${widget.questionModel.commentCount} cevap', color: Colors.grey)
                         ],
                       ),
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      CustomText(
+                        timeago.format(DateTime.now().subtract(Duration(minutes: Random().nextInt(999)))).toString(),
+                        style: TextStyle(
+                          color: context.colors.onBackground,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500
+                        ),
+
+                      ),
+                    ],
+                  ),
                   SizedBox(
-                    height: 25,
+                    height: 15,
                   ),
                 ],
               ),
@@ -140,15 +155,5 @@ class QuestionSingleView extends StatelessWidget {
         )),
       ),
     );
-  }
-
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    /// isteği buraya gönder
-    // final bool success= await sendRequest();
-
-    /// başarısız olursa, hiçbir şey yapama
-    // return success? !isLiked:isLiked;
-
-    return !isLiked;
   }
 }

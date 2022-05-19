@@ -1,10 +1,14 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
+import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/question/subviews/question_add/question_add_view_model.dart';
+import 'package:mobuni_v2/feature/widgets/user/user_photo.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+
 
 class QuestionAddView extends StatelessWidget {
   const QuestionAddView({Key? key}) : super(key: key);
@@ -27,7 +31,34 @@ class QuestionAddView extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          NavigationService().back();
+                          if(vm.controller.text.isNotEmpty||vm.selectImage!=null){
+                            AwesomeDialog(
+                              context: context,
+                              animType: AnimType.SCALE,
+                              dialogType: DialogType.INFO,
+                              body: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Girmiş olduğunuz bilgiler silinecek. Çıkmak istediğinize emin misiniz?',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),),
+                              btnOkOnPress: () {
+                                context.navigationService.back();
+                              },
+                              btnOkColor: context.theme.primaryColor,
+                              btnCancelOnPress: (){
+                              },
+                              btnOkText: 'Evet',
+                              btnCancelText: 'Geri',
+
+                            )..show();
+                          }
+                          else{
+                            context.navigationService.back();
+                          }
                         },
                         child: Text(
                           'İptal Et',
@@ -66,8 +97,9 @@ class QuestionAddView extends StatelessWidget {
                       ),
                       Center(
                         child: CustomText(
-                          'İstanbul Medeniyet Üniversitesine Sor',
+                          '${vm.selectUnivercity.name} Sor',
                           fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
                       ),
                       Padding(
@@ -77,15 +109,7 @@ class QuestionAddView extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                child: CircleAvatar(
-                                  radius: 30.0,
-                                  backgroundImage: NetworkImage("https://pbs.twimg.com/profile_images/1486436054169268238/-jsp8MLq_400x400.jpg"),
-                                  backgroundColor: Colors.transparent,
-                                ),
-                              ),
+                              child: UserPhoto(size: 50,),
                             ),
                             Expanded(
                               child: SingleChildScrollView(

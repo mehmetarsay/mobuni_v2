@@ -63,6 +63,7 @@ class ThemeModel {
       secondaryHeaderColor: Colors.grey[400],
       shadowColor: Color(0xff282828),
       backgroundColor: Colors.grey[900],
+
       appBarTheme: AppBarTheme(
         color: Colors.grey[900],
         elevation: 0,

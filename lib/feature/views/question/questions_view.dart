@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
+import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view_model.dart';
+import 'package:mobuni_v2/feature/views/question/subviews/question_comments/question_comments_view.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -17,28 +19,37 @@ class QuestionsView extends StatelessWidget {
       viewModelBuilder: () => QuestionsViewModel(),
       builder: (context, vm, child) => Scaffold(
         body: Scaffold(
-          appBar: CustomAppBar(),
+          appBar: CustomAppBar(title: 'Mobuni',),
           floatingActionButton: FloatingActionButton(
             backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () {
-              NavigationService().navigateTo(Routes.questionAddView);
+            onPressed: () async{
+              return await context.navigationService.navigateTo(
+                Routes.questionAddView,
+              )!.then((value) async{
+                await vm.getQuestions();
+              });
             },
             child: Icon(Icons.add,color: Colors.white,),
           ),
           body: RefreshIndicator(
             key: vm.indicator,
-            onRefresh: () async{
-              return Future.delayed(Duration(seconds: 2));
-            },
+            onRefresh:vm.onRefresh,
             child: Stack(
               children: [
                 ListView.separated(
                   key: PageStorageKey<String>('questionController'),
                   controller: vm.questionService.scrollController,
+                  physics: BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(8),
                   itemCount: vm.questionService.questions!.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return QuestionSingleView( questionModel: vm.questionService.questions!.elementAt(index),onTapNavigate: true,);
+                    return QuestionSingleView( questionModel: vm.questionService.questions!.elementAt(index),onTap: ()async{
+                     return await context.navigationService.navigateToView(
+                        QuestionCommentsView(questionModel: vm.questionService.questions!.elementAt(index)),
+                      )!.then((value) async{
+                        await vm.getQuestions();
+                      });
+                    },);
                   },
                   separatorBuilder: (BuildContext context, int index) => const Divider(),
                 ),

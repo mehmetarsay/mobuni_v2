@@ -8,6 +8,7 @@ import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_tab_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
+import 'package:mobuni_v2/feature/widgets/user/user_photo.dart';
 import 'package:stacked/stacked.dart';
 
 class ProfileTabView extends StatelessWidget {
@@ -47,7 +48,6 @@ class ProfileTabView extends StatelessWidget {
                   (_, int index) {
                     return QuestionSingleView(
                       questionModel: vm.questions!.elementAt(index),
-                      onTapNavigate: true,
                     );
                   },
                   childCount: vm.questions!.length,
@@ -76,28 +76,7 @@ class ProfileTabView extends StatelessWidget {
             /// profil fotoğrafı
             Stack(
               children: [
-                GeneralManager.user.image != null&&GeneralManager.user.image != ''
-                    ? CachedNetworkImage(
-                        imageUrl: GeneralManager.user.image!,
-                        imageBuilder: (context, imageProvider) => Container(
-                          width: context.height / 6,
-                          height: context.height / 6,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                          ),
-                        ),
-                        placeholder: (context, url) => CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                      )
-                    : Container(
-                        width: context.height / 6,
-                        height: context.height / 6,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(image: Image.asset('assets/empty_profile.png').image, fit: BoxFit.cover),
-                        ),
-                      ),
+                UserPhoto(size: context.height/6,),
                 Positioned(
                   right: 0,
                   child: Material(

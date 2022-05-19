@@ -19,6 +19,8 @@ class AuthService {
     _hiveService!.hive.put(Constants.authToken, token);
     _networkManager!.setHeaderToken(token!);
     _hiveService!.hive.put(Constants.user, user);
+    UserModel userq = _hiveService!.hive.get(Constants.user);
+    print(userq);
   }
 
   void get deleteToken {

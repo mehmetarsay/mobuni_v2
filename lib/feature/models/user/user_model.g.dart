@@ -28,13 +28,15 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       image: fields[8] as String?,
       universityId: fields[9] as int?,
       departmentId: fields[10] as int?,
-    );
+    )
+      ..university = fields[11] as UniversityModel?
+      ..department = fields[12] as DeaprtmentModel?;
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -56,7 +58,11 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(9)
       ..write(obj.universityId)
       ..writeByte(10)
-      ..write(obj.departmentId);
+      ..write(obj.departmentId)
+      ..writeByte(11)
+      ..write(obj.university)
+      ..writeByte(12)
+      ..write(obj.department);
   }
 
   @override
@@ -86,7 +92,14 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       image: json['image'] as String?,
       universityId: json['universityId'] as int?,
       departmentId: json['departmentId'] as int?,
-    );
+    )
+      ..university = json['university'] == null
+          ? null
+          : UniversityModel.fromJson(json['university'] as Map<String, dynamic>)
+      ..department = json['department'] == null
+          ? null
+          : DeaprtmentModel.fromJson(
+              json['department'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) {
   final val = <String, dynamic>{};
@@ -108,5 +121,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) {
   writeNotNull('image', instance.image);
   writeNotNull('universityId', instance.universityId);
   writeNotNull('departmentId', instance.departmentId);
+  writeNotNull('university', instance.university);
+  writeNotNull('department', instance.department);
   return val;
 }

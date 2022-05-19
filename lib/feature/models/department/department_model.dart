@@ -1,8 +1,10 @@
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobuni_v2/core/base/models/base_model/base_model.dart';
 
 part 'department_model.g.dart';
 
+@HiveType(typeId: 2)
 @JsonSerializable()
 class DeaprtmentModel extends BaseModel {
   DeaprtmentModel({
@@ -10,7 +12,9 @@ class DeaprtmentModel extends BaseModel {
     this.name,
   });
 
+  @HiveField(0)
   int? id;
+  @HiveField(1)
   String? name;
 
   String get dropdownText => name ?? '';

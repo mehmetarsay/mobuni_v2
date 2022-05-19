@@ -8,6 +8,7 @@ import 'package:mobuni_v2/core/components/text_form_field/custom_text_form_field
 import 'package:mobuni_v2/core/constants/app/validators.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/feature/views/profile/subviews/photo_change/photo_change_view.dart';
 import 'package:mobuni_v2/feature/widgets/text/custom_title.dart';
 import 'package:mobuni_v2/feature/widgets/user/user_photo.dart';
 import 'package:stacked/stacked.dart';
@@ -40,27 +41,32 @@ class ProfileRedesignView extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      Stack(
-                        children: [
-                          UserPhoto(size: context.height/6,),
-                          Positioned(
-                            right: 0,
-                            left: 100,
-                            bottom: 0,
-                            child: Material(
-                              color: context.theme.primaryColorDark,
-                              shape: CircleBorder(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: context.theme.primaryColorLight,
-                                  size: 18,
+                      GestureDetector(
+                        onTap: (){
+                          context.navigationService.navigateToView(PhotoChangeView(image:GeneralManager.user.image!));
+                        },
+                        child: Stack(
+                          children: [
+                            UserPhoto(size: context.height/6,),
+                            Positioned(
+                              right: 0,
+                              left: 100,
+                              bottom: 0,
+                              child: Material(
+                                color: context.theme.primaryColorDark,
+                                shape: CircleBorder(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: context.theme.primaryColorLight,
+                                    size: 18,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),

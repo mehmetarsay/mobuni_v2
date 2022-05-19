@@ -1,6 +1,8 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobuni_v2/core/base/models/base_model/base_model.dart';
+import 'package:mobuni_v2/feature/models/department/department_model.dart';
+import 'package:mobuni_v2/feature/models/university/university_model.dart';
 
 part 'user_model.g.dart';
 
@@ -43,6 +45,10 @@ class UserModel extends BaseModel {
   int? universityId;
   @HiveField(10)
   int? departmentId;
+  @HiveField(11)
+  UniversityModel? university;
+  @HiveField(12)
+  DeaprtmentModel? department;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 

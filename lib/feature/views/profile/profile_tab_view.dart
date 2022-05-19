@@ -4,6 +4,8 @@ import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
+import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_tab_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
 import 'package:stacked/stacked.dart';
@@ -13,8 +15,10 @@ class ProfileTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserModel user = GeneralManager.user;
     return ViewModelBuilder<ProfileTabViewModel>.reactive(
       // onModelReady: (model) => model.init()
+
       builder: (context, vm, child) => SafeArea(
         child: Scaffold(
           body: CustomScrollView(
@@ -22,28 +26,29 @@ class ProfileTabView extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             slivers: <Widget>[
               SliverAppBar(
-                title:Container(
+                title: Container(
                   color: Colors.white,
                   child: CustomText(
-                    vm.selectListType==ProfileListType.ActivityType?'Etkinlikler':'Sorularım',
+                    vm.selectListType == ProfileListType.ActivityType ? 'Etkinlikler' : 'Sorularım',
                     style: TextStyle(color: context.theme.primaryColor, fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                ) ,
+                ),
                 pinned: true,
                 automaticallyImplyLeading: false,
                 expandedHeight: context.height / 2.02,
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   collapseMode: CollapseMode.parallax,
-
-                  background: sliverBackroundWidget(context,vm),
+                  background: sliverBackroundWidget(context, vm),
                 ),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (_, int index) {
-                    return QuestionSingleView( questionModel: vm.questions!.elementAt(index),onTapNavigate: true,);
-
+                    return QuestionSingleView(
+                      questionModel: vm.questions!.elementAt(index),
+                      onTapNavigate: true,
+                    );
                   },
                   childCount: vm.questions!.length,
                 ),
@@ -56,9 +61,9 @@ class ProfileTabView extends StatelessWidget {
     );
   }
 
-   sliverBackroundWidget(BuildContext context,ProfileTabViewModel vm) {
+  sliverBackroundWidget(BuildContext context, ProfileTabViewModel vm) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         context.navigationService.navigateTo(Routes.profileRedesignView);
       },
       child: Padding(
@@ -68,21 +73,31 @@ class ProfileTabView extends StatelessWidget {
             SizedBox(
               height: context.height / 15,
             ),
+            /// profil fotoğrafı
             Stack(
               children: [
-                CachedNetworkImage(
-                  imageUrl: Constants.mehmetPhoto,
-                  imageBuilder: (context, imageProvider) => Container(
-                    width: context.height / 6,
-                    height: context.height / 6,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                    ),
-                  ),
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
+                GeneralManager.user.image != null&&GeneralManager.user.image != ''
+                    ? CachedNetworkImage(
+                        imageUrl: GeneralManager.user.image!,
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: context.height / 6,
+                          height: context.height / 6,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                          ),
+                        ),
+                        placeholder: (context, url) => CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      )
+                    : Container(
+                        width: context.height / 6,
+                        height: context.height / 6,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(image: Image.asset('assets/empty_profile.png').image, fit: BoxFit.cover),
+                        ),
+                      ),
                 Positioned(
                   right: 0,
                   child: Material(
@@ -103,8 +118,9 @@ class ProfileTabView extends StatelessWidget {
             SizedBox(
               height: context.height / 50,
             ),
+            ///username
             CustomText(
-              '@mehmetarsay',
+              '@${GeneralManager.user.userName}',
               style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.bold, fontSize: 20),
             ),
             SizedBox(height: context.height / 50),
@@ -117,11 +133,11 @@ class ProfileTabView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                radiusTextOntapWidget(context,isSelect:vm.selectListType==ProfileListType.QuestionType,text: 'Sorularım',onTap: (){
-                  vm.selectListType=ProfileListType.QuestionType;
+                radiusTextOntapWidget(context, isSelect: vm.selectListType == ProfileListType.QuestionType, text: 'Sorularım', onTap: () {
+                  vm.selectListType = ProfileListType.QuestionType;
                 }),
-                radiusTextOntapWidget(context,isSelect:vm.selectListType==ProfileListType.ActivityType,text: 'Etkinliklerim',onTap: (){
-                  vm.selectListType=ProfileListType.ActivityType;
+                radiusTextOntapWidget(context, isSelect: vm.selectListType == ProfileListType.ActivityType, text: 'Etkinliklerim', onTap: () {
+                  vm.selectListType = ProfileListType.ActivityType;
                 }),
               ],
             )
@@ -131,32 +147,35 @@ class ProfileTabView extends StatelessWidget {
     );
   }
 
-   radiusTextOntapWidget(BuildContext context,{String text='',required Function() onTap,bool isSelect=false}) {
-    Color color = isSelect?context.theme.primaryColor:context.theme.primaryColorDark;
-    Color color1 = isSelect?context.theme.primaryColorLight:context.theme.primaryColorLight;
+  radiusTextOntapWidget(BuildContext context, {String text = '', required Function() onTap, bool isSelect = false}) {
+    Color color = isSelect ? context.theme.primaryColor : context.theme.primaryColorDark;
+    Color color1 = isSelect ? context.theme.primaryColorLight : context.theme.primaryColorLight;
     return Container(
       width: 150,
       child: Column(
         children: [
           Material(
             color: color,
-            borderRadius:BorderRadius.all(Radius.circular(15)) ,
+            borderRadius: BorderRadius.all(Radius.circular(15)),
             child: Ink(
               height: 40,
               decoration: BoxDecoration(color: color, borderRadius: BorderRadius.all(Radius.circular(15))),
               child: InkWell(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 splashColor: context.theme.primaryColor,
-                onTap:onTap,
+                onTap: onTap,
                 child: Center(
                     child: CustomText(
                   text,
-                  style: TextStyle(color: color==context.theme.primaryColor?Colors.white:color1, fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(color: color == context.theme.primaryColor ? Colors.white : color1, fontWeight: FontWeight.bold, fontSize: 20),
                 )),
               ),
             ),
           ),
-          Divider(thickness: 2,color: color,)
+          Divider(
+            thickness: 2,
+            color: color,
+          )
         ],
       ),
     );
@@ -175,7 +194,7 @@ class ProfileTabView extends StatelessWidget {
               iconSize: 18,
               iconData: Icons.person,
               customText: CustomText(
-                'Mehmet Arsay',
+               '${ GeneralManager.user.name} ${ GeneralManager.user.surname}',
                 style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w700, fontSize: 18),
               ),
             ),
@@ -185,7 +204,7 @@ class ProfileTabView extends StatelessWidget {
               iconSize: 16,
               iconData: Icons.school,
               customText: CustomText(
-                'İstanbul Medeniyet Üniversitesi',
+                '${ GeneralManager.user.university!.name}',
                 style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w600, fontSize: 16),
               ),
             ),
@@ -194,7 +213,7 @@ class ProfileTabView extends StatelessWidget {
                 iconSize: 14,
                 iconData: Icons.mosque,
                 customText: CustomText(
-                  'Bilgisayar Mühendisliği',
+                  '${ GeneralManager.user.department!.name}',
                   style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w500, fontSize: 14),
                 )),
           ],

@@ -18,7 +18,7 @@ class QuestionsViewModel extends BaseViewModel {
 
   init()async{
     newQuestionCalculate();
-    // await questionService.questionGetByUniversityId(universityId: 1);
+     await questionService.questionGetByUniversityId(universityId: 1);
     notifyListeners();
   }
 

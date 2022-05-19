@@ -19,7 +19,6 @@ class _BottomNavViewState extends State<BottomNavView> {
   @override
   void initState() {
     super.initState();
-    print(GeneralManager.user.toJson());
   }
   @override
   Widget build(BuildContext context) {

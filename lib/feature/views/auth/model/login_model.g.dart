@@ -12,6 +12,9 @@ LoginModel _$LoginModelFromJson(Map<String, dynamic> json) => LoginModel(
       expiresIn: json['expiresIn'] == null
           ? null
           : DateTime.parse(json['expiresIn'] as String),
+      user: json['user'] == null
+          ? null
+          : UserModel.fromJson(json['user'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$LoginModelToJson(LoginModel instance) =>
@@ -19,4 +22,5 @@ Map<String, dynamic> _$LoginModelToJson(LoginModel instance) =>
       'accessToken': instance.accessToken,
       'tokenType': instance.tokenType,
       'expiresIn': instance.expiresIn?.toIso8601String(),
+      'user': instance.user,
     };

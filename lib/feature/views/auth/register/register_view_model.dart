@@ -79,7 +79,7 @@ class RegisterViewModel extends BaseViewModel {
     print(user.toJson());
     var response = await _authService.register(user);
     if (response is LoginModel) {
-      _authService.saveToken(response.accessToken);
+      _authService.saveToken(response.accessToken, response.user!);
       context.navigationService.pushNamedAndRemoveUntil(Routes.bottomNavView);
     }
     context.loaderOverlay.hide();

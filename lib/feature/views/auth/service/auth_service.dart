@@ -5,6 +5,7 @@ import 'package:mobuni_v2/core/constants/enum/req_types.dart';
 import 'package:mobuni_v2/core/network/network_manager.dart';
 import 'package:mobuni_v2/feature/models/department/department_model.dart';
 import 'package:mobuni_v2/feature/models/university/university_model.dart';
+import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:mobuni_v2/feature/services/hive/hive_services.dart';
 import 'package:mobuni_v2/feature/views/auth/model/login_model.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -14,15 +15,17 @@ class AuthService {
   final NetworkManager? _networkManager = locator<NetworkManager>();
   final HiveService? _hiveService = locator<HiveService>();
 
-  void saveToken(String? token) {
+  void saveToken(String? token, UserModel user) {
     _hiveService!.hive.put(Constants.authToken, token);
     _networkManager!.setHeaderToken(token!);
-    // BURAYA USER BİLGİSİ DE GELEREK GEREKLİ YERE KAYIT EDİLECEK
+    _hiveService!.hive.put(Constants.user, user);
   }
 
-  void get deleteToken => _hiveService!.hive.delete(Constants.authToken);
-    // BURAYA USER BİLGİSİNİ SİLME EKLENECEK
-
+  void get deleteToken {
+    _hiveService!.hive.delete(Constants.authToken);
+    _networkManager!.setHeaderToken('');
+    _hiveService!.hive.delete(Constants.user);
+  }
 
   bool get isLogin => _hiveService!.hive.containsKey(Constants.authToken);
 

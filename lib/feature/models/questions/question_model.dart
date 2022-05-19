@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobuni_v2/core/base/models/base_model/base_model.dart';
 import 'package:mobuni_v2/feature/models/university/university_model.dart';
@@ -7,7 +6,7 @@ import 'package:mobuni_v2/feature/models/user/user_model.dart';
 part 'question_model.g.dart';
 
 @JsonSerializable(includeIfNull: false)
-class QuestionModel extends BaseModel{
+class QuestionModel extends BaseModel {
   int? id;
   String? userId;
   DateTime? createdTime;
@@ -22,35 +21,27 @@ class QuestionModel extends BaseModel{
   UniversityModel? university;
   bool isLiked;
 
-
-
   QuestionModel({
-     this.id,
-     this.userId,
-     this.createdTime,
-     this.universityId,
-     this.text,
+    this.id,
+    this.userId,
+    this.createdTime,
+    this.universityId,
+    this.text,
     this.updatedTime,
     this.image,
-    this.commentCount=0,
+    this.commentCount = 0,
     this.likeCount = 0,
     this.user,
     this.university,
     this.isLiked = false,
-});
+  });
 
-  factory QuestionModel.fromJson(Map<String, dynamic> json) => _$QuestionModelFromJson(json);
-
-  @override
-  fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    return _$QuestionModelFromJson(json);
-  }
+  factory QuestionModel.fromJson(Map<String, dynamic> json) =>
+      _$QuestionModelFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() {
-    // TODO: implement toJson
-    return _$QuestionModelToJson(this);
-  }
+  fromJson(Map<String, dynamic> json) => _$QuestionModelFromJson(json);
 
+  @override
+  Map<String, dynamic> toJson() => _$QuestionModelToJson(this);
 }

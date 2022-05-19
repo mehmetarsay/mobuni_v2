@@ -4,10 +4,8 @@ import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
 import 'package:mobuni_v2/feature/views/question/subviews/question_comments/question_comments_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
-import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
 import 'package:mobuni_v2/feature/widgets/comment/comment_widget.dart';
 import 'package:stacked/stacked.dart';
-import '/core/components/text/custom_text.dart';
 
 class QuestionCommentsView extends StatelessWidget {
   const QuestionCommentsView({Key? key, required this.questionModel}) : super(key: key);

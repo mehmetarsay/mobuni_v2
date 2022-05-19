@@ -28,14 +28,10 @@ class CommentModel extends BaseModel {
   );
 
   @override
-  fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-   return _$CommentModelFromJson(json);
-  }
+  fromJson(Map<String, dynamic> json) => _$CommentModelFromJson(json);
+  
 
   @override
-  Map<String, dynamic> toJson() {
-    // TODO: implement toJson
-    return _$CommentModelToJson(this);
-  }
+  Map<String, dynamic> toJson() => _$CommentModelToJson(this);
+  
 }

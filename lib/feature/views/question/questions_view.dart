@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/app/app.router.dart';
+import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
@@ -16,6 +17,7 @@ class QuestionsView extends StatelessWidget {
       viewModelBuilder: () => QuestionsViewModel(),
       builder: (context, vm, child) => Scaffold(
         body: Scaffold(
+          appBar: CustomAppBar(),
           floatingActionButton: FloatingActionButton(
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () {

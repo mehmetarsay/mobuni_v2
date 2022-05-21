@@ -18,4 +18,6 @@ class ApiConstants {
   static String question = 'Question';
   static String questionComment = 'QuestionComment';
   static String questionCommentGetByActivityId = 'QuestionComment/GetByQuestionId';
+  static String userAll = 'User/GetAll';
+  static String userById = 'User/GetByUserId';
 }

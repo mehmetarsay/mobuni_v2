@@ -13,7 +13,7 @@ const CustomBackButton({ Key? key }) : super(key: key);
           color: context.colors.primary.withOpacity(0.25),
           borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10))
         ),
-        child: Icon(Icons.arrow_back_ios, color: Color(0xff40668B)),
+        child: Icon(Icons.arrow_back_ios, color: context.colors.primary),
       ),
     );
   }

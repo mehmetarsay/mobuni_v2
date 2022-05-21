@@ -82,7 +82,7 @@ class NetworkManager {
         return _showError(
           '$path ${method.name}',
           'Status Code: ${response.statusCode} | Status Message: ${response.statusMessage}',
-          response.data['message'],
+          response.data,
           time,
         );
       }
@@ -90,7 +90,7 @@ class NetworkManager {
       return _showError(
         '$path ${method.name}',
         'Error: ${dioError.error} | Status Message: ${dioError.message}',
-        dioError.response!.data['message'],
+        dioError.response!.data,
         time,
       );
     } catch (error) {
@@ -103,11 +103,24 @@ class NetworkManager {
     }
   }
 
-  void _showError(String errorPoint, dynamic error, String? responseMessage,
-      DateTime time) {
+  void _showError(
+    String errorPoint,
+    dynamic error,
+    dynamic responseData,
+    DateTime time,
+  ) {
+    String? message;
+    if (responseData != null) {
+      if(responseData == ''){
+        message = 'Sunucu ile ilgili bir hata oluştu. Lütfen daha sonra tekrar deneyiniz';
+      }else {
+        message = responseData!['message'];
+      }
+    }
     log('$errorPoint FAILED | Status Code: $error');
-    print('$errorPoint -> ${(DateTime.now().difference(time)).inMilliseconds} ms');
-    if (responseMessage != null) Fluttertoast.showToast(msg: responseMessage);
+    print(
+        '$errorPoint -> ${(DateTime.now().difference(time)).inMilliseconds} ms');
+    if (message != null) Fluttertoast.showToast(msg: message);
     return null;
   }
 

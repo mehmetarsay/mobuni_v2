@@ -88,8 +88,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               errorStyle: TextStyle(fontSize: 16),
               // fillColor: widget.fillColor ??
               //     (isEmpty
-              //         ? themeData.colorScheme.primary.withAlpha(80)
-              //         : themeData.colorScheme.onSecondary),
+              //         ? context.colors.primary.withAlpha(80)
+              //         : context.colors.onSecondary),
               hintText: widget.insideHint! ? widget.hintText ?? '' : '',
               hintStyle: TextStyle(color: context.theme.secondaryHeaderColor),
               border: OutlineInputBorder(
@@ -97,7 +97,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 borderRadius: BorderRadius.all(
                   Radius.circular(8.0),
                 ),
-                // borderSide: BorderSide(color: themeData.primaryColor),
+                // borderSide: BorderSide(color: context.theme.primaryColor),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
@@ -117,10 +117,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 borderRadius: BorderRadius.all(
                   Radius.circular(8.0),
                 ),
-                // borderSide: BorderSide(color: themeData.primaryColor, width: 3),
+                // borderSide: BorderSide(color: context.theme.primaryColor, width: 3),
               ),
               filled: true,
-              //fillColor: themeData.colorScheme.background,
+              //fillColor: context.colors.background,
               // prefixIcon: Icon(
               //   widget.iconData ?? MdiIcons.nullIcon,
               //   size: 26,

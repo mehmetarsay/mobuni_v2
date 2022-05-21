@@ -18,9 +18,8 @@ extension MediaQueryExtension on BuildContext {
   double get mediumValue => height * 0.04;
   double get highValue => height * 0.1;
 
-  double dynamicValue(double value) {
-    return height * value;
-  }
+  double dynamicValue(double value) => height * value;
+  double dynamicWidth(double value) => width * value;
 }
 
 extension PaddingExtensionAll on BuildContext {

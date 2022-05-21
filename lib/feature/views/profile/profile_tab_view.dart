@@ -63,8 +63,10 @@ class ProfileTabView extends StatelessWidget {
 
   sliverBackroundWidget(BuildContext context, ProfileTabViewModel vm) {
     return GestureDetector(
-      onTap: () {
-        context.navigationService.navigateTo(Routes.profileRedesignView);
+      onTap: () async{
+        await context.navigationService.navigateTo(Routes.profileRedesignView)!.then((value) {
+          vm.notifyListeners();
+        });
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),

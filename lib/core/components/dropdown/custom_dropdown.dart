@@ -9,12 +9,14 @@ class CustomDropdown extends StatefulWidget {
     required this.items,
     this.isLoading = true,
     this.voidCallback,
+    this.initId
   }) : super(key: key);
 
   final String labelText;
   final List items;
   final isLoading;
   final Function(Object? value)? voidCallback;
+  final int ? initId;
 
   @override
   State<CustomDropdown> createState() => _CustomDropdownState();
@@ -22,6 +24,7 @@ class CustomDropdown extends StatefulWidget {
 
 class _CustomDropdownState extends State<CustomDropdown> {
   var index;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,7 +42,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                 child: DropdownButton(
                   isExpanded: true,
                   isDense: true,
-                  value: index,
+                  value: index ?? widget.initId,
                   hint: CustomText(
                     widget.labelText.toUpperCase(),
                     color: context.colors.primary,

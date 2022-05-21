@@ -12,7 +12,6 @@ import 'package:stacked/stacked_annotations.dart';
 class QuestionService {
 
   List<QuestionModel>? questions = [];
-  ScrollController scrollController = ScrollController();
 
   final NetworkManager? _networkManager = locator<NetworkManager>();
 

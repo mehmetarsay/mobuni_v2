@@ -55,6 +55,7 @@ dependencies:
   timeago: ^3.2.2
   awesome_dialog: ^2.2.1
   photo_view: ^0.13.0
+  shimmer: ^2.0.0
   
 
 dev_dependencies:

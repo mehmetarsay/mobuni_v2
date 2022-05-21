@@ -3,10 +3,10 @@ import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
+import 'package:mobuni_v2/feature/views/comments/comment_view.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/core/theme/theme_notifier.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view_model.dart';
-import 'package:mobuni_v2/feature/views/question/subviews/question_comments/question_comments_view.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
@@ -67,14 +67,14 @@ class QuestionsView extends StatelessWidget {
               children: [
                 ListView.separated(
                   key: PageStorageKey<String>('questionController'),
-                  controller: vm.questionService.scrollController,
+                  controller: vm.scrollController,
                   physics: BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(8),
                   itemCount: vm.questionService.questions!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return QuestionSingleView( questionModel: vm.questionService.questions!.elementAt(index),onTap: ()async{
                      return await context.navigationService.navigateToView(
-                        QuestionCommentsView(questionModel: vm.questionService.questions!.elementAt(index)),
+                        CommentView(questionModel: vm.questionService.questions!.elementAt(index)),
                       )!.then((value) async{
                         await vm.getQuestions();
                       });

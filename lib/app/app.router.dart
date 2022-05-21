@@ -16,11 +16,12 @@ import '../feature/views/auth/login/login_view.dart';
 import '../feature/views/auth/register/register_view.dart';
 import '../feature/views/chat/chat_home/chat_home_view.dart';
 import '../feature/views/chat/chat_message/chat_message_view.dart';
+import '../feature/views/comments/comment_view.dart';
 import '../feature/views/home/bottomnav_view.dart';
 import '../feature/views/profile/subviews/profile_redesign/profile_redesign_view.dart';
 import '../feature/views/question/subviews/question_add/question_add_view.dart';
-import '../feature/views/question/subviews/question_comments/question_comments_view.dart';
 import '../feature/views/splash/view/splash_view.dart';
+import '../feature/widgets/photo/photo_view.dart';
 
 class Routes {
   static const String splashView = '/';
@@ -28,8 +29,9 @@ class Routes {
   static const String loginView = '/login-view';
   static const String registerView = '/register-view';
   static const String questionAddView = '/question-add-view';
-  static const String questionCommentsView = '/question-comments-view';
+  static const String commentView = '/comment-view';
   static const String profileRedesignView = '/profile-redesign-view';
+  static const String customPhotoView = '/custom-photo-view';
   static const String chatHomeView = '/chat-home-view';
   static const String chatMessageView = '/chat-message-view';
   static const all = <String>{
@@ -38,8 +40,9 @@ class Routes {
     loginView,
     registerView,
     questionAddView,
-    questionCommentsView,
+    commentView,
     profileRedesignView,
+    customPhotoView,
     chatHomeView,
     chatMessageView,
   };
@@ -54,8 +57,9 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.loginView, page: LoginView),
     RouteDef(Routes.registerView, page: RegisterView),
     RouteDef(Routes.questionAddView, page: QuestionAddView),
-    RouteDef(Routes.questionCommentsView, page: QuestionCommentsView),
+    RouteDef(Routes.commentView, page: CommentView),
     RouteDef(Routes.profileRedesignView, page: ProfileRedesignView),
+    RouteDef(Routes.customPhotoView, page: CustomPhotoView),
     RouteDef(Routes.chatHomeView, page: ChatHomeView),
     RouteDef(Routes.chatMessageView, page: ChatMessageView),
   ];
@@ -92,10 +96,12 @@ class StackedRouter extends RouterBase {
         settings: data,
       );
     },
-    QuestionCommentsView: (data) {
-      var args = data.getArgs<QuestionCommentsViewArguments>(nullOk: false);
+    CommentView: (data) {
+      var args = data.getArgs<CommentViewArguments>(
+        orElse: () => CommentViewArguments(),
+      );
       return MaterialPageRoute<dynamic>(
-        builder: (context) => QuestionCommentsView(
+        builder: (context) => CommentView(
           key: args.key,
           questionModel: args.questionModel,
         ),
@@ -105,6 +111,16 @@ class StackedRouter extends RouterBase {
     ProfileRedesignView: (data) {
       return MaterialPageRoute<dynamic>(
         builder: (context) => const ProfileRedesignView(),
+        settings: data,
+      );
+    },
+    CustomPhotoView: (data) {
+      var args = data.getArgs<CustomPhotoViewArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => CustomPhotoView(
+          key: args.key,
+          imageUrl: args.imageUrl,
+        ),
         settings: data,
       );
     },
@@ -141,11 +157,18 @@ class StackedRouter extends RouterBase {
 /// Arguments holder classes
 /// *************************************************************************
 
-/// QuestionCommentsView arguments holder class
-class QuestionCommentsViewArguments {
+/// CommentView arguments holder class
+class CommentViewArguments {
   final Key? key;
-  final QuestionModel questionModel;
-  QuestionCommentsViewArguments({this.key, required this.questionModel});
+  final QuestionModel? questionModel;
+  CommentViewArguments({this.key, this.questionModel});
+}
+
+/// CustomPhotoView arguments holder class
+class CustomPhotoViewArguments {
+  final Key? key;
+  final String imageUrl;
+  CustomPhotoViewArguments({this.key, required this.imageUrl});
 }
 
 /// ChatHomeView arguments holder class

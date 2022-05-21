@@ -9,6 +9,7 @@ import '../../../app/app.locator.dart';
 class QuestionsViewModel extends BaseViewModel {
   QuestionService questionService = locator<QuestionService>();
   var indicator = new GlobalKey<RefreshIndicatorState>();
+  ScrollController scrollController = ScrollController();
   int _newQuestionSize = 0;
 
   int get newQuestionSize => _newQuestionSize;
@@ -41,8 +42,8 @@ class QuestionsViewModel extends BaseViewModel {
     return newQuestionSize;
   }
   onTapNewQuestions()async{
-    questionService.scrollController.animateTo(-20,
-        duration: const Duration(seconds: 1), curve: Curves.linear).then((value) {
+   scrollController.animateTo(-20,
+        duration: const Duration(milliseconds: 50), curve: Curves.linear).then((value) {
       indicator.currentState!.show();
     });
     onRefresh();

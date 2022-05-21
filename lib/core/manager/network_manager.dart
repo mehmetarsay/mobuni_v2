@@ -136,7 +136,7 @@ class NetworkManager {
           var list = <T>[];
           (baseResponse.data as List)
               .forEach((element) => list.add(model!.fromJson(element)));
-          return list.isNotEmpty ? list : model;
+          return list;
         } else {
           return model!.fromJson(baseResponse.data as Map<String, dynamic>);
         }

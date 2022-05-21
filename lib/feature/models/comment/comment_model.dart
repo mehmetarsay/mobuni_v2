@@ -1,31 +1,39 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobuni_v2/core/base/models/base_model/base_model.dart';
+import 'package:mobuni_v2/feature/models/user/user_model.dart';
 
 part 'comment_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class CommentModel extends BaseModel {
   int? id;
-  int? userId;
-  int? tableId;
-  int? tableType;
+  String? userId;
+  UserModel? user;
+  int? activityId;
+  int? questionId;
   String? content;
   DateTime? createdTime;
   DateTime? updateTime;
   int? likeCount;
+  bool isLiked;
 
   CommentModel(
   {
      this.id,
      this.userId,
-     this.tableId,
-     this.tableType,
+     this.activityId,
+     this.questionId,
      this.content,
     this.createdTime,
     this.updateTime,
-    this.likeCount
+    this.likeCount,
+    this.user,
+    this.isLiked=false,
 }
   );
+
+  factory CommentModel.fromJson(Map<String, dynamic> json) => _$CommentModelFromJson(json);
+
 
   @override
   fromJson(Map<String, dynamic> json) => _$CommentModelFromJson(json);

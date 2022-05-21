@@ -8,9 +8,9 @@ part of 'comment_model.dart';
 
 CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
       id: json['id'] as int?,
-      userId: json['userId'] as int?,
-      tableId: json['tableId'] as int?,
-      tableType: json['tableType'] as int?,
+      userId: json['userId'] as String?,
+      activityId: json['activityId'] as int?,
+      questionId: json['questionId'] as int?,
       content: json['content'] as String?,
       createdTime: json['createdTime'] == null
           ? null
@@ -19,16 +19,30 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
           ? null
           : DateTime.parse(json['updateTime'] as String),
       likeCount: json['likeCount'] as int?,
+      user: json['user'] == null
+          ? null
+          : UserModel.fromJson(json['user'] as Map<String, dynamic>),
+      isLiked: json['isLiked'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'userId': instance.userId,
-      'tableId': instance.tableId,
-      'tableType': instance.tableType,
-      'content': instance.content,
-      'createdTime': instance.createdTime?.toIso8601String(),
-      'updateTime': instance.updateTime?.toIso8601String(),
-      'likeCount': instance.likeCount,
-    };
+Map<String, dynamic> _$CommentModelToJson(CommentModel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('userId', instance.userId);
+  writeNotNull('user', instance.user);
+  writeNotNull('activityId', instance.activityId);
+  writeNotNull('questionId', instance.questionId);
+  writeNotNull('content', instance.content);
+  writeNotNull('createdTime', instance.createdTime?.toIso8601String());
+  writeNotNull('updateTime', instance.updateTime?.toIso8601String());
+  writeNotNull('likeCount', instance.likeCount);
+  val['isLiked'] = instance.isLiked;
+  return val;
+}

@@ -51,6 +51,8 @@ class UserModel extends BaseModel {
   UniversityModel? university;
   @HiveField(12)
   DeaprtmentModel? department;
+  
+  String get fullName => '$name $surname';
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 

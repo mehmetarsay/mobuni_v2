@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
 import 'package:mobuni_v2/feature/views/home/bottomnav_view_model.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_tab_view.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view.dart';
@@ -13,13 +13,34 @@ class BottomNavView extends StatefulWidget {
   State<BottomNavView> createState() => _BottomNavViewState();
 }
 
-class _BottomNavViewState extends State<BottomNavView> {
+class _BottomNavViewState extends State<BottomNavView>
+    with WidgetsBindingObserver {
   final Map<int, Widget> _viewCache = Map<int, Widget>();
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print(state.toString());
+    if (state == AppLifecycleState.resumed) {
+      FirebaseService.instance!.updateUserState(true);
+    } else {
+      FirebaseService.instance!.updateUserState(false);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+
+    FirebaseService.instance!.updateUserState(true);
+    WidgetsBinding.instance.addObserver(this);
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<BottomNavViewModel>.reactive(

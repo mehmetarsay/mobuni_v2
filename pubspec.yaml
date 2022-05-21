@@ -55,6 +55,13 @@ dependencies:
   timeago: ^3.2.2
   awesome_dialog: ^2.2.1
   photo_view: ^0.13.0
+  material_design_icons_flutter: ^5.0.6595
+  badges: ^2.0.2
+  date_format: ^2.0.6
+  ntp: ^2.0.0
+  image_pickers: ^2.0.0+2
+  url_launcher: ^6.1.2
+  file_picker: ^4.5.1
   
 
 dev_dependencies:

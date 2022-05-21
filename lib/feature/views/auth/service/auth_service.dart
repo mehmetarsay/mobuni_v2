@@ -55,4 +55,15 @@ class AuthService {
         path: ApiConstants.departmentAll,
         model: DeaprtmentModel(),
       );
+  Future getAllUser() async => await _networkManager!.request(
+        method: ReqTypes.get,
+        path: ApiConstants.userAll,
+        model: UserModel(),
+      );
+  Future getUserById(String id) async => await _networkManager!.request(
+        method: ReqTypes.get,
+        path: ApiConstants.userById,
+        model: UserModel(),
+        queryParameters: {'UserId' : id}
+      );
 }

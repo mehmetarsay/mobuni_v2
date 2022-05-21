@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -13,11 +14,14 @@ import 'package:provider/provider.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator(environment: Environment.dev);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   ///hive initialize and encryption
   final hiveService = locator<HiveManager>();
@@ -42,10 +46,10 @@ class MyApp extends StatelessWidget {
         return GlobalLoaderOverlay(
           useDefaultLoading: false,
           overlayWidget: Center(
-            child: 
-            LoadingAnimationWidget.staggeredDotsWave(
-                color: context.theme.primaryColor,
-                size: 50),
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              color: context.theme.primaryColor,
+              size: 50,
+            ),
           ),
           child: MaterialApp(
             title: 'MobUni',

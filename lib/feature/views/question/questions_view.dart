@@ -3,9 +3,12 @@ import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
+import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/core/theme/theme_notifier.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/subviews/question_comments/question_comments_view.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -19,7 +22,33 @@ class QuestionsView extends StatelessWidget {
       viewModelBuilder: () => QuestionsViewModel(),
       builder: (context, vm, child) => Scaffold(
         body: Scaffold(
-          appBar: CustomAppBar(title: 'Mobuni',),
+          appBar: CustomAppBar(
+            actions: [
+              Visibility(
+                visible: true,
+                child: IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () {
+                      GeneralManager.authS.deleteToken;
+                      GeneralManager.navigationS
+                          .pushNamedAndRemoveUntil(Routes.loginView);
+                    }),
+              ),
+              IconButton(
+                icon: Icon(
+                  context.watch<ThemeNotifier>().darkTheme!
+                      ? Icons.light_mode
+                      : Icons.dark_mode,
+                ),
+                onPressed: () => context.read<ThemeNotifier>().toggleTheme(),
+              ),
+              IconButton(
+                  icon: Icon(Icons.message),
+                  onPressed: () {
+                    GeneralManager.navigationS.navigateTo(Routes.chatHomeView);
+                  })
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () async{

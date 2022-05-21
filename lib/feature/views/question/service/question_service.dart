@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
+import 'package:mobuni_v2/core/base/models/base_response/empty_response.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/enum/req_types.dart';
 import 'package:mobuni_v2/core/manager/network_manager.dart';
@@ -37,18 +38,20 @@ class QuestionService {
     );
 
   getQuestionSize({required int universityId})async{
-    return  await _networkManager!.requestDirectData(
+    return  await _networkManager!.request(
       method: ReqTypes.get,
       path: ApiConstants.questionCountsByUniversityId,
+      model: EmptyModel(),
       queryParameters:{
         'universityId':universityId
       } ,
     );
   }
   setQuestionLike({required int questionId})async{
-    return  await _networkManager!.requestDirectData(
+    return  await _networkManager!.request(
       method: ReqTypes.put,
       path: ApiConstants.likeQuestion,
+      model: EmptyModel(),
       queryParameters:{
         'questionId':questionId
       } ,

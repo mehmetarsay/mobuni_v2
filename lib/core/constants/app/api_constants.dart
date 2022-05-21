@@ -8,6 +8,7 @@ class ApiConstants {
   
   static String login = 'User/Login';
   static String register = 'User/Register';
+  static String uploadProfileImage = 'User/UploadProfileImage';
   static String questionGetByUniversityId = 'Question/GetByUniversityId';
   static String questionCountsByUniversityId = 'Question/GetQuestionCountsByUniversityId';
   static String likeQuestion = 'Question/LikeQuestion';

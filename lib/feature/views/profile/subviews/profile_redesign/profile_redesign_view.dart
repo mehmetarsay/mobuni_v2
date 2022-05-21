@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/components/button/custom_button.dart';
 import 'package:mobuni_v2/core/components/dropdown/custom_dropdown.dart';
@@ -43,7 +44,7 @@ class ProfileRedesignView extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: (){
-                          context.navigationService.navigateToView(PhotoChangeView(image:GeneralManager.user.image!));
+                          context.navigationService.navigateToView(PhotoChangeView(imageUrl:GeneralManager.user.image!));
                         },
                         child: Stack(
                           children: [

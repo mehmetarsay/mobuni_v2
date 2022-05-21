@@ -5,6 +5,7 @@ import 'package:mobuni_v2/feature/views/auth/login/login_view.dart';
 import 'package:mobuni_v2/feature/views/auth/register/register_view.dart';
 import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
 import 'package:mobuni_v2/feature/views/home/bottomnav_view.dart';
+import 'package:mobuni_v2/feature/views/profile/service/profile_service.dart';
 import 'package:mobuni_v2/feature/views/profile/subviews/profile_redesign/profile_redesign_view.dart';
 import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
 import 'package:mobuni_v2/feature/views/question/subviews/question_add/question_add_view.dart';
@@ -29,6 +30,7 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: HiveManager),
     LazySingleton(classType: QuestionService),
     LazySingleton(classType: AuthService),
+    LazySingleton(classType: ProfileService),
     LazySingleton(classType: NavigationService,environments: {Environment.dev}),
   ]
 )

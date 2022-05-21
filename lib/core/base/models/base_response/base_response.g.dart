@@ -10,7 +10,7 @@ BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse(
       success: json['success'] as bool? ?? false,
       data: json['data'],
       message: json['message'] as String?,
-      statusCode: json['status_code'] as int?,
+      statusCode: json['statusCode'] as int?,
     );
 
 Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
@@ -18,5 +18,5 @@ Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
       'success': instance.success,
       'data': instance.data,
       'message': instance.message,
-      'status_code': instance.statusCode,
+      'statusCode': instance.statusCode,
     };

@@ -1,31 +1,43 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
+import 'package:mobuni_v2/core/components/button/custom_button.dart';
+import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
+import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/profile/subviews/photo_change/photo_change_view_model.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:stacked/stacked.dart';
 
 class PhotoChangeView extends StatelessWidget {
-  const PhotoChangeView({Key? key,required this.image}) : super(key: key);
-  final String image;
+  const PhotoChangeView({Key? key,required this.imageUrl}) : super(key: key);
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<PhotoChangeViewModel>.reactive(
       viewModelBuilder: () => PhotoChangeViewModel(),
       builder: builder,
-      //onModelReady: (vm) => vm.initialize(context),
+      onModelReady: (vm) => vm.initialize(imageUrl),
     );
   }
+
   Widget builder(BuildContext context, PhotoChangeViewModel vm, Widget? child){
     return Scaffold(
+      key: GlobalKey(debugLabel: 'PhotoView'),
       appBar: AppBar(
+        leading: GestureDetector(
+            onTap: (){
+             Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 15),
             child: GestureDetector(
-              onTap: vm.getImage,
+              onTap: () => vm.getImage(),
               child: Material(
                 color: context.theme.primaryColorDark,
                 shape: CircleBorder(),
@@ -42,11 +54,11 @@ class PhotoChangeView extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
+      body:vm.initialised? Container(
           child: Stack(
             children: [
               PhotoView(
-                imageProvider:vm.imageFile==null? NetworkImage(image):Image.asset(vm.imageFile!.path).image,
+                imageProvider:vm.imageFile==null? NetworkImage(imageUrl):Image.file(File(vm.imageFile!.path)).image,
                 maxScale: 1.0,
                 minScale: 1.1,
                 backgroundDecoration: BoxDecoration(
@@ -54,35 +66,75 @@ class PhotoChangeView extends StatelessWidget {
                 ),
               ),
               if(vm.imageFile!=null)Positioned(
-                right: 0,
-                left: 0,
-                bottom: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 100,
-                      height:100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white,width: 4),
-                        image: DecorationImage(image: Image.asset(vm.imageFile!.path).image, fit: BoxFit.contain),
+                right: 10,
+                left: 10,
+                bottom: 10,
+                child: Container(
+                  width: context.width,
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color:context.theme.primaryColorDark,width: 1 ),
+                    color: context.theme.primaryColorDark.withOpacity(0.5)
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            radius: 25.0,
+                            backgroundImage: Image.file(File(vm.imageFile!.path)).image,
+                            backgroundColor: Colors.transparent,
+                          ),
+                          SizedBox(
+                            width: 6,
+                          ),
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomText(
+                                  GeneralManager.user.userName!,
+                                  color:  context.theme.primaryColorLight,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                CustomText('Bu fotoğraf efsane oldu :) ⭐🌟️⭐🌟️⭐'
+                                ,
+                                  color: context.theme.primaryColorLight ,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Container(
-                      width: 100,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: Colors.grey
-                      ),
-                      child: Text('Uygula'),
-                    )
-                  ],
+                      SizedBox(height: 10,),
+                      CustomButton(
+                      text: 'Kaydet',
+                        onPressed: (){
+                          vm.save(context);
+                        },
+                      )
+                    ],
+                  ),
                 ),
               )
             ],
           )
+      ):Container(
+        color: context.theme.primaryColorLight,
+        child: Center(
+          child: GestureDetector(
+            onTap: vm.getImage,
+            child: CustomText(
+              'Lütfen fotoğraf seçiniz...',
+              color: context.theme.primaryColorDark,
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -52,7 +52,7 @@ class StackedRouter extends RouterBase {
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
-  final _pagesMap = <Type, StackedRouteFactory>{
+   final _pagesMap = <Type, StackedRouteFactory>{
     SplashView: (data) {
       return MaterialPageRoute<dynamic>(
         builder: (context) => const SplashView(),

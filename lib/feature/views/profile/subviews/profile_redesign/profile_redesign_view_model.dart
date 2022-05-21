@@ -37,6 +37,11 @@ class ProfileRedesignViewModel extends BaseViewModel {
     departmentList = await _authService.getAllDepartment();
     isLoading = false;
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   void save(BuildContext context) async {
     if (!formKey.currentState!.validate()) {

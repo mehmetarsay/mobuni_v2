@@ -6,6 +6,7 @@
 
 // ignore_for_file: public_member_api_docs
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -52,7 +53,7 @@ class StackedRouter extends RouterBase {
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
-   final _pagesMap = <Type, StackedRouteFactory>{
+  final _pagesMap = <Type, StackedRouteFactory>{
     SplashView: (data) {
       return MaterialPageRoute<dynamic>(
         builder: (context) => const SplashView(),

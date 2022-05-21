@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
+import 'package:mobuni_v2/core/base/models/base_response/empty_response.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
@@ -115,7 +116,7 @@ class NetworkManager {
     final baseResponse = BaseResponse.fromJson(data);
     if (baseResponse.success!) {
       if (baseResponse.data != null) {
-        if(baseResponse.data is bool){
+        if(model is EmptyModel){
           return baseResponse.data;
         }
         if (baseResponse.data is List) {

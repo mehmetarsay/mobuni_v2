@@ -9,6 +9,7 @@ import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:mobuni_v2/feature/views/profile/service/profile_service.dart';
 import 'package:stacked/stacked.dart';
 
@@ -47,8 +48,10 @@ class PhotoChangeViewModel extends BaseViewModel {
         'image':await MultipartFile.fromFile(imageFile!.path)
     });
   var a = await profileService.profilePhotoChange(data);
-  if(a){
-   print('fotoğrraf değişti');
+  if(a!=null){
+    UserModel user = GeneralManager.user;
+    user.image = a;
+    GeneralManager.hiveM.hive.put(Constants.user, user);
    Fluttertoast.showToast(msg: 'Fotoğraf güncellendi');
    context.loaderOverlay.hide();
    context.navigationService.back();

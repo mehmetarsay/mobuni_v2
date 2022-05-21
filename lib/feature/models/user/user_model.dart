@@ -21,6 +21,8 @@ class UserModel extends BaseModel {
     this.image,
     this.universityId,
     this.departmentId,
+    this.university,
+    this.department
   });
 
   @HiveField(0)

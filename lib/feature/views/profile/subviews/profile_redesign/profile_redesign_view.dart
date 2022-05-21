@@ -35,98 +35,103 @@ class ProfileRedesignView extends StatelessWidget {
         key: vm.formKey,
         child: Container(
           height: context.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          context.navigationService.navigateToView(PhotoChangeView(imageUrl:GeneralManager.user.image!));
-                        },
-                        child: Stack(
-                          children: [
-                            UserPhoto(size: context.height/6,),
-                            Positioned(
-                              right: 0,
-                              left: 100,
-                              bottom: 0,
-                              child: Material(
-                                color: context.theme.primaryColorDark,
-                                shape: CircleBorder(),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: context.theme.primaryColorLight,
-                                    size: 18,
+          child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Stack(
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            context.navigationService.navigateToView(PhotoChangeView(imageUrl:GeneralManager.user.image!));
+                          },
+                          child: Stack(
+                            children: [
+                              UserPhoto(size: context.height/6,),
+                              Positioned(
+                                right: 0,
+                                left: 100,
+                                bottom: 0,
+                                child: Material(
+                                  color: context.theme.primaryColorDark,
+                                  shape: CircleBorder(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: context.theme.primaryColorLight,
+                                      size: 18,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 30,),
-                  CustomTextFormField(
-                    controller: vm.name,
-                    hintText: 'Name',
-                    validator: Validators.notEmpty,
-                  ),
-                  CustomTextFormField(
-                    controller: vm.surname,
-                    hintText: 'Surname',
-                    validator: Validators.notEmpty,
-                  ),
-                  CustomTextFormField(
-                    controller: vm.userName,
-                    hintText: 'Username',
-                    validator: Validators.notEmpty,
-                  ),
-                  CustomTextFormField(
-                    controller: vm.email,
-                    hintText: 'Email Address',
-                    validator: Validators.emailValidator,
-                    textInputType: TextInputType.emailAddress,
-                  ),
-                  Visibility(
-                    visible: GeneralManager.user.userType==1,
-                    child: Column(
-                      children: [
-                        CustomDropdown(
-                          labelText: 'University',
-                          items: vm.universityList,
-                          isLoading: vm.isLoading,
-                          voidCallback: (value) => vm.universityId = value as int,
-                        ),
-                        CustomDropdown(
-                          labelText: 'Department',
-                          items: vm.departmentList,
-                          isLoading: vm.isLoading,
-                          voidCallback: (value) => vm.departmentId = value as int,
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                    SizedBox(height: 30,),
+                    CustomTextFormField(
+                      controller: vm.name,
+                      hintText: 'Name',
+                      validator: Validators.notEmpty,
+                    ),
+                    CustomTextFormField(
+                      controller: vm.surname,
+                      hintText: 'Surname',
+                      validator: Validators.notEmpty,
+                    ),
+                    CustomTextFormField(
+                      controller: vm.userName,
+                      hintText: 'Username',
+                      validator: Validators.notEmpty,
+                    ),
+                    CustomTextFormField(
+                      controller: vm.email,
+                      hintText: 'Email Address',
+                      validator: Validators.emailValidator,
+                      textInputType: TextInputType.emailAddress,
+                    ),
+                    Visibility(
+                      visible: GeneralManager.user.userType==1,
+                      child: Column(
+                        children: [
+                          CustomDropdown(
+                            labelText: 'University',
+                            items: vm.universityList,
+                            isLoading: vm.isLoading,
+                            initId: vm.universityId,
+                            voidCallback: (value) => vm.universityId = value as int,
+                          ),
+                          CustomDropdown(
+                            labelText: 'Department',
+                            items: vm.departmentList,
+                            isLoading: vm.isLoading,
+                            initId: vm.departmentId,
+                            voidCallback: (value) => vm.departmentId = value as int,
+                          ),
+                        ],
+                      ),
+                    ),
 
-                ],
-              ),
+                  ],
+                ),
+                SizedBox(height: 20,),
+                Column(
+                  children: [
+                    CustomButton(
+                      text: 'Kaydet',
+                      onPressed: () => vm.save(context),
+                    ),
+                    SizedBox(height: 20,)
+                  ],
+                ),
 
-              Column(
-                children: [
-                  CustomButton(
-                    text: 'Kaydet',
-                    onPressed: () => vm.save(context),
-                  ),
-                  SizedBox(height: 20,)
-                ],
-              ),
-
-            ],
+              ],
+            ),
           ),
         ),
       ),

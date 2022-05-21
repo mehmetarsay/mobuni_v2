@@ -7,6 +7,7 @@ part 'empty_response.g.dart';
 class EmptyModel extends BaseModel {
   EmptyModel();
 
+
   factory EmptyModel.fromJson(Map<String, dynamic> json) => _$EmptyModelFromJson(json);
 
   @override

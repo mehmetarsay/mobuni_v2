@@ -6,6 +6,7 @@ class ApiConstants {
       ? PrivateConstants.productionUrl
       : PrivateConstants.developmentUrl;
   
+  static String user = 'User';
   static String login = 'User/Login';
   static String register = 'User/Register';
   static String uploadProfileImage = 'User/UploadProfileImage';

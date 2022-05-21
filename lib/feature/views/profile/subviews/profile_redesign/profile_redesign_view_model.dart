@@ -3,15 +3,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/app/app.router.dart';
+import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/constants/enum/user_type_enum.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:mobuni_v2/feature/views/auth/model/login_model.dart';
 import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
+import 'package:mobuni_v2/feature/views/profile/service/profile_service.dart';
 import 'package:stacked/stacked.dart';
 
 class ProfileRedesignViewModel extends BaseViewModel {
+  ProfileService _profileService = locator<ProfileService>();
   AuthService _authService = locator<AuthService>();
   final formKey = GlobalKey<FormState>();
 
@@ -26,15 +29,22 @@ class ProfileRedesignViewModel extends BaseViewModel {
   final surname = TextEditingController();
   final userName = TextEditingController();
   final email = TextEditingController();
-  int universityId = -1;
-  int departmentId = -1;
+  int? universityId;
+  int? departmentId;
   List universityList = [];
   List departmentList = [];
 
   initialize(BuildContext context) async {
+
+    name.text = GeneralManager.user.name!;
+    surname.text = GeneralManager.user.surname!;
+    userName.text = GeneralManager.user.userName!;
+    email.text = GeneralManager.user.email!;
     isLoading = true;
     universityList = await _authService.getAllUniversity();
     departmentList = await _authService.getAllDepartment();
+    universityId = GeneralManager.user.universityId!;
+    departmentId = GeneralManager.user.departmentId!;
     isLoading = false;
   }
   @override
@@ -66,13 +76,24 @@ class ProfileRedesignViewModel extends BaseViewModel {
       email: email.text,
       universityId: universityId,
       departmentId: departmentId,
-      userType:GeneralManager.user.userType,
+      id: GeneralManager.user.id,
+      department: GeneralManager.user.department,
+      university: GeneralManager.user.university,
+
     );
-    // var response = await _authService.register(user);
-    // if (response is LoginModel) {
-    //   _authService.saveToken(response.accessToken, response.user!);
-    //   context.navigationService.pushNamedAndRemoveUntil(Routes.bottomNavView);
-    // }
-    context.loaderOverlay.hide();
+    try{
+      var response = await _profileService.profileUpdate(user);
+      if (response is UserModel) {
+        GeneralManager.hiveM.hive.put(Constants.user, response);
+        Fluttertoast.showToast(msg: 'Güncellendi');
+        context.loaderOverlay.hide();
+        context.navigationService.back();
+      }
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: 'Hata');
+      context.loaderOverlay.hide();
+    }
+
   }
 }

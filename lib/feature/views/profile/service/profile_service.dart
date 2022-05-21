@@ -21,4 +21,11 @@ class ProfileService {
     data: data,
     isFile: true,
   );
+
+  Future profileUpdate(dynamic data) async => await _networkManager!.request(
+    method: ReqTypes.put,
+    path: ApiConstants.user,
+    model: UserModel(),
+    data: data,
+  );
 }

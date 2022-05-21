@@ -28,9 +28,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       image: fields[8] as String?,
       universityId: fields[9] as int?,
       departmentId: fields[10] as int?,
-    )
-      ..university = fields[11] as UniversityModel?
-      ..department = fields[12] as DeaprtmentModel?;
+      university: fields[11] as UniversityModel?,
+      department: fields[12] as DeaprtmentModel?,
+    );
   }
 
   @override
@@ -92,14 +92,15 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       image: json['image'] as String?,
       universityId: json['universityId'] as int?,
       departmentId: json['departmentId'] as int?,
-    )
-      ..university = json['university'] == null
+      university: json['university'] == null
           ? null
-          : UniversityModel.fromJson(json['university'] as Map<String, dynamic>)
-      ..department = json['department'] == null
+          : UniversityModel.fromJson(
+              json['university'] as Map<String, dynamic>),
+      department: json['department'] == null
           ? null
           : DeaprtmentModel.fromJson(
-              json['department'] as Map<String, dynamic>);
+              json['department'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) {
   final val = <String, dynamic>{};

@@ -27,57 +27,54 @@ class QuestionSingleView extends StatefulWidget {
 class _QuestionSingleViewState extends State<QuestionSingleView> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap ?? () {},
-      onDoubleTap: () async {
-        widget.questionModel.isLiked = !widget.questionModel.isLiked;
-        await locator<QuestionService>().setQuestionLike(questionId: widget.questionModel.id!);
-        setState(() {});
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(top: 5),
-        child: Container(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 25.0,
-              backgroundImage: widget.questionModel.user!.image == null || widget.questionModel.user!.image == ''
-                  ? Image.asset('assets/empty_profile.png').image
-                  : NetworkImage(
-                      widget.questionModel.user!.image!,
-                    ),
-              backgroundColor: Colors.transparent,
-            ),
-            SizedBox(
-              width: 6,
-            ),
-            Container(
-              width: context.width / 1.3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.questionModel.user!.userName!,
-                    style: Theme.of(context).textTheme.headline1,
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: Container(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 25.0,
+            backgroundImage: widget.questionModel.user!.image == null || widget.questionModel.user!.image == ''
+                ? Image.asset('assets/empty_profile.png').image
+                : NetworkImage(
+                    widget.questionModel.user!.image!,
                   ),
-                  Text(widget.questionModel.text!),
-                  if (widget.questionModel.image != null && widget.questionModel.image != '') photoWidget(),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  likeCommentWidget(context),
-                  timeWidget(context),
-                  SizedBox(
-                    height: 15,
-                  ),
-                ],
-              ),
+            backgroundColor: Colors.transparent,
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          Container(
+            width: context.width / 1.3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.questionModel.user!.userName!,
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+                GestureDetector(
+                    onTap: widget.onTap ?? () {},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(widget.questionModel.text!),
+                    )),
+                if (widget.questionModel.image != null && widget.questionModel.image != '') photoWidget(),
+                SizedBox(
+                  height: 25,
+                ),
+                likeCommentWidget(context),
+                timeWidget(context),
+                SizedBox(
+                  height: 15,
+                ),
+              ],
             ),
-          ],
-        )),
-      ),
+          ),
+        ],
+      )),
     );
   }
 
@@ -114,18 +111,21 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
         SizedBox(
           width: 10,
         ),
-        Row(
-          children: [
-            Icon(
-              Icons.messenger_outlined,
-              size: 20,
-              color: Colors.grey,
-            ),
-            SizedBox(
-              width: 4,
-            ),
-            if (widget.questionModel.commentCount > 0) CustomText('${widget.questionModel.commentCount} cevap', color: Colors.grey)
-          ],
+        GestureDetector(
+          onTap: widget.onTap ?? () {},
+          child: Row(
+            children: [
+              Icon(
+                Icons.messenger_outlined,
+                size: 20,
+                color: Colors.grey,
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              if (widget.questionModel.commentCount > 0) CustomText('${widget.questionModel.commentCount} cevap', color: Colors.grey)
+            ],
+          ),
         ),
       ],
     );

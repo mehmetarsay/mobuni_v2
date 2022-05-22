@@ -69,7 +69,6 @@ class QuestionsView extends StatelessWidget {
                   key: PageStorageKey<String>('questionController'),
                   controller: vm.scrollController,
                   physics: BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(8),
                   itemCount: vm.questionService.questions!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return QuestionSingleView( questionModel: vm.questionService.questions!.elementAt(index),onTap: ()async{

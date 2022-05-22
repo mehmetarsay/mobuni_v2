@@ -2,6 +2,7 @@ import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/app/app.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
+import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/comment/comment_model.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
 import 'package:mobuni_v2/feature/views/comments/comment_view_model.dart';
@@ -25,7 +26,7 @@ class CommentView extends StatelessWidget {
                 appBar: AppBar(
                 ),
                   body: CommentBox(
-                userImage: "https://pbs.twimg.com/profile_images/1486436054169268238/-jsp8MLq_400x400.jpg",
+                userImage: GeneralManager.user.image,
                 labelText: 'Cevap yaz...',
                 withBorder: false,
                 errorText: 'Boş cevap gönderilemez',

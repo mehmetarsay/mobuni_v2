@@ -5,6 +5,7 @@ import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/models/comment/comment_model.dart';
 import 'package:mobuni_v2/feature/views/comments/service/comment_service.dart';
+import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 
 class CommentWidget extends StatefulWidget {
   const CommentWidget({Key? key,required this.commentModel}) : super(key: key);
@@ -22,19 +23,14 @@ class _CommentWidgetState extends State<CommentWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 20.0,
-              backgroundImage:
-              NetworkImage("https://pbs.twimg.com/profile_images/1486436054169268238/-jsp8MLq_400x400.jpg"),
-              backgroundColor: Colors.transparent,
-            ),
+            UserPhoto(url: widget.commentModel.user!.image,size: 40,currentUser: false,),
             SizedBox(width: 6,),
             Container(
               width: context.width/1.3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Mehmet Arsay',style: Theme.of(context).textTheme.headline1,),
+                  Text(widget.commentModel.user!.userName!,style: Theme.of(context).textTheme.headline1,),
                   Text(widget.commentModel.content!),
                   SizedBox(height: 10,),
                   Row(
@@ -73,15 +69,5 @@ class _CommentWidgetState extends State<CommentWidget> {
           ],
         )
     );
-  }
-
-  Future<bool> onLikeButtonTapped(bool isLiked) async{
-    /// isteği buraya gönder
-    // final bool success= await sendRequest();
-
-    /// başarısız olursa, hiçbir şey yapama
-    // return success? !isLiked:isLiked;
-
-    return !isLiked;
   }
 }

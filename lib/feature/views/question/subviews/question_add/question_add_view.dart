@@ -4,7 +4,7 @@ import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/question/subviews/question_add/question_add_view_model.dart';
-import 'package:mobuni_v2/feature/widgets/user/user_photo.dart';
+import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';

@@ -8,7 +8,7 @@ import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_tab_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
-import 'package:mobuni_v2/feature/widgets/user/user_photo.dart';
+import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:stacked/stacked.dart';
 
 class ProfileTabView extends StatelessWidget {
@@ -18,52 +18,51 @@ class ProfileTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     UserModel user = GeneralManager.user;
     return ViewModelBuilder<ProfileTabViewModel>.reactive(
-      // onModelReady: (model) => model.init()
-
-      builder: (context, vm, child) => SafeArea(
-        child: Scaffold(
-          body: CustomScrollView(
-            controller: vm.controller,
-            physics: BouncingScrollPhysics(),
-            slivers: <Widget>[
-              SliverAppBar(
-                title: Container(
-                  color: Colors.white,
-                  child: CustomText(
-                    vm.selectListType == ProfileListType.ActivityType ? 'Etkinlikler' : 'Sorularım',
-                    style: TextStyle(color: context.theme.primaryColor, fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                pinned: true,
-                automaticallyImplyLeading: false,
-                expandedHeight: context.height / 2.02,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  collapseMode: CollapseMode.parallax,
-                  background: sliverBackroundWidget(context, vm),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (_, int index) {
-                    return QuestionSingleView(
-                      questionModel: vm.questions!.elementAt(index),
-                    );
-                  },
-                  childCount: vm.questions!.length,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
       viewModelBuilder: () => ProfileTabViewModel(),
+      onModelReady: (model) => model.init(),
+      builder: (context, vm, child) => vm.initialised
+          ? SafeArea(
+              child: Scaffold(
+                body: CustomScrollView(
+                  controller: vm.controller,
+                  physics: BouncingScrollPhysics(),
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      centerTitle: false,
+                      title: CustomText(
+                        vm.selectListType == ProfileListType.ActivityType ? 'Etkinlikler' : 'Sorularım',
+                        style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      pinned: true,
+                      automaticallyImplyLeading: false,
+                      expandedHeight: context.height / 2.02,
+                      flexibleSpace: FlexibleSpaceBar(
+                        centerTitle: true,
+                        collapseMode: CollapseMode.parallax,
+                        background: sliverBackroundWidget(context, vm),
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (_, int index) {
+                          return QuestionSingleView(
+                            questionModel: vm.questions!.elementAt(index),
+                          );
+                        },
+                        childCount: vm.questions!.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : Container(),
     );
   }
 
   sliverBackroundWidget(BuildContext context, ProfileTabViewModel vm) {
     return GestureDetector(
-      onTap: () async{
+      onTap: () async {
         await context.navigationService.navigateTo(Routes.profileRedesignView)!.then((value) {
           vm.notifyListeners();
         });
@@ -73,12 +72,14 @@ class ProfileTabView extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: context.height / 15,
+              height: context.height / 20,
             ),
             /// profil fotoğrafı
             Stack(
               children: [
-                UserPhoto(size: context.height/6,),
+                UserPhoto(
+                  size: context.height / 6,
+                ),
                 Positioned(
                   right: 0,
                   child: Material(
@@ -175,7 +176,7 @@ class ProfileTabView extends StatelessWidget {
               iconSize: 18,
               iconData: Icons.person,
               customText: CustomText(
-               '${ GeneralManager.user.name} ${ GeneralManager.user.surname}',
+                '${GeneralManager.user.name} ${GeneralManager.user.surname}',
                 style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w700, fontSize: 18),
               ),
             ),
@@ -185,7 +186,7 @@ class ProfileTabView extends StatelessWidget {
               iconSize: 16,
               iconData: Icons.school,
               customText: CustomText(
-                '${ GeneralManager.user.university!.name}',
+                '${GeneralManager.user.university!.name}',
                 style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w600, fontSize: 16),
               ),
             ),
@@ -194,7 +195,7 @@ class ProfileTabView extends StatelessWidget {
                 iconSize: 14,
                 iconData: Icons.mosque,
                 customText: CustomText(
-                  '${ GeneralManager.user.department!.name}',
+                  '${GeneralManager.user.department!.name}',
                   style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w500, fontSize: 14),
                 )),
           ],

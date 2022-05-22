@@ -10,6 +10,7 @@ import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
 import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
 import 'package:mobuni_v2/feature/widgets/photo/photo_view.dart';
+import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zoom_pinch_overlay/zoom_pinch_overlay.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -28,21 +29,13 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5),
+      padding: const EdgeInsets.only(left: 8,right: 8,top: 5,bottom: 0),
       child: Container(
           child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 25.0,
-            backgroundImage: widget.questionModel.user!.image == null || widget.questionModel.user!.image == ''
-                ? Image.asset('assets/empty_profile.png').image
-                : NetworkImage(
-                    widget.questionModel.user!.image!,
-                  ),
-            backgroundColor: Colors.transparent,
-          ),
+          UserPhoto(url: widget.questionModel.user!.image,size: 50,currentUser: false,),
           SizedBox(
             width: 6,
           ),

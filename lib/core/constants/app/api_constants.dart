@@ -13,6 +13,7 @@ class ApiConstants {
   static String questionGetByUniversityId = 'Question/GetByUniversityId';
   static String questionCountsByUniversityId = 'Question/GetQuestionCountsByUniversityId';
   static String likeQuestion = 'Question/LikeQuestion';
+  static String getQuestionsByUserId = 'Question/GetQuestionsByUserId';
   static String like = 'Like';
   static String universityAll = 'University/GetAll';
   static String departmentAll = 'Department/ALL';

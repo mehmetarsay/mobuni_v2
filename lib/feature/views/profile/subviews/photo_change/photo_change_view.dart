@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
@@ -12,7 +13,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:stacked/stacked.dart';
 
 class PhotoChangeView extends StatelessWidget {
-  const PhotoChangeView({Key? key,required this.imageUrl}) : super(key: key);
+  const PhotoChangeView({Key? key, required this.imageUrl}) : super(key: key);
   final String imageUrl;
 
   @override
@@ -24,13 +25,13 @@ class PhotoChangeView extends StatelessWidget {
     );
   }
 
-  Widget builder(BuildContext context, PhotoChangeViewModel vm, Widget? child){
+  Widget builder(BuildContext context, PhotoChangeViewModel vm, Widget? child) {
     return Scaffold(
       key: GlobalKey(debugLabel: 'PhotoView'),
       appBar: AppBar(
         leading: GestureDetector(
-            onTap: (){
-             Navigator.pop(context);
+            onTap: () {
+              Navigator.pop(context);
             },
             child: Icon(Icons.arrow_back_ios)),
         actions: [
@@ -54,18 +55,25 @@ class PhotoChangeView extends StatelessWidget {
           ),
         ],
       ),
-      body:vm.initialised? Container(
+      body: vm.initialised ? Container(
           child: Stack(
             children: [
-              PhotoView(
-                imageProvider:vm.imageFile==null? NetworkImage(imageUrl):Image.file(File(vm.imageFile!.path)).image,
-                maxScale: 1.0,
-                minScale: 1.1,
-                backgroundDecoration: BoxDecoration(
-                  color: context.theme.primaryColorLight
+              Hero(
+                tag: 'Unique tag999',
+                child: Container(
+                  height: context.height,
+                  width: context.width,
+                  child: InteractiveViewer(
+                      child: Image(
+                          image: vm.imageFile == null ? NetworkImage(imageUrl) : Image
+                              .file(File(vm.imageFile!.path))
+                              .image,
+                        fit: BoxFit.contain,
+                      ),
+                  ),
                 ),
               ),
-              if(vm.imageFile!=null)Positioned(
+              if(vm.imageFile != null)Positioned(
                 right: 10,
                 left: 10,
                 bottom: 10,
@@ -73,8 +81,8 @@ class PhotoChangeView extends StatelessWidget {
                   width: context.width,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    border: Border.all(color:context.theme.primaryColorDark,width: 1 ),
-                    color: context.theme.primaryColorDark.withOpacity(0.5)
+                      border: Border.all(color: context.theme.primaryColorDark, width: 1),
+                      color: context.theme.primaryColorDark.withOpacity(0.5)
                   ),
                   child: Column(
                     children: [
@@ -84,7 +92,9 @@ class PhotoChangeView extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 25.0,
-                            backgroundImage: Image.file(File(vm.imageFile!.path)).image,
+                            backgroundImage: Image
+                                .file(File(vm.imageFile!.path))
+                                .image,
                             backgroundColor: Colors.transparent,
                           ),
                           SizedBox(
@@ -96,15 +106,15 @@ class PhotoChangeView extends StatelessWidget {
                               children: [
                                 CustomText(
                                   GeneralManager.user.userName!,
-                                  color:  context.theme.primaryColorLight,
+                                  color: context.theme.primaryColorLight,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 SizedBox(
                                   height: 5,
                                 ),
                                 CustomText('Bu fotoğraf efsane oldu :) ⭐🌟️⭐🌟️⭐'
-                                ,
-                                  color: context.theme.primaryColorLight ,
+                                  ,
+                                  color: context.theme.primaryColorLight,
                                 ),
                               ],
                             ),
@@ -113,8 +123,8 @@ class PhotoChangeView extends StatelessWidget {
                       ),
                       SizedBox(height: 10,),
                       CustomButton(
-                      text: 'Kaydet',
-                        onPressed: (){
+                        text: 'Kaydet',
+                        onPressed: () {
                           vm.save(context);
                         },
                       )
@@ -124,7 +134,7 @@ class PhotoChangeView extends StatelessWidget {
               )
             ],
           )
-      ):Container(
+      ) : Container(
         color: context.theme.primaryColorLight,
         child: Center(
           child: GestureDetector(

@@ -11,7 +11,7 @@ import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/profile/subviews/photo_change/photo_change_view.dart';
 import 'package:mobuni_v2/feature/widgets/text/custom_title.dart';
-import 'package:mobuni_v2/feature/widgets/user/user_photo.dart';
+import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:stacked/stacked.dart';
 
 import 'profile_redesign_view_model.dart';
@@ -45,8 +45,10 @@ class ProfileRedesignView extends StatelessWidget {
                     Stack(
                       children: [
                         GestureDetector(
-                          onTap: (){
-                            context.navigationService.navigateToView(PhotoChangeView(imageUrl:GeneralManager.user.image!));
+                          onTap: ()async{
+                            await context.navigationService.navigateToView(PhotoChangeView(imageUrl:GeneralManager.user.image!))!.then((value) {
+                              vm.notifyListeners();
+                            });
                           },
                           child: Stack(
                             children: [
@@ -78,6 +80,7 @@ class ProfileRedesignView extends StatelessWidget {
                       controller: vm.name,
                       hintText: 'Name',
                       validator: Validators.notEmpty,
+
                     ),
                     CustomTextFormField(
                       controller: vm.surname,
@@ -88,12 +91,14 @@ class ProfileRedesignView extends StatelessWidget {
                       controller: vm.userName,
                       hintText: 'Username',
                       validator: Validators.notEmpty,
+                      readOnly: true,
                     ),
                     CustomTextFormField(
                       controller: vm.email,
                       hintText: 'Email Address',
                       validator: Validators.emailValidator,
                       textInputType: TextInputType.emailAddress,
+                      readOnly: true,
                     ),
                     Visibility(
                       visible: GeneralManager.user.userType==1,

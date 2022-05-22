@@ -6,6 +6,7 @@ import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/enum/req_types.dart';
 import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
 import 'package:mobuni_v2/core/manager/network_manager.dart';
+import 'package:mobuni_v2/feature/models/questions/question_model.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -28,4 +29,12 @@ class ProfileService {
     model: UserModel(),
     data: data,
   );
+  Future questionGetByUserId({required String userId}) async {
+    return  await _networkManager!.request(
+      method: ReqTypes.get,
+      path: '${ApiConstants.getQuestionsByUserId}/${userId}',
+      model: QuestionModel(),
+    );
+
+  }
 }

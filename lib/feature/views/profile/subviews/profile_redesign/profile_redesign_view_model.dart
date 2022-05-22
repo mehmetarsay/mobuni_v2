@@ -19,7 +19,9 @@ class ProfileRedesignViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
 
   bool _isLoading = true;
+
   bool get isLoading => _isLoading;
+
   set isLoading(bool value) {
     _isLoading = value;
     notifyListeners();
@@ -35,7 +37,6 @@ class ProfileRedesignViewModel extends BaseViewModel {
   List departmentList = [];
 
   initialize(BuildContext context) async {
-
     name.text = GeneralManager.user.name!;
     surname.text = GeneralManager.user.surname!;
     userName.text = GeneralManager.user.userName!;
@@ -47,6 +48,7 @@ class ProfileRedesignViewModel extends BaseViewModel {
     departmentId = GeneralManager.user.departmentId!;
     isLoading = false;
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -58,7 +60,7 @@ class ProfileRedesignViewModel extends BaseViewModel {
       Fluttertoast.showToast(msg: 'Lütfen gerekli alanları doldurunuz');
       return;
     }
-    if (GeneralManager.user.userType==1) {
+    if (GeneralManager.user.userType == 1) {
       if (universityId == -1) {
         Fluttertoast.showToast(msg: 'Lütfen üniversite seçiniz');
         return;
@@ -74,14 +76,14 @@ class ProfileRedesignViewModel extends BaseViewModel {
       surname: surname.text,
       userName: userName.text,
       email: email.text,
+      image: GeneralManager.user.image,
       universityId: universityId,
       departmentId: departmentId,
       id: GeneralManager.user.id,
       department: GeneralManager.user.department,
       university: GeneralManager.user.university,
-
     );
-    try{
+    try {
       var response = await _profileService.profileUpdate(user);
       if (response is UserModel) {
         GeneralManager.hiveM.hive.put(Constants.user, response);
@@ -89,11 +91,9 @@ class ProfileRedesignViewModel extends BaseViewModel {
         context.loaderOverlay.hide();
         context.navigationService.back();
       }
-    }
-    catch(e){
+    } catch (e) {
       Fluttertoast.showToast(msg: 'Hata');
       context.loaderOverlay.hide();
     }
-
   }
 }

@@ -63,6 +63,7 @@ dependencies:
   image_pickers: ^2.0.0+2
   url_launcher: ^6.1.2
   file_picker: ^4.5.1
+  dismissible_page: ^0.7.2
 
 
 dev_dependencies:

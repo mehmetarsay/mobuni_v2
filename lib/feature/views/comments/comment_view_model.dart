@@ -61,10 +61,11 @@ class CommentViewModel extends BaseViewModel {
           commentController.clear();
           commentSend =true;
           Fluttertoast.showToast(msg: 'Gönderildi');
+          question!.commentCount = question!.commentCount + 1;
         });
         notifyListeners();
       } else {
-        Fluttertoast.showToast(msg: 'Boş yorum göndeirlemez');
+        Fluttertoast.showToast(msg: 'Boş yorum gönderilemez');
       }
     }
 

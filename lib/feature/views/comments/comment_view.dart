@@ -7,7 +7,7 @@ import 'package:mobuni_v2/feature/models/questions/question_model.dart';
 import 'package:mobuni_v2/feature/views/comments/comment_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
 import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
-import 'package:mobuni_v2/feature/widgets/comment/comment_widget.dart';
+import 'package:mobuni_v2/feature/views/comments/widget/comment_widget.dart';
 import 'package:stacked/stacked.dart';
 
 class CommentView extends StatelessWidget {
@@ -77,7 +77,17 @@ class CommentView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 50,),
-                Text('İlk Cevabı sen yaz...')
+                GestureDetector(
+                  onTap: (){
+                    vm.focusNode.requestFocus();
+                  },
+                  child: Column(
+                    children: [
+                      Text('İlk cevabı sen yaz...'),
+                      Icon(Icons.arrow_circle_down_rounded)
+                    ],
+                  ),
+                )
               ],
             );
           }

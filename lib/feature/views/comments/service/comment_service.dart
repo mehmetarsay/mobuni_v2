@@ -1,4 +1,5 @@
 import 'package:mobuni_v2/app/app.locator.dart';
+import 'package:mobuni_v2/core/base/models/base_response/empty_response.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/constants/enum/req_types.dart';
@@ -31,6 +32,19 @@ class CommentService {
         path: ApiConstants.questionComment,
         model: CommentModel(),
         data: data
+    );
+  }
+
+  setCommentLike({required int id})async{
+    return  await _networkManager!.request(
+      method: ReqTypes.post,
+      path: ApiConstants.like,
+      model: EmptyModel(),
+      queryParameters:{
+        //Tabletype 2 olursa yorumu beğenir
+        'TableType':2,
+        'id':id
+      } ,
     );
   }
 }

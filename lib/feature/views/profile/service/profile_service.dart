@@ -29,6 +29,16 @@ class ProfileService {
     model: UserModel(),
     data: data,
   );
+
+  Future<UserModel> getUserProfile(String userId) async => await _networkManager!.request(
+    method: ReqTypes.get,
+    path: ApiConstants.getByUserId,
+    model: UserModel(),
+    queryParameters: {
+      'userId':userId
+    }
+  );
+
   Future questionGetByUserId({required String userId}) async {
     return  await _networkManager!.request(
       method: ReqTypes.get,

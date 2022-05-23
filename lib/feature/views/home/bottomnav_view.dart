@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
 import 'package:mobuni_v2/feature/views/home/bottomnav_view_model.dart';
-import 'package:mobuni_v2/feature/views/profile/profile_tab_view.dart';
+import 'package:mobuni_v2/feature/views/profile/profile_view.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view.dart';
 import 'package:mobuni_v2/feature/views/tab2/tab2_view.dart';
 import 'package:stacked/stacked.dart';
@@ -81,7 +81,7 @@ class _BottomNavViewState extends State<BottomNavView>
           _viewCache[index] = Tab2View();
           break;
         case 2:
-          _viewCache[index] = ProfileTabView();
+          _viewCache[index] = ProfileView();
           break;
       }
     }

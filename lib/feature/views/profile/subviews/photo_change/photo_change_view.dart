@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,12 +10,13 @@ import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/profile/subviews/photo_change/photo_change_view_model.dart';
+
 import 'package:photo_view/photo_view.dart';
 import 'package:stacked/stacked.dart';
 
 class PhotoChangeView extends StatelessWidget {
   const PhotoChangeView({Key? key, required this.imageUrl}) : super(key: key);
-  final String imageUrl;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,49 @@ class PhotoChangeView extends StatelessWidget {
             },
             child: Icon(Icons.arrow_back_ios)),
         actions: [
+         if(imageUrl!=null&&imageUrl!='') Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: GestureDetector(
+              onTap: () {
+                AwesomeDialog(
+                  context: context,
+                  animType: AnimType.SCALE,
+                  dialogType: DialogType.INFO,
+                  body: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Profil fotoğrafı silinecek emin misiniz?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),),
+                  btnOkOnPress: (){
+                    vm.delete(context);
+                  },
+                  btnOkColor: context.theme.primaryColor,
+                  btnCancelOnPress: (){
+                  },
+                  btnOkText: 'Evet',
+                  btnCancelText: 'Geri',
+
+                )..show();
+
+              } ,
+              child: Material(
+                color: context.theme.primaryColorDark,
+                shape: CircleBorder(),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Icon(
+                    Icons.delete,
+                    color: context.theme.primaryColorLight,
+                    size: 18,
+                  ),
+                ),
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 15),
             child: GestureDetector(
@@ -65,7 +110,7 @@ class PhotoChangeView extends StatelessWidget {
                   width: context.width,
                   child: InteractiveViewer(
                       child: Image(
-                          image: vm.imageFile == null ? NetworkImage(imageUrl) : Image
+                          image: vm.imageFile == null ? NetworkImage(imageUrl!) : Image
                               .file(File(vm.imageFile!.path))
                               .image,
                         fit: BoxFit.contain,

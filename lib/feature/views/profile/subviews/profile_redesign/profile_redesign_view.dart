@@ -4,13 +4,11 @@ import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/components/button/custom_button.dart';
 import 'package:mobuni_v2/core/components/dropdown/custom_dropdown.dart';
-import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/components/text_form_field/custom_text_form_field.dart';
 import 'package:mobuni_v2/core/constants/app/validators.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/profile/subviews/photo_change/photo_change_view.dart';
-import 'package:mobuni_v2/feature/widgets/text/custom_title.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:stacked/stacked.dart';
 
@@ -46,7 +44,7 @@ class ProfileRedesignView extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: ()async{
-                            await context.navigationService.navigateToView(PhotoChangeView(imageUrl:GeneralManager.user.image!))!.then((value) {
+                            await context.navigationService.navigateToView(PhotoChangeView(imageUrl:GeneralManager.user.image))!.then((value) {
                               vm.notifyListeners();
                             });
                           },

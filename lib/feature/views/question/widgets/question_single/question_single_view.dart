@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
@@ -8,6 +9,8 @@ import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
+import 'package:mobuni_v2/feature/views/chat/chat_home/big_image_view.dart';
+import 'package:mobuni_v2/feature/views/profile/profile_view.dart';
 import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
 import 'package:mobuni_v2/feature/widgets/photo/photo_view.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
@@ -29,13 +32,22 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8,right: 8,top: 5,bottom: 0),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 0),
       child: Container(
           child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserPhoto(url: widget.questionModel.user!.image,size: 50,currentUser: false,),
+          GestureDetector(
+            onTap: (){
+              context.navigationService.navigateToView(ProfileView(userId: widget.questionModel.userId));
+            },
+            child: UserPhoto(
+              url: widget.questionModel.user!.image,
+              size: 50,
+              currentUser: false,
+            ),
+          ),
           SizedBox(
             width: 6,
           ),
@@ -142,39 +154,47 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
       child: GestureDetector(
         onTap: () {
           if (widget.questionModel.image != null && widget.questionModel.image != '')
-            context.navigationService.navigateToView(
-              CustomPhotoView(imageUrl: widget.questionModel.image!),
-              fullscreenDialog: true,
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (BuildContext context, _, __) => CustomPhotoView(
+                  imageUrl: widget.questionModel.image!,
+                       imageTag: widget.questionModel.id.toString(),
+                ),
+              ),
             );
         },
-        child: CachedNetworkImage(
-          imageUrl: widget.questionModel.image!,
-          imageBuilder: (context, imageProvider) => Container(
-            height: context.height / 3.5,
-            width: context.width / 1.1,
-            decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                color: Colors.grey),
-          ),
-          placeholder: (context, url) => Shimmer.fromColors(
-            highlightColor: context.theme.primaryColorLight.withOpacity(0.1),
-            baseColor: context.theme.primaryColorDark.withOpacity(0.1),
-            child: Container(
+        child: Hero(
+          tag: widget.questionModel.id.toString(),
+          child: CachedNetworkImage(
+            imageUrl: widget.questionModel.image!,
+            imageBuilder: (context, imageProvider) => Container(
               height: context.height / 3.5,
               width: context.width / 1.1,
-              decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.all(Radius.circular(10)), color: Colors.grey),
+              decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                  color: Colors.grey),
             ),
-          ),
-          errorWidget: (context, url, error) => Container(
-            height: context.height / 3.5,
-            width: context.width / 1.1,
-            decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: context.theme.primaryColorDark.withOpacity(0.1)),
-            child: Icon(Icons.error),
+            placeholder: (context, url) => Shimmer.fromColors(
+              highlightColor: context.theme.primaryColorLight.withOpacity(0.1),
+              baseColor: context.theme.primaryColorDark.withOpacity(0.1),
+              child: Container(
+                height: context.height / 3.5,
+                width: context.width / 1.1,
+                decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.all(Radius.circular(10)), color: Colors.grey),
+              ),
+            ),
+            errorWidget: (context, url, error) => Container(
+              height: context.height / 3.5,
+              width: context.width / 1.1,
+              decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: context.theme.primaryColorDark.withOpacity(0.1)),
+              child: Icon(Icons.error),
+            ),
           ),
         ),
       ),

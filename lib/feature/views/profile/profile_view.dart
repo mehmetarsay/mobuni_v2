@@ -6,20 +6,20 @@ import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
-import 'package:mobuni_v2/feature/views/profile/profile_tab_view_model.dart';
+import 'package:mobuni_v2/feature/views/profile/profile_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:stacked/stacked.dart';
 
-class ProfileTabView extends StatelessWidget {
-  const ProfileTabView({Key? key}) : super(key: key);
+class ProfileView extends StatelessWidget {
+  const ProfileView({Key? key,this.userId}) : super(key: key);
+  final String? userId;
 
   @override
   Widget build(BuildContext context) {
-    UserModel user = GeneralManager.user;
-    return ViewModelBuilder<ProfileTabViewModel>.reactive(
-      viewModelBuilder: () => ProfileTabViewModel(),
-      onModelReady: (model) => model.init(),
+    return ViewModelBuilder<ProfileViewModel>.reactive(
+      viewModelBuilder: () => ProfileViewModel(),
+      onModelReady: (model) => model.init(userId),
       builder: (context, vm, child) => vm.initialised
           ? SafeArea(
               child: Scaffold(
@@ -29,6 +29,9 @@ class ProfileTabView extends StatelessWidget {
                   slivers: <Widget>[
                     SliverAppBar(
                       centerTitle: false,
+                      leading:userId!=null? IconButton(onPressed: () {
+                        context.navigationService.back();
+                      }, icon: Icon(Icons.arrow_back_ios),):Container(),
                       title: CustomText(
                         vm.selectListType == ProfileListType.ActivityType ? 'Etkinlikler' : 'Sorularım',
                         style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.bold, fontSize: 20),
@@ -56,13 +59,16 @@ class ProfileTabView extends StatelessWidget {
                 ),
               ),
             )
-          : Container(),
+          : Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
-  sliverBackroundWidget(BuildContext context, ProfileTabViewModel vm) {
+  sliverBackroundWidget(BuildContext context, ProfileViewModel vm) {
     return GestureDetector(
       onTap: () async {
+        if(userId==null)
         await context.navigationService.navigateTo(Routes.profileRedesignView)!.then((value) {
           vm.notifyListeners();
         });
@@ -79,8 +85,9 @@ class ProfileTabView extends StatelessWidget {
               children: [
                 UserPhoto(
                   size: context.height / 6,
+                  url: vm.viewUser.image,
                 ),
-                Positioned(
+                if(userId==null)Positioned(
                   right: 0,
                   child: Material(
                     color: context.theme.primaryColorDark,
@@ -102,11 +109,11 @@ class ProfileTabView extends StatelessWidget {
             ),
             ///username
             CustomText(
-              '@${GeneralManager.user.userName}',
+              '@${vm.viewUser.userName}',
               style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.bold, fontSize: 20),
             ),
             SizedBox(height: context.height / 50),
-            buildUserInfoWidget(context),
+            buildUserInfoWidget(context,vm),
             SizedBox(height: 10),
             Divider(
               thickness: 2,
@@ -163,7 +170,7 @@ class ProfileTabView extends StatelessWidget {
     );
   }
 
-  Row buildUserInfoWidget(BuildContext context) {
+  Row buildUserInfoWidget(BuildContext context,ProfileViewModel vm) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -176,7 +183,7 @@ class ProfileTabView extends StatelessWidget {
               iconSize: 18,
               iconData: Icons.person,
               customText: CustomText(
-                '${GeneralManager.user.name} ${GeneralManager.user.surname}',
+                '${vm.viewUser.name} ${vm.viewUser.surname}',
                 style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w700, fontSize: 18),
               ),
             ),
@@ -186,7 +193,7 @@ class ProfileTabView extends StatelessWidget {
               iconSize: 16,
               iconData: Icons.school,
               customText: CustomText(
-                '${GeneralManager.user.university!.name}',
+                '${vm.viewUser.university!.name}',
                 style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w600, fontSize: 16),
               ),
             ),
@@ -195,7 +202,7 @@ class ProfileTabView extends StatelessWidget {
                 iconSize: 14,
                 iconData: Icons.mosque,
                 customText: CustomText(
-                  '${GeneralManager.user.department!.name}',
+                  '${vm.viewUser.department!.name}',
                   style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.w500, fontSize: 14),
                 )),
           ],

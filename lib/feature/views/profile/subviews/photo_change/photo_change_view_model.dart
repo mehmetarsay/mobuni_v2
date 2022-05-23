@@ -56,8 +56,31 @@ class PhotoChangeViewModel extends BaseViewModel {
    context.loaderOverlay.hide();
    context.navigationService.back();
   }
-  Fluttertoast.showToast(msg: 'Hata');
+  else{
+    Fluttertoast.showToast(msg: 'Hata');
+  }
   context.loaderOverlay.hide();
+
+
+  }
+  delete(BuildContext context)async{
+    context.loaderOverlay.show();
+    var data = FormData.fromMap({
+        'image':''
+    });
+    var a = await profileService.profilePhotoChange(data);
+    if(a!=null){
+      UserModel user = GeneralManager.user;
+      user.image = '';
+      GeneralManager.hiveM.hive.put(Constants.user, user);
+      Fluttertoast.showToast(msg: a);
+      context.loaderOverlay.hide();
+      context.navigationService.back();
+    }
+    else{
+      Fluttertoast.showToast(msg: 'Hata');
+    }
+    context.loaderOverlay.hide();
 
 
   }

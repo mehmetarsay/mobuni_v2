@@ -120,6 +120,7 @@ class StackedRouter extends RouterBase {
         builder: (context) => CustomPhotoView(
           key: args.key,
           imageUrl: args.imageUrl,
+          imageTag: args.imageTag,
         ),
         settings: data,
       );
@@ -168,7 +169,9 @@ class CommentViewArguments {
 class CustomPhotoViewArguments {
   final Key? key;
   final String imageUrl;
-  CustomPhotoViewArguments({this.key, required this.imageUrl});
+  final String imageTag;
+  CustomPhotoViewArguments(
+      {this.key, required this.imageUrl, required this.imageTag});
 }
 
 /// ChatHomeView arguments holder class

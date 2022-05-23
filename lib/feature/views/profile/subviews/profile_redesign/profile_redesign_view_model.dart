@@ -71,18 +71,11 @@ class ProfileRedesignViewModel extends BaseViewModel {
       }
     }
     context.loaderOverlay.show();
-    var user = UserModel(
-      name: name.text,
-      surname: surname.text,
-      userName: userName.text,
-      email: email.text,
-      image: GeneralManager.user.image,
-      universityId: universityId,
-      departmentId: departmentId,
-      id: GeneralManager.user.id,
-      department: GeneralManager.user.department,
-      university: GeneralManager.user.university,
-    );
+    var user =GeneralManager.user;
+    user.name = name.text;
+    user.surname =surname.text;
+    user.universityId = universityId;
+    user.departmentId = departmentId;
     try {
       var response = await _profileService.profileUpdate(user);
       if (response is UserModel) {

@@ -8,7 +8,7 @@ import 'package:stacked/stacked.dart';
 
 enum ProfileListType { QuestionType, ActivityType }
 
-class ProfileTabViewModel extends BaseViewModel {
+class ProfileViewModel extends BaseViewModel {
   ScrollController controller = ScrollController();
 
   ProfileService profileService = locator<ProfileService>();
@@ -35,10 +35,16 @@ class ProfileTabViewModel extends BaseViewModel {
   }
 
 
-  init() async {
+  init(String? userId) async {
     setInitialised(false);
     ///User initialize
-    viewUser = GeneralManager.user;
+    if(userId!=null){
+      viewUser = await profileService.getUserProfile(userId)  ;
+    }
+    else{
+      viewUser = GeneralManager.user;
+    }
+
     setInitialised(true);
     notifyListeners();
     await getQuestionAndActivity();

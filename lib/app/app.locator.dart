@@ -13,6 +13,7 @@ import 'package:stacked_services/stacked_services.dart';
 import '../core/manager/hive/hive_manager.dart';
 import '../core/manager/network_manager.dart';
 import '../core/manager/provider_manager.dart';
+import '../feature/views/activity/service/activity_service.dart';
 import '../feature/views/auth/service/auth_service.dart';
 import '../feature/views/comments/service/comment_service.dart';
 import '../feature/views/profile/service/profile_service.dart';
@@ -33,6 +34,7 @@ void setupLocator({String? environment, EnvironmentFilter? environmentFilter}) {
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => ProfileService());
   locator.registerLazySingleton(() => CommentService());
+  locator.registerLazySingleton(() => ActivityService());
   locator
       .registerLazySingleton(() => NavigationService(), registerFor: {"dev"});
 }

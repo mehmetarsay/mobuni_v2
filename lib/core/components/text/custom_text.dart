@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '/core/extension/context_extension.dart';
 
 class CustomText extends StatefulWidget {
   final String? data;
@@ -40,7 +39,8 @@ class _CustomTextState extends State<CustomText> {
       style:widget.style==null? TextStyle(
           fontSize: widget.fontSize ?? 12,
           fontWeight: widget.fontWeight ?? FontWeight.normal,
-          color: widget.color ?? context.colors.primary,
+          color: widget.color,
+          // color: widget.color ?? context.colors.primary,
           decoration: widget.lineThrough
               ? TextDecoration.lineThrough
               : TextDecoration.none,

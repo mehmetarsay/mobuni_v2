@@ -1,21 +1,14 @@
-import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
-import 'package:mobuni_v2/app/app.router.dart';
+import 'package:mobuni_v2/core/components/image/cached_image.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
-import 'package:mobuni_v2/feature/views/chat/chat_home/big_image_view.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_view.dart';
 import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
-import 'package:mobuni_v2/feature/widgets/photo/photo_view.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:zoom_pinch_overlay/zoom_pinch_overlay.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 // ignore: must_be_immutable
@@ -151,53 +144,12 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
   photoWidget() {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
-      child: GestureDetector(
-        onTap: () {
-          if (widget.questionModel.image != null && widget.questionModel.image != '')
-            Navigator.of(context).push(
-              PageRouteBuilder(
-                opaque: false,
-                pageBuilder: (BuildContext context, _, __) => CustomPhotoView(
-                  imageUrl: widget.questionModel.image!,
-                       imageTag: widget.questionModel.id.toString(),
-                ),
-              ),
-            );
-        },
-        child: Hero(
-          tag: widget.questionModel.id.toString(),
-          child: CachedNetworkImage(
+      child: CachedImage(
             imageUrl: widget.questionModel.image!,
-            imageBuilder: (context, imageProvider) => Container(
-              height: context.height / 3.5,
-              width: context.width / 1.1,
-              decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                  color: Colors.grey),
-            ),
-            placeholder: (context, url) => Shimmer.fromColors(
-              highlightColor: context.theme.primaryColorLight.withOpacity(0.1),
-              baseColor: context.theme.primaryColorDark.withOpacity(0.1),
-              child: Container(
-                height: context.height / 3.5,
-                width: context.width / 1.1,
-                decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.all(Radius.circular(10)), color: Colors.grey),
-              ),
-            ),
-            errorWidget: (context, url, error) => Container(
-              height: context.height / 3.5,
-              width: context.width / 1.1,
-              decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: context.theme.primaryColorDark.withOpacity(0.1)),
-              child: Icon(Icons.error),
-            ),
+            height: context.height / 3.5,
+            width: context.width / 1.1,
+            borderRadiusGeometry: BorderRadius.all(Radius.circular(10)),
           ),
-        ),
-      ),
     );
   }
 }

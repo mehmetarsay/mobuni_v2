@@ -1,7 +1,7 @@
 import 'package:stacked/stacked.dart';
 
 
-class BottomNavViewModel extends BaseViewModel {
+class HomeViewModel extends BaseViewModel {
   int _currentTabIndex = 0;
   int get currentTabIndex => _currentTabIndex;
 

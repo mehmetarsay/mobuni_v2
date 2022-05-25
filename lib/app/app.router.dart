@@ -14,10 +14,11 @@ import '../feature/models/messaging/chat.dart';
 import '../feature/models/questions/question_model.dart';
 import '../feature/views/auth/login/login_view.dart';
 import '../feature/views/auth/register/register_view.dart';
+import '../feature/views/chat/chat_contact/chat_contact_view.dart';
 import '../feature/views/chat/chat_home/chat_home_view.dart';
 import '../feature/views/chat/chat_message/chat_message_view.dart';
 import '../feature/views/comments/comment_view.dart';
-import '../feature/views/home/bottomnav_view.dart';
+import '../feature/views/home/home_view.dart';
 import '../feature/views/profile/subviews/profile_redesign/profile_redesign_view.dart';
 import '../feature/views/question/subviews/question_add/question_add_view.dart';
 import '../feature/views/splash/view/splash_view.dart';
@@ -25,7 +26,7 @@ import '../feature/widgets/photo/photo_view.dart';
 
 class Routes {
   static const String splashView = '/';
-  static const String bottomNavView = '/bottom-nav-view';
+  static const String homeView = '/home-view';
   static const String loginView = '/login-view';
   static const String registerView = '/register-view';
   static const String questionAddView = '/question-add-view';
@@ -34,9 +35,10 @@ class Routes {
   static const String customPhotoView = '/custom-photo-view';
   static const String chatHomeView = '/chat-home-view';
   static const String chatMessageView = '/chat-message-view';
+  static const String chatContactView = '/chat-contact-view';
   static const all = <String>{
     splashView,
-    bottomNavView,
+    homeView,
     loginView,
     registerView,
     questionAddView,
@@ -45,6 +47,7 @@ class Routes {
     customPhotoView,
     chatHomeView,
     chatMessageView,
+    chatContactView,
   };
 }
 
@@ -53,7 +56,7 @@ class StackedRouter extends RouterBase {
   List<RouteDef> get routes => _routes;
   final _routes = <RouteDef>[
     RouteDef(Routes.splashView, page: SplashView),
-    RouteDef(Routes.bottomNavView, page: BottomNavView),
+    RouteDef(Routes.homeView, page: HomeView),
     RouteDef(Routes.loginView, page: LoginView),
     RouteDef(Routes.registerView, page: RegisterView),
     RouteDef(Routes.questionAddView, page: QuestionAddView),
@@ -62,6 +65,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.customPhotoView, page: CustomPhotoView),
     RouteDef(Routes.chatHomeView, page: ChatHomeView),
     RouteDef(Routes.chatMessageView, page: ChatMessageView),
+    RouteDef(Routes.chatContactView, page: ChatContactView),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -72,9 +76,9 @@ class StackedRouter extends RouterBase {
         settings: data,
       );
     },
-    BottomNavView: (data) {
+    HomeView: (data) {
       return MaterialPageRoute<dynamic>(
-        builder: (context) => const BottomNavView(),
+        builder: (context) => const HomeView(),
         settings: data,
       );
     },
@@ -151,6 +155,18 @@ class StackedRouter extends RouterBase {
         settings: data,
       );
     },
+    ChatContactView: (data) {
+      var args = data.getArgs<ChatContactViewArguments>(
+        orElse: () => ChatContactViewArguments(),
+      );
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => ChatContactView(
+          key: args.key,
+          isCreateGroup: args.isCreateGroup,
+        ),
+        settings: data,
+      );
+    },
   };
 }
 
@@ -195,4 +211,11 @@ class ChatMessageViewArguments {
       required this.isCreated,
       this.isSelect = false,
       this.data = ''});
+}
+
+/// ChatContactView arguments holder class
+class ChatContactViewArguments {
+  final Key? key;
+  final bool isCreateGroup;
+  ChatContactViewArguments({this.key, this.isCreateGroup = false});
 }

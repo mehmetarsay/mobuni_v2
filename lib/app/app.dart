@@ -1,6 +1,7 @@
 import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
 import 'package:mobuni_v2/core/manager/network_manager.dart';
 import 'package:mobuni_v2/core/manager/provider_manager.dart';
+import 'package:mobuni_v2/feature/views/activity/service/activity_service.dart';
 import 'package:mobuni_v2/feature/views/auth/login/login_view.dart';
 import 'package:mobuni_v2/feature/views/auth/register/register_view.dart';
 import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
@@ -41,6 +42,7 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: AuthService),
     LazySingleton(classType: ProfileService),
     LazySingleton(classType: CommentService),
+    LazySingleton(classType: ActivityService),
     LazySingleton(classType: NavigationService,environments: {Environment.dev}),
   ]
 )

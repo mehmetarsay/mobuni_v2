@@ -4,6 +4,7 @@ import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/constants/enum/req_types.dart';
 import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
 import 'package:mobuni_v2/core/manager/network_manager.dart';
+import 'package:mobuni_v2/feature/models/activity_category/activity_category_model.dart';
 import 'package:mobuni_v2/feature/models/department/department_model.dart';
 import 'package:mobuni_v2/feature/models/university/university_model.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
@@ -23,6 +24,11 @@ class AuthService {
     print(userq);
   }
 
+  void saveCategory(List<ActivityCategoryModel> categories){
+    _hiveService!.hive.delete('category');
+    _hiveService!.hive.put('category', categories);
+  }
+
   void get deleteToken {
     _hiveService!.hive.delete(Constants.authToken);
     _networkManager!.setHeaderToken('');
@@ -31,39 +37,55 @@ class AuthService {
 
   bool get isLogin => _hiveService!.hive.containsKey(Constants.authToken);
 
-  Future login(Map data) async => await _networkManager!.request(
+  Future login(Map data) async =>
+      await _networkManager!.request(
         method: ReqTypes.post,
         path: ApiConstants.login,
         model: LoginModel(),
         data: data,
       );
 
-  Future register(dynamic data) async => await _networkManager!.request(
+  Future register(dynamic data) async =>
+      await _networkManager!.request(
         method: ReqTypes.post,
         path: ApiConstants.register,
         model: LoginModel(),
         data: data,
       );
 
-  Future getAllUniversity() async => await _networkManager!.request(
+  Future getAllUniversity() async =>
+      await _networkManager!.request(
         method: ReqTypes.get,
         path: ApiConstants.universityAll,
         model: UniversityModel(),
       );
-  Future getAllDepartment() async => await _networkManager!.request(
+
+  Future getAllDepartment() async =>
+      await _networkManager!.request(
         method: ReqTypes.get,
         path: ApiConstants.departmentAll,
         model: DeaprtmentModel(),
       );
-  Future getAllUser() async => await _networkManager!.request(
+
+  Future getAllUser() async =>
+      await _networkManager!.request(
         method: ReqTypes.get,
         path: ApiConstants.userAll,
         model: UserModel(),
       );
-  Future getUserById(String id) async => await _networkManager!.request(
-        method: ReqTypes.get,
-        path: ApiConstants.userById,
-        model: UserModel(),
-        queryParameters: {'UserId' : id}
+
+  Future getUserById(String id) async =>
+      await _networkManager!.request(
+          method: ReqTypes.get,
+          path: ApiConstants.userById,
+          model: UserModel(),
+          queryParameters: {'UserId': id}
+      );
+
+  Future getAllCategory() async =>
+      _networkManager!.request(
+          method:ReqTypes.get,
+          path: ApiConstants.activityCategory,
+          model: ActivityCategoryModel(),
       );
 }

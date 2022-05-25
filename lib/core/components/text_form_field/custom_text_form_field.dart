@@ -1,4 +1,5 @@
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 // import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -17,6 +18,8 @@ class CustomTextFormField extends StatefulWidget {
   final FocusNode? focusNode;
   final String? Function(String?)? validator;
   final bool? isNumber;
+  final int maxLines;
+  final String? title;
 
   const CustomTextFormField({
     BuildContext? context,
@@ -33,6 +36,8 @@ class CustomTextFormField extends StatefulWidget {
     this.focusNode,
     this.validator,
     this.isNumber = false,
+    this.maxLines =1,
+    this.title
   }) : super(key: key);
 
   @override
@@ -68,11 +73,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!widget.insideHint!)
-            widget.hintText != null
-                ? CustomText(widget.hintText,
-                    fontWeight: FontWeight.bold, fontSize: 16)
-                : const SizedBox(),
+          if(widget.title!=null)CustomText(widget.title,style: TextStyle(
+              color: context.theme.secondaryHeaderColor,
+              fontWeight: FontWeight.w700
+          ),),
+          SizedBox(height: 5,),
           TextFormField(
             autofocus: false,
             obscureText: passwordVisible,
@@ -148,6 +153,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             textInputAction: TextInputAction.next,
             focusNode: focus,
             onTap: widget.onTap,
+            maxLines: widget.maxLines,
             validator: widget.validator,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             //textCapitalization: TextCapitalization.sentences,

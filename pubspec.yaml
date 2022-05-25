@@ -64,6 +64,7 @@ dependencies:
   url_launcher: ^6.1.2
   file_picker: ^4.5.1
   dismissible_page: ^0.7.2
+  date_time_picker: ^2.1.0
 
 
 dev_dependencies:

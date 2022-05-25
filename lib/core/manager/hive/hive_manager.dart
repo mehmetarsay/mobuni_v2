@@ -1,6 +1,7 @@
 
 import 'dart:typed_data';
 
+import 'package:mobuni_v2/feature/models/activity_category/activity_category_model.dart';
 import 'package:mobuni_v2/feature/models/department/department_model.dart';
 import 'package:mobuni_v2/feature/models/university/university_model.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
@@ -25,6 +26,7 @@ class HiveManager{
     Hive.registerAdapter(UserModelAdapter()); 
     Hive.registerAdapter(UniversityModelAdapter());
     Hive.registerAdapter(DeaprtmentModelAdapter());
+    Hive.registerAdapter(ActivityCategoryModelAdapter());
     _hive = await Hive.openBox('hive', encryptionCipher: HiveAesCipher(encryptionKey));
   }
 }

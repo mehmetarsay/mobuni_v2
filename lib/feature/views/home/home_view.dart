@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/feature/views/activity/activity_view.dart';
 import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
-import 'package:mobuni_v2/feature/views/home/bottomnav_view_model.dart';
+import 'package:mobuni_v2/feature/views/home/home_view_model.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_view.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view.dart';
-import 'package:mobuni_v2/feature/views/tab2/tab2_view.dart';
 import 'package:stacked/stacked.dart';
 
-class BottomNavView extends StatefulWidget {
-  const BottomNavView({Key? key}) : super(key: key);
+class HomeView extends StatefulWidget {
+  const HomeView({Key? key}) : super(key: key);
 
   @override
-  State<BottomNavView> createState() => _BottomNavViewState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _BottomNavViewState extends State<BottomNavView>
+class _HomeViewState extends State<HomeView>
     with WidgetsBindingObserver {
   final Map<int, Widget> _viewCache = Map<int, Widget>();
   @override
@@ -43,7 +43,7 @@ class _BottomNavViewState extends State<BottomNavView>
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<BottomNavViewModel>.reactive(
+    return ViewModelBuilder<HomeViewModel>.reactive(
       builder: (context, viewModel, child) => Scaffold(
         //appBar: CustomAppBar(title: 'MobUni'),
         body: getViewForIndex(viewModel.currentTabIndex),
@@ -53,21 +53,21 @@ class _BottomNavViewState extends State<BottomNavView>
           onTap: viewModel.setTabIndex,
           items: [
             BottomNavigationBarItem(
-              label: 'Tab1',
-              icon: Icon(Icons.ac_unit),
+              label: 'Sorular',
+              icon: Icon(Icons.question_answer),
             ),
             BottomNavigationBarItem(
-              label: 'Tab2',
-              icon: Icon(Icons.access_alarm),
+              label: 'Etkinlikler',
+              icon: Icon(Icons.event_note),
             ),
             BottomNavigationBarItem(
-              label: 'Tab3',
-              icon: Icon(Icons.access_alarms),
+              label: 'Profil',
+              icon: Icon(Icons.account_box),
             ),
           ],
         ),
       ),
-      viewModelBuilder: () => BottomNavViewModel(),
+      viewModelBuilder: () => HomeViewModel(),
     );
   }
 
@@ -78,7 +78,7 @@ class _BottomNavViewState extends State<BottomNavView>
           _viewCache[index] = QuestionsView();
           break;
         case 1:
-          _viewCache[index] = Tab2View();
+          _viewCache[index] = ActivityView();
           break;
         case 2:
           _viewCache[index] = ProfileView();

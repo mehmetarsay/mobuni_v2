@@ -4,11 +4,12 @@ import 'package:mobuni_v2/core/manager/provider_manager.dart';
 import 'package:mobuni_v2/feature/views/auth/login/login_view.dart';
 import 'package:mobuni_v2/feature/views/auth/register/register_view.dart';
 import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
+import 'package:mobuni_v2/feature/views/chat/chat_contact/chat_contact_view.dart';
 import 'package:mobuni_v2/feature/views/comments/comment_view.dart';
 import 'package:mobuni_v2/feature/views/comments/service/comment_service.dart';
 import 'package:mobuni_v2/feature/views/chat/chat_home/chat_home_view.dart';
 import 'package:mobuni_v2/feature/views/chat/chat_message/chat_message_view.dart';
-import 'package:mobuni_v2/feature/views/home/bottomnav_view.dart';
+import 'package:mobuni_v2/feature/views/home/home_view.dart';
 import 'package:mobuni_v2/feature/views/profile/service/profile_service.dart';
 import 'package:mobuni_v2/feature/views/profile/subviews/profile_redesign/profile_redesign_view.dart';
 import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
@@ -21,7 +22,7 @@ import 'package:stacked_services/stacked_services.dart';
 @StackedApp(
   routes: [
     MaterialRoute(page: SplashView, initial: true),
-    MaterialRoute(page: BottomNavView),
+    MaterialRoute(page: HomeView),
     MaterialRoute(page: LoginView),
     MaterialRoute(page: RegisterView),
     MaterialRoute(page: QuestionAddView),
@@ -30,6 +31,7 @@ import 'package:stacked_services/stacked_services.dart';
     MaterialRoute(page: CustomPhotoView),
     MaterialRoute(page: ChatHomeView),
     MaterialRoute(page: ChatMessageView),
+    MaterialRoute(page: ChatContactView),
   ],
   dependencies: [
     LazySingleton(classType: ProviderManager),

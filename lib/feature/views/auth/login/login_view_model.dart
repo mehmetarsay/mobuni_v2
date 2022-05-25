@@ -11,8 +11,8 @@ import 'package:mobuni_v2/core/extension/context_extension.dart';
 class LoginViewModel extends BaseViewModel {
   AuthService _authService = locator<AuthService>();
   final formKey = GlobalKey<FormState>();
-  final email = TextEditingController(text: 'bilaltest2');
-  final password = TextEditingController(text: 'Bilal123');
+  final email = TextEditingController(text: 'swagtest');
+  final password = TextEditingController(text: '123456');
 
   void login(BuildContext context) async {
     if (!formKey.currentState!.validate()) {
@@ -28,7 +28,7 @@ class LoginViewModel extends BaseViewModel {
     var response = await _authService.login(data);
     if(response is LoginModel){
       _authService.saveToken(response.accessToken, response.user!);
-      context.navigationService.pushNamedAndRemoveUntil(Routes.bottomNavView);
+      context.navigationService.pushNamedAndRemoveUntil(Routes.homeView);
     }
     context.loaderOverlay.hide();
   }

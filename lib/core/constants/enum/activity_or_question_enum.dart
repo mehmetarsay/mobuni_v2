@@ -1,0 +1,4 @@
+enum ProfileListType {
+  QuestionType,
+  ActivityType,
+}

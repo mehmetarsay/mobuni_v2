@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
+import 'package:mobuni_v2/core/constants/enum/activity_or_question_enum.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
+import 'package:mobuni_v2/feature/views/activity/widgets/activity_single_view.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
@@ -33,7 +35,7 @@ class ProfileView extends StatelessWidget {
                         context.navigationService.back();
                       }, icon: Icon(Icons.arrow_back_ios),):Container(),
                       title: CustomText(
-                        vm.selectListType == ProfileListType.ActivityType ? 'Etkinlikler' : 'Sorularım',
+                        vm.selectListType == ProfileListType.ActivityType ? 'Etkinlikler' : 'Sorular',
                         style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       pinned: true,
@@ -45,7 +47,7 @@ class ProfileView extends StatelessWidget {
                         background: sliverBackroundWidget(context, vm),
                       ),
                     ),
-                    SliverList(
+                    vm.selectListType == ProfileListType.QuestionType ?SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (_, int index) {
                           return QuestionSingleView(
@@ -54,7 +56,17 @@ class ProfileView extends StatelessWidget {
                         },
                         childCount: vm.questions!.length,
                       ),
-                    ),
+                    ):
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                            (_, int index) {
+                          return ActivitySingleView(
+                            activity: vm.activities!.elementAt(index),
+                          );
+                        },
+                        childCount: vm.activities!.length,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -122,11 +134,13 @@ class ProfileView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                radiusTextOntapWidget(context, isSelect: vm.selectListType == ProfileListType.QuestionType, text: 'Sorularım', onTap: () {
+                radiusTextOntapWidget(context, isSelect: vm.selectListType == ProfileListType.QuestionType, text: 'Sorular', onTap: () {
                   vm.selectListType = ProfileListType.QuestionType;
+                  vm.notifyListeners();
                 }),
-                radiusTextOntapWidget(context, isSelect: vm.selectListType == ProfileListType.ActivityType, text: 'Etkinliklerim', onTap: () {
+                radiusTextOntapWidget(context, isSelect: vm.selectListType == ProfileListType.ActivityType, text: 'Etkinlikler', onTap: () {
                   vm.selectListType = ProfileListType.ActivityType;
+                  vm.notifyListeners();
                 }),
               ],
             )

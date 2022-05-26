@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/core/components/button/custom_button.dart';
 import 'package:mobuni_v2/core/components/select_time/select_time_widget.dart';
@@ -7,7 +8,6 @@ import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/app/validators.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/feature/views/activity/activity_add/activity_add_view_model.dart';
-import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../core/components/text_form_field/custom_text_form_field.dart';
@@ -96,7 +96,7 @@ class ActivityAddView extends StatelessWidget {
                             ],
                           ),
                           GestureDetector(
-                            onTap: vm.getImage,
+                            onTap: () => vm.getImage(context),
                             child: Container(
                               width: double.infinity,
                               height: context.height / 3.5,
@@ -106,8 +106,9 @@ class ActivityAddView extends StatelessWidget {
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
                                   border: Border.all(color: context.theme.primaryColorDark),
                                   image: DecorationImage(
-                                      fit: BoxFit.contain,
-                                      image: vm.imageFile == null ? Image.asset('assets/empty_photo.png').image : Image.asset(vm.imageFile!.path).image)),
+                                      fit: BoxFit.cover,
+                                      image: vm.imageFile == null ? Image.asset('assets/empty_photo.png').image : 
+                                      Image.file(File(vm.imageFile!.path)).image)),
                             ),
                           ),
                         ],

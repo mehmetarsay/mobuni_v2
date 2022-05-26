@@ -32,7 +32,7 @@ class PhotoChangeViewModel extends BaseViewModel {
      notifyListeners();
    }
   getImage() async{
-     imageFile = await _picker.pickImage(source: ImageSource.gallery);
+     imageFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: Constants.imageQuality);
      if((imageUrlVal==null||imageUrlVal=='')&&imageFile==null){
        setInitialised(false);
      }

@@ -11,7 +11,16 @@ class ActivityService {
 
   Future activityGetAll({Map queryParameters = const {}}) async =>
       await _networkManager!.request(
-          method: ReqTypes.get,
-          path: ApiConstants.activity,
-          model: ActivityModel());
+        method: ReqTypes.get,
+        path: ApiConstants.activity,
+        model: ActivityModel(),
+      );
+
+  Future activityPost(dynamic data) async => await _networkManager!.request(
+        method: ReqTypes.post,
+        path: ApiConstants.activity,
+        model: ActivityModel(),
+        data: data,
+        isFile: true,
+      );
 }

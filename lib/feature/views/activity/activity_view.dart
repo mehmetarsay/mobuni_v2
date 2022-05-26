@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
@@ -28,6 +27,8 @@ class ActivityView extends StatelessWidget {
           return await context.navigationService.navigateToView(
             ActivityAddView(),
           )!.then((value) async{
+            if(value != null)
+              vm.addActivity(value);
           });
         },
         child: Icon(Icons.add,color: Colors.white,),

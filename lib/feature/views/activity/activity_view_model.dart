@@ -17,4 +17,8 @@ class ActivityViewModel extends BaseViewModel {
     setBusy(false);
     
   }
+  void addActivity(ActivityModel activity){
+    activities!.insert(0, activity);
+    notifyListeners();
+  }
 }

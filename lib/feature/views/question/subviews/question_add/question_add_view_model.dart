@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
+import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
@@ -72,7 +73,7 @@ class QuestionAddViewModel extends BaseViewModel {
   }
 
   Future imageCamera() async {
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera, imageQuality: Constants.imageQuality);
     if (photo != null) selectImage = File(photo.path);
   }
 

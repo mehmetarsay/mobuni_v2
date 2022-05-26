@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/base/models/base_response/empty_response.dart';

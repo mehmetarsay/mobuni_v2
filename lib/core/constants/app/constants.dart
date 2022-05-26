@@ -12,4 +12,5 @@ class Constants {
           color: Color(0xff000000).withOpacity(0.25),
         ),
       ];
+  static int imageQuality = 10;
 }

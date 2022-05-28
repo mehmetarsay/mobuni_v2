@@ -14,8 +14,7 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView>
-    with WidgetsBindingObserver {
+class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   final Map<int, Widget> _viewCache = Map<int, Widget>();
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -48,7 +47,15 @@ class _HomeViewState extends State<HomeView>
     return ViewModelBuilder<HomeViewModel>.reactive(
       builder: (context, viewModel, child) => Scaffold(
         //appBar: CustomAppBar(title: 'MobUni'),
-        body: getViewForIndex(viewModel.currentTabIndex),
+        // body: getViewForIndex(viewModel.currentTabIndex),
+        body: IndexedStack(
+          children: [
+            QuestionsView(),
+            ActivityView(),
+            ProfileView()
+          ],
+          index: viewModel.currentTabIndex,
+        ),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 6,
           currentIndex: viewModel.currentTabIndex,

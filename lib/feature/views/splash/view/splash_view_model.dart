@@ -1,6 +1,7 @@
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/core/manager/one_signal_notification_manager.dart';
 import 'package:mobuni_v2/feature/models/activity_category/activity_category_model.dart';
 import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
 import 'package:stacked/stacked.dart';
@@ -14,6 +15,8 @@ class SplashViewModel extends BaseViewModel {
 
   init() async{
     GeneralManager.hiveM.hive.delete(Constants.users);
+    OneSignalNotificationManager.initializeAppSplash();
+
 
     Future.delayed(Duration(seconds: 3)).then((value)async {
       if (authService.isLogin) {

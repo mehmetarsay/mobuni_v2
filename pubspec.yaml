@@ -64,6 +64,7 @@ dependencies:
   file_picker: ^4.5.1
   dismissible_page: ^0.7.2
   date_time_picker: ^2.1.0
+  onesignal_flutter: ^3.3.1  
 
 
 dev_dependencies:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/core/manager/one_signal_notification_manager.dart';
 import 'package:mobuni_v2/feature/views/activity/activity_view.dart';
 import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
 import 'package:mobuni_v2/feature/views/home/home_view_model.dart';
@@ -32,6 +33,7 @@ class _HomeViewState extends State<HomeView>
     super.initState();
 
     FirebaseService.instance!.updateUserState(true);
+    OneSignalNotificationManager.initializeApp(context);
     WidgetsBinding.instance.addObserver(this);
   }
 

@@ -7,6 +7,7 @@ import 'package:mobuni_v2/feature/views/auth/service/auth_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class GeneralManager {
+  static bool get isSignUser => locator<HiveManager>().hive.containsKey(Constants.user);
   static UserModel get user => locator<HiveManager>().hive.get(Constants.user);
   static UserModel get userDummy => UserModel(
       name: 'TEST',

@@ -8,6 +8,7 @@ import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/core/theme/theme_notifier.dart';
 import 'package:mobuni_v2/feature/views/question/questions_view_model.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -28,10 +29,11 @@ class QuestionsView extends StatelessWidget {
                 visible: true,
                 child: IconButton(
                     icon: Icon(Icons.logout),
-                    onPressed: () {
+                    onPressed: () async {
                       GeneralManager.authS.deleteToken;
                       GeneralManager.navigationS
                           .pushNamedAndRemoveUntil(Routes.loginView);
+                      await OneSignal.shared.setExternalUserId('');
                     }),
               ),
               IconButton(

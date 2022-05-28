@@ -51,15 +51,24 @@ class MyApp extends StatelessWidget {
               size: 50,
             ),
           ),
-          child: MaterialApp(
-            title: 'MobUni',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeModel().lightMode,
-            darkTheme: ThemeModel().darkMode,
-            themeMode:
-                mode.darkTheme == true ? ThemeMode.dark : ThemeMode.light,
-            onGenerateRoute: StackedRouter().onGenerateRoute,
-            navigatorKey: StackedService.navigatorKey,
+          child: GestureDetector(
+            onTap: (){
+              var currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus &&
+                  currentFocus.focusedChild != null) {
+                FocusManager.instance.primaryFocus!.unfocus();
+              }
+            },
+            child: MaterialApp(
+              title: 'MobUni',
+              debugShowCheckedModeBanner: false,
+              theme: ThemeModel().lightMode,
+              darkTheme: ThemeModel().darkMode,
+              themeMode:
+                  mode.darkTheme == true ? ThemeMode.dark : ThemeMode.light,
+              onGenerateRoute: StackedRouter().onGenerateRoute,
+              navigatorKey: StackedService.navigatorKey,
+            ),
           ),
         );
       }),

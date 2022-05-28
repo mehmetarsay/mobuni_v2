@@ -15,11 +15,11 @@ class ProfileViewModel extends BaseViewModel {
 
   ProfileService profileService = locator<ProfileService>();
 
-  ProfileListType _selectListType = ProfileListType.QuestionType;
+  GeneralType _selectListType = GeneralType.QuestionType;
 
-  ProfileListType get selectListType => _selectListType;
+  GeneralType get selectListType => _selectListType;
 
-  set selectListType(ProfileListType value) {
+  set selectListType(GeneralType value) {
     _selectListType = value;
     notifyListeners();
   }

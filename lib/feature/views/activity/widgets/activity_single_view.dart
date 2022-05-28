@@ -4,6 +4,7 @@ import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/extension/date_time_extension.dart';
 import 'package:mobuni_v2/feature/models/activity/activity_model.dart';
+import 'package:mobuni_v2/feature/views/comments/comment_view.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -47,16 +48,24 @@ class ActivitySingleView extends StatelessWidget {
               width: context.width,
             ),
           // if (activity.image == null)
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(activity.title, fontWeight: FontWeight.bold),
-                CustomText(
-                  activity.content ?? '',
-                ),
-              ],
+          GestureDetector(
+            onTap: (){
+              context.navigationService.navigateToView(
+                CommentView(activityModel: activity),
+              )!.then((value) async{
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(activity.title, fontWeight: FontWeight.bold),
+                  CustomText(
+                    activity.content ?? '',
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(

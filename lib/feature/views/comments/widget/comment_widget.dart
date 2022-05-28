@@ -41,13 +41,13 @@ class _CommentWidgetState extends State<CommentWidget> {
                           LikeButton(
                             onTap: (val)async{
                               locator<CommentService>().setCommentLike(id: widget.commentModel.id!);
-                              if (widget.commentModel.isLiked&&widget.commentModel.likeCount!>0) {
+                              if (widget.commentModel.isLiked!&&widget.commentModel.likeCount!>0) {
                                 widget.commentModel.likeCount=widget.commentModel.likeCount!-1;
                               } else {
                                 widget.commentModel.likeCount=widget.commentModel.likeCount!+1;
                               }
                               setState(() {
-                                widget.commentModel.isLiked = !widget.commentModel.isLiked;
+                                widget.commentModel.isLiked = !widget.commentModel.isLiked!;
                               });
                               return widget.commentModel.isLiked;
                             },

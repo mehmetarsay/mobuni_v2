@@ -1,4 +1,4 @@
-enum ProfileListType {
+enum GeneralType {
   QuestionType,
   ActivityType,
 }

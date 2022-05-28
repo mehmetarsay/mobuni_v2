@@ -35,7 +35,7 @@ class ProfileView extends StatelessWidget {
                         context.navigationService.back();
                       }, icon: Icon(Icons.arrow_back_ios),):Container(),
                       title: CustomText(
-                        vm.selectListType == ProfileListType.ActivityType ? 'Etkinlikler' : 'Sorular',
+                        vm.selectListType == GeneralType.ActivityType ? 'Etkinlikler' : 'Sorular',
                         style: TextStyle(color: context.theme.primaryColorDark, fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       pinned: true,
@@ -47,7 +47,7 @@ class ProfileView extends StatelessWidget {
                         background: sliverBackroundWidget(context, vm),
                       ),
                     ),
-                    vm.selectListType == ProfileListType.QuestionType ?SliverList(
+                    vm.selectListType == GeneralType.QuestionType ?SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (_, int index) {
                           return QuestionSingleView(
@@ -134,12 +134,12 @@ class ProfileView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                radiusTextOntapWidget(context, isSelect: vm.selectListType == ProfileListType.QuestionType, text: 'Sorular', onTap: () {
-                  vm.selectListType = ProfileListType.QuestionType;
+                radiusTextOntapWidget(context, isSelect: vm.selectListType == GeneralType.QuestionType, text: 'Sorular', onTap: () {
+                  vm.selectListType = GeneralType.QuestionType;
                   vm.notifyListeners();
                 }),
-                radiusTextOntapWidget(context, isSelect: vm.selectListType == ProfileListType.ActivityType, text: 'Etkinlikler', onTap: () {
-                  vm.selectListType = ProfileListType.ActivityType;
+                radiusTextOntapWidget(context, isSelect: vm.selectListType == GeneralType.ActivityType, text: 'Etkinlikler', onTap: () {
+                  vm.selectListType = GeneralType.ActivityType;
                   vm.notifyListeners();
                 }),
               ],

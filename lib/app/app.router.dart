@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
+import '../feature/models/activity/activity_model.dart';
 import '../feature/models/messaging/chat.dart';
 import '../feature/models/questions/question_model.dart';
 import '../feature/views/auth/login/login_view.dart';
@@ -108,6 +109,7 @@ class StackedRouter extends RouterBase {
         builder: (context) => CommentView(
           key: args.key,
           questionModel: args.questionModel,
+          activityModel: args.activityModel,
         ),
         settings: data,
       );
@@ -178,7 +180,8 @@ class StackedRouter extends RouterBase {
 class CommentViewArguments {
   final Key? key;
   final QuestionModel? questionModel;
-  CommentViewArguments({this.key, this.questionModel});
+  final ActivityModel? activityModel;
+  CommentViewArguments({this.key, this.questionModel, this.activityModel});
 }
 
 /// CustomPhotoView arguments holder class

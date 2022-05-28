@@ -25,7 +25,7 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 0),
+      padding: const EdgeInsets.only(left: 8, right: 0, top: 5, bottom: 0),
       child: Container(
           child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

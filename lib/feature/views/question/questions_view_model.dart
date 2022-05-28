@@ -95,7 +95,7 @@ class QuestionsViewModel extends BaseViewModel {
     );
     hasNextPage = result.hasNextPage;
     var list = data.get(HiveBoxKey.questions.name);
-    if (list == null) list = [];
+    if (list == null || pageIndex == 1) list = [];
     (list as List).addAll(result.items);
     await data.put(HiveBoxKey.questions.name, list);
     pageIndex++;

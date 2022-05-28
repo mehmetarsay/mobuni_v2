@@ -3,6 +3,77 @@
 part of 'question_model.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class QuestionModelAdapter extends TypeAdapter<QuestionModel> {
+  @override
+  final int typeId = 4;
+
+  @override
+  QuestionModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return QuestionModel(
+      id: fields[0] as int?,
+      userId: fields[1] as String?,
+      createdTime: fields[2] as DateTime?,
+      universityId: fields[8] as int?,
+      text: fields[4] as String?,
+      updatedTime: fields[3] as DateTime?,
+      image: fields[5] as String?,
+      commentCount: fields[6] as int,
+      likeCount: fields[7] as int,
+      user: fields[9] as UserModel?,
+      university: fields[10] as UniversityModel?,
+      isLiked: fields[11] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, QuestionModel obj) {
+    writer
+      ..writeByte(12)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.userId)
+      ..writeByte(2)
+      ..write(obj.createdTime)
+      ..writeByte(3)
+      ..write(obj.updatedTime)
+      ..writeByte(4)
+      ..write(obj.text)
+      ..writeByte(5)
+      ..write(obj.image)
+      ..writeByte(6)
+      ..write(obj.commentCount)
+      ..writeByte(7)
+      ..write(obj.likeCount)
+      ..writeByte(8)
+      ..write(obj.universityId)
+      ..writeByte(9)
+      ..write(obj.user)
+      ..writeByte(10)
+      ..write(obj.university)
+      ..writeByte(11)
+      ..write(obj.isLiked);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QuestionModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

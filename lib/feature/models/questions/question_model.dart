@@ -1,3 +1,4 @@
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobuni_v2/core/base/models/base_model/base_model.dart';
 import 'package:mobuni_v2/feature/models/university/university_model.dart';
@@ -5,20 +6,33 @@ import 'package:mobuni_v2/feature/models/user/user_model.dart';
 
 part 'question_model.g.dart';
 
+@HiveType(typeId: 4)
 @JsonSerializable(includeIfNull: false)
 class QuestionModel extends BaseModel {
+  @HiveField(0)
   int? id;
+  @HiveField(1)
   String? userId;
+  @HiveField(2)
   DateTime? createdTime;
+  @HiveField(3)
   DateTime? updatedTime;
+  @HiveField(4)
   String? text;
+  @HiveField(5)
   String? image;
+  @HiveField(6)
   int commentCount;
+  @HiveField(7)
   int likeCount;
+  @HiveField(8)
   int? universityId;
   //int? departmentId;
+  @HiveField(9)
   UserModel? user;
+  @HiveField(10)
   UniversityModel? university;
+  @HiveField(11)
   bool isLiked;
 
   QuestionModel({

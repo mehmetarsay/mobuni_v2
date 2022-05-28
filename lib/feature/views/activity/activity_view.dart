@@ -24,6 +24,7 @@ class ActivityView extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: 'Etkinlikler'),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'activity',
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () async {
           return await context.navigationService

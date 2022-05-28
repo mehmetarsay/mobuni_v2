@@ -29,12 +29,15 @@ class ActivityViewModel extends BaseViewModel {
   }
 
   init() async {
+    setInitialised(false);
+    setBusy(true);
     data = await Hive.openBox(HiveBox.data.name);
     await fetchActivities();
     scrollController.addListener(_loadMore);
   }
 
   Future fetchActivities() async {
+    
     if (data.containsKey(HiveBoxKey.activities.name)) {
       setBusy(false);
     }

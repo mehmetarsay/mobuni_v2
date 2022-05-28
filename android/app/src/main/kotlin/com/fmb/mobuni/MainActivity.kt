@@ -1,4 +1,4 @@
-package com.mobuni.mobuni_v2
+package com.fmb.mobuni
 
 import io.flutter.embedding.android.FlutterActivity
 

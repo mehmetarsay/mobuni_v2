@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mobuni.mobuni_v2">
+    package="com.fmb.mobuni">
    <application
         android:label="mobuni_v2"
         android:name="${applicationName}"

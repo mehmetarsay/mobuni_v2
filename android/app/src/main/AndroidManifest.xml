@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fmb.mobuni">
    <application
-        android:label="mobuni_v2"
+        android:label="MobUni V2"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"

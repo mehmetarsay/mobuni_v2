@@ -13,4 +13,5 @@ class Constants {
         ),
       ];
   static int imageQuality = 10;
+  static int pageSize = 10;
 }

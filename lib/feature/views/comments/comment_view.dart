@@ -1,32 +1,37 @@
-import 'package:comment_box/comment/comment.dart';
+
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/app/app.dart';
+import 'package:mobuni_v2/core/constants/enum/activity_or_question_enum.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/feature/models/activity/activity_model.dart';
 import 'package:mobuni_v2/feature/models/comment/comment_model.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
+import 'package:mobuni_v2/feature/views/activity/widgets/activity_single_view.dart';
 import 'package:mobuni_v2/feature/views/comments/comment_view_model.dart';
+import 'package:mobuni_v2/feature/views/comments/widget/comment_write_widget.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
 import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
 import 'package:mobuni_v2/feature/views/comments/widget/comment_widget.dart';
 import 'package:stacked/stacked.dart';
 
 class CommentView extends StatelessWidget {
-  const CommentView({Key? key, this.questionModel}) : super(key: key);
+  const CommentView({Key? key, this.questionModel,this.activityModel}) : super(key: key);
   final QuestionModel? questionModel;
+  final ActivityModel? activityModel;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CommentViewModel>.reactive(
       viewModelBuilder: () => CommentViewModel(),
-      onModelReady: (model) => model.init(context, question: questionModel),
+      onModelReady: (model) => model.init(context, question: questionModel,activity: activityModel),
       builder: (context, vm, child) => vm.initialised
           ? SafeArea(
               child: Scaffold(
                 appBar: AppBar(
                 ),
-                  body: CommentBox(
-                userImage: GeneralManager.user.image,
+                  body: CommentBoxRfct(
+                userImage: GeneralManager.user.image==''?null:GeneralManager.user.image,
                 labelText: 'Cevap yaz...',
                 withBorder: false,
                 errorText: 'Boş cevap gönderilemez',
@@ -34,7 +39,7 @@ class CommentView extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: SingleChildScrollView(
                     physics: BouncingScrollPhysics(),
-                    child: Column(
+                    child: vm.generalType==GeneralType.QuestionType?Column(
                       children: [
                         QuestionSingleView(
                           questionModel: questionModel!,
@@ -42,6 +47,15 @@ class CommentView extends StatelessWidget {
                         Divider(),
                         getCommentWidget(vm),
 
+                      ],
+                    ):
+                    Column(
+                      children: [
+                        ActivitySingleView(
+                          activity: vm.activity!,
+                        ),
+                        Divider(),
+                        getCommentWidget(vm),
                       ],
                     ),
                   ),

@@ -22,7 +22,7 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
       user: json['user'] == null
           ? null
           : UserModel.fromJson(json['user'] as Map<String, dynamic>),
-      isLiked: json['isLiked'] as bool? ?? false,
+      isLiked: json['isLiked'] as bool?,
     );
 
 Map<String, dynamic> _$CommentModelToJson(CommentModel instance) {
@@ -43,6 +43,6 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) {
   writeNotNull('createdTime', instance.createdTime?.toIso8601String());
   writeNotNull('updateTime', instance.updateTime?.toIso8601String());
   writeNotNull('likeCount', instance.likeCount);
-  val['isLiked'] = instance.isLiked;
+  writeNotNull('isLiked', instance.isLiked);
   return val;
 }

@@ -15,7 +15,7 @@ class CommentModel extends BaseModel {
   DateTime? createdTime;
   DateTime? updateTime;
   int? likeCount;
-  bool isLiked;
+  bool? isLiked;
 
   CommentModel(
   {
@@ -28,7 +28,7 @@ class CommentModel extends BaseModel {
     this.updateTime,
     this.likeCount,
     this.user,
-    this.isLiked=false,
+    this.isLiked,
 }
   );
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
+import 'package:mobuni_v2/core/constants/enum/activity_or_question_enum.dart';
+import 'package:mobuni_v2/feature/models/activity/activity_model.dart';
 import 'package:mobuni_v2/feature/models/comment/comment_model.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
 import 'package:mobuni_v2/feature/views/comments/service/comment_service.dart';
@@ -18,7 +20,9 @@ class CommentViewModel extends BaseViewModel {
 
   ///TODO buraya ActivityModel gelicek
     late QuestionModel? question;
+    late ActivityModel? activity;
     late BuildContext context;
+    late GeneralType generalType;
 
     bool _commentSend = true;
   bool get commentSend => _commentSend;
@@ -28,40 +32,43 @@ class CommentViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  init(BuildContext context,{QuestionModel? question}){
+  init(BuildContext context,{QuestionModel? question,ActivityModel? activity}){
       setInitialised(false);
       this.context = context;
-      this.question = question;
+      if(question!=null){
+        generalType = GeneralType.QuestionType;
+        this.question = question;
+      }
+      else if(activity!=null){
+        generalType = GeneralType.ActivityType;
+        this.activity = activity;
+      }
       setInitialised(true);
       notifyListeners();
 
   }
 
   Future<List<CommentModel>> getComment() async{
-      if(question!=null){
+      if(generalType==GeneralType.QuestionType){
         return await _commentService.getCommentQuestion(question!.id!);
       }
-      else{
-        ///TODO burası daha sonra activity için düzeltilicek
-        return await _commentService.getCommentQuestion(question!.id!);
+      else {
+        return await _commentService.getCommentActivity(activity!.id!);
       }
 
   }
   sendComment()async{
     if(commentSend){
       if (formKey.currentState!.validate()) {
-        CommentModel commentModel = CommentModel(
-          content: commentController.text,
-          // activityId: activityId
-          questionId: question!.id,
-        );
+       CommentModel commentModel =  getCommentModel();
         commentSend=false;
         focusNode.unfocus();
         await _commentService.postComment(commentModel).then((value){
           commentController.clear();
           commentSend =true;
           Fluttertoast.showToast(msg: 'Gönderildi');
-          question!.commentCount = question!.commentCount + 1;
+          countCommentSize();
+
         });
         notifyListeners();
       } else {
@@ -70,5 +77,29 @@ class CommentViewModel extends BaseViewModel {
     }
 
 
+  }
+
+  getCommentModel(){
+    CommentModel commentModel;
+    if(generalType==GeneralType.QuestionType)
+     commentModel = CommentModel(
+      content: commentController.text,
+      questionId: question!.id,
+    );
+    else
+      commentModel = CommentModel(
+        content: commentController.text,
+        activityId: activity!.id,
+      );
+    commentModel.isLiked =null;
+
+    return commentModel;
+  }
+
+  countCommentSize(){
+    if(generalType==GeneralType.QuestionType)
+      question!.commentCount = question!.commentCount + 1;
+    else
+      activity!.commentCount = activity!.commentCount! + 1;
   }
 }

@@ -14,7 +14,7 @@ class CommentService {
   Future getCommentQuestion(int questionId) async {
     return  await _networkManager!.request(
       method: ReqTypes.get,
-      path: '${ApiConstants.questionCommentGetByActivityId}/${questionId}',
+      path: '${ApiConstants.questionCommentGetByQuestionId}/${questionId}',
       model: CommentModel(),
     );
 
@@ -22,7 +22,7 @@ class CommentService {
   Future getCommentActivity(int activityId) async {
     return await _networkManager!.request(
         method: ReqTypes.get,
-        path: '${ApiConstants.questionCommentGetByActivityId}/${activityId}',
+        path: '${ApiConstants.activityCommentGetByActivityId}/${activityId}',
         model: CommentModel(),
     );
   }
@@ -30,7 +30,7 @@ class CommentService {
     return await _networkManager!.request(
         method: ReqTypes.post,
         path: ApiConstants.questionComment,
-        model: CommentModel(),
+        model: EmptyModel(),
         data: data
     );
   }

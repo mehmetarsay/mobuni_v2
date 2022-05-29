@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/core/components/progress/custom_progress_widget.dart';
+import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/app/private_constants.dart';
 import 'package:mobuni_v2/core/constants/enum/notifications_enum.dart';
+import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/chat/chat_message/chat_message_view.dart';
 import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
 import 'package:mobuni_v2/feature/views/unavailabile_view.dart';
+import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class OneSignalNotificationManager {
   static final OneSignalNotificationManager? _instance =
@@ -34,7 +38,7 @@ class OneSignalNotificationManager {
   }
 
   void _initialize() async {
-    await OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    await OneSignal.shared.setLogLevel(OSLogLevel.none, OSLogLevel.none);
     await OneSignal.shared.setAppId(PrivateConstants.onesignalAppId);
     if(GeneralManager.isSignUser) {
       await OneSignal.shared.setExternalUserId(GeneralManager.user.id.toString());
@@ -85,25 +89,27 @@ class OneSignalNotificationManager {
       // Ön planda bir bildirim alındığında çağrılacak
       // Bildirimi Görüntüle, bildirimi görüntülememek için boş parametre iletin
       print('setNotificationWillShowInForegroundHandler worked');
+      print('one_signal: ${GeneralManager.activeChatReceiverGid}');
+
       var additionalData = event.notification.additionalData!;
       final type =
           (additionalData['notificationType'] as int).intToNotificationType;
-      // if (additionalData['senderUserGid'] != GeneralManager.user.id) {
-      //   if (type == NotificationType.chat) {
-      //     if (additionalData['senderUserGid'] !=
-      //         GlobalValue.activeChatReceiverGid) {
-      //       event.complete(null);
-      //       showForegroundMessage(event.notification.title!,
-      //           event.notification.body!, additionalData);
-      //     } else {
-      //       event.complete(null);
-      //     }
-      //   } else {
-      //     event.complete(event.notification);
-      //   }
-      // } else {
-      //   event.complete(null);
-      // }
+      if (additionalData['senderUserGid'] != GeneralManager.user.id) {
+        if (type == NotificationType.chat) {
+          if (additionalData['senderUserGid'] !=
+              GeneralManager.activeChatReceiverGid) {
+            event.complete(null);
+            showForegroundMessage(event.notification.title!,
+                event.notification.body!, additionalData);
+          } else {
+            event.complete(null);
+          }
+        } else {
+          event.complete(event.notification);
+        }
+      } else {
+        event.complete(null);
+      }
     });
 
     OneSignal.shared.setNotificationOpenedHandler(
@@ -116,45 +122,45 @@ class OneSignalNotificationManager {
     });
   }
 
-  // void showForegroundMessage(
-  //     String title, String body, Map<String, dynamic> data) {
-  //   var userImage = data['userImage'];
-  //   showTopSnackBar(
-  //     _context,
-  //     Material(
-  //       borderRadius: BorderRadius.all(Radius.circular(10)),
-  //       color: _context.themeData.primaryColor.withOpacity(0.9),
-  //       child: Padding(
-  //         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           children: [
-  //             UserAvatar(userImage),
-  //             SizedBox(width: _context.dynamicWidth(0.02)),
-  //             Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 CustomText(title,
-  //                     fontSize: 14,
-  //                     color: Colors.black,
-  //                     fontWeight: FontWeight.w800),
-  //                 CustomText(body,
-  //                     fontSize: 11,
-  //                     color: Colors.black,
-  //                     fontWeight: FontWeight.w800),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //     onTap: () async {
-  //       print('onTap');
-  //       await navigateView(data);
-  //       // singleton.onClickNotification(message.data);
-  //     },
-  //   );
-  // }
+  void showForegroundMessage(
+      String title, String body, Map<String, dynamic> data) {
+    var userImage = data['userImage'];
+    showTopSnackBar(
+      _context,
+      Material(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: _context.theme.primaryColor.withOpacity(0.9),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              UserPhoto(url: userImage),
+              SizedBox(width: _context.dynamicWidth(0.02)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(title,
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800),
+                  CustomText(body,
+                      fontSize: 11,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      onTap: () async {
+        print('onTap');
+        await navigateView(data);
+        // singleton.onClickNotification(message.data);
+      },
+    );
+  }
 
   Future navigateView(Map<String, dynamic> data) async {
     final type = (data['notificationType'] as int).intToNotificationType;

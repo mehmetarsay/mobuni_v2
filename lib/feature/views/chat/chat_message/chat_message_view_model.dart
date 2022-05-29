@@ -84,10 +84,22 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
   }
 
   @override
-  // TODO: implement streamsMap
   Map<String, StreamData> get streamsMap => {
-        'message':
-            StreamData(FirebaseService.instance!.getChatMessages(chat.id!)),
+        'message': StreamData<List<Map<String, dynamic>>>(
+          FirebaseService.instance!.getChatMessages(chat.id!).asyncMap(
+            (query) async {
+              var futures = query.docs.map(
+                (doc) async {
+                  var data = doc.data();
+                  var message = Message().fromJson(data);
+                  await message.initSender();
+                  return {'message' : message, 'referance' : doc.reference};
+                },
+              );
+              return await Future.wait(futures);
+            },
+          ),
+        ),
         if (chat.type == ChatType.SINGLE.index)
           'userState': StreamData<DocumentSnapshot<Map<String, dynamic>>>(
               FirebaseService.instance!.getUserChatInfo(chat.receiverUserId!)),
@@ -102,7 +114,9 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
               return chat;
             },
           ),
-        )
+        ),
+        'chatRef': StreamData<DocumentSnapshot<Map<String, dynamic>>>(
+            FirebaseService.instance!.streamChat(chat.id!))
       };
 
   bool get userState => dataMap!['userState']!.data() != null
@@ -123,22 +137,9 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
   }
 
   void updateStreamChat(Chat chat) {
-    (dataMap!['chat']! as DocumentSnapshot<Map<String, dynamic>>)
+    (dataMap!['chatRef']! as DocumentSnapshot<Map<String, dynamic>>)
         .reference
         .update(chat.toJson());
-  }
-
-  List get usersOneSignalIdList {
-    var oneSignalIdList = [];
-    (dataMap!['usersChatInfo']! as QuerySnapshot<Map<String, dynamic>>)
-        .docs
-        .map((e) {
-      var userChatInfo = UserChatInfo.fromJson(e.data());
-      if (userChatInfo.currentChatId != chat.id) {
-        oneSignalIdList.addAll(userChatInfo.oneSignalIdList ?? []);
-      }
-    }).toList();
-    return oneSignalIdList;
   }
 
   List get inactiveUsersInThisChat {
@@ -155,22 +156,22 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
   }
 
   List<dynamic> get getMessages {
-    return dataMap!['message']!.docs.map((documentSnapshot) {
-      var message =
-          Message().fromJson(documentSnapshot.data() as Map<String, dynamic>);
+    return (dataMap!['message'] ?? []).map((documentSnapshot) {
+      var message = documentSnapshot['message'];
+          // Message().fromJson(documentSnapshot.data() as Map<String, dynamic>);
       if (!message.isReadMessage &&
           (message.receiverList ?? []).contains(GeneralManager.user.id)) {
         // message.read;
         message.updateReadWithuserId(GeneralManager.user.id!);
-        (documentSnapshot as DocumentSnapshot)
-            .reference
+        documentSnapshot['referance']
             .update(message.toJson());
         var tempChat = streamChat;
-        if (tempChat != null && tempChat.lastMessage != null &&
+        if (tempChat != null &&
+            tempChat.lastMessage != null &&
             tempChat.lastMessage!.id == message.id) {
           print('Chat son mesajı güncellendi');
           tempChat.lastMessage = message;
-          // updateStreamChat(tempChat);
+          updateStreamChat(tempChat);
         }
       }
 
@@ -191,8 +192,8 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
       var receiverList = chat.users!.map((e) => e).toList();
       receiverList.remove(GeneralManager.user.id);
       var isReadList = <String, bool>{};
-      receiverList.forEach((element) => 
-      isReadList.putIfAbsent(element, () => false));
+      receiverList
+          .forEach((element) => isReadList.putIfAbsent(element, () => false));
       print('aaaa');
       var msg = Message(
           id: Uuid().v1(),
@@ -202,7 +203,7 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
           receiverList: receiverList,
           isReadMap: isReadList,
           time: DateTime.now());
-          print('debug sendMessage');
+      print('debug sendMessage');
       await FirebaseService.instance!
           .sendChatMessage(chat.id!, msg, inactiveUsersInThisChat);
       // scrollToBottom(isDelayed: false);
@@ -220,7 +221,7 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
             'chatType': chat.type
           },
           pushAllSubscribed: false,
-          userList: receiverList,
+          userList: inactiveUsersInThisChat,
           group: 'chat');
     }
   }
@@ -254,7 +255,7 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
           NotificationType.chat,
           data: {'gid': chat.id},
           pushAllSubscribed: false,
-          userList: receiverList,
+          userList: inactiveUsersInThisChat,
           group: 'chat');
       isExpanded = !isExpanded;
       if (!showMenu) showMenu = true;
@@ -304,58 +305,4 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
           curve: Curves.easeOut);
     });
   }
-
-  void sendLocation() async {
-    // var marker = await GeneralManager.navigationS.navigateToView(ChatMapView());
-    // if (marker != null) {
-    //   isLoading = true;
-    //   var receiverList = chat.users!.map((e) => e).toList();
-    //   receiverList.remove(GeneralManager.user.id);
-    //   var isReadList = <String, bool>{};
-    //   receiverList
-    //       .forEach((element) => isReadList.putIfAbsent(element, () => false));
-    //   var msg = Message(
-    //       id: Uuid().v1(),
-    //       message: '',
-    //       messageType: MessageType.LOCATION.index,
-    //       sender: GeneralManager.user.id,
-    //       receiverList: receiverList,
-    //       isReadMap: isReadList,
-    //       latitude: (marker as Marker).position.latitude,
-    //       longitude: marker.position.longitude,
-    //       time: await NTP.now());
-    //   await FirebaseService.instance!
-    //       .sendChatMessage(chat.id!, msg, inactiveUsersInThisChat);
-    //   // scrollToBottom(isDelayed: false);
-    //   NotificationService.instance!.pushNotification(
-    //       chat.type == ChatType.SINGLE.index
-    //           ? '${GeneralManager.user.fullName}:'
-    //           : chat.groupName!,
-    //       chat.type == ChatType.SINGLE.index
-    //           ? 'Konum'
-    //           : '${GeneralManager.user.fullName}: Konum',
-    //       NotificationType.CHAT,
-    //       data: {
-    //         'gid': chat.id,
-    //         'userImage': GeneralManager.user.image,
-    //         'chatType': chat.type
-    //       },
-    //       pushAllSubscribed: false,
-    //       userList: usersOneSignalIdList,
-    //       group: 'chat');
-    //   isLoading = false;
-    // }
-  }
-
-  // Future<Demand> getDemand(String demandId) async {
-  //   var result = await DemandService.instance!.getDemandGid(demandId);
-  //   return result!;
-  // }
-
-  // Future<Property> getProperty(String id) async {
-  //   var result = await PropertyService.instance!.getPropertyWithById(id);
-  //   await result!.getMedia();
-  //   await result.getSpecification();
-  //   return result;
-  // }
 }

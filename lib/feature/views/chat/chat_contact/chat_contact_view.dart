@@ -542,7 +542,7 @@ class _ChatContactViewState extends State<ChatContactView> {
                     viewModel.isforward = false;
 
                     await GeneralManager.navigationS
-                        .navigateToView(ChatMessageView(
+                        .replaceWithTransition(ChatMessageView(
                       chat: chat,
                       isCreated: true,
                     ));

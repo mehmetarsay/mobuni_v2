@@ -39,7 +39,9 @@ class _ChatMessageViewState extends State<ChatMessageView> {
   @override
   void initState() {
     super.initState();
-    // GlobalValue.activeChatReceiverGid = widget.chat.receiverUser!.gid;
+    if (widget.chat.receiverUser != null)
+      GeneralManager.activeChatReceiverGid = widget.chat.receiverUser!.id!;
+    print('chat_message init: ${GeneralManager.activeChatReceiverGid}');
     FirebaseService.instance!
         .updateUserState(true, currentCahtId: widget.chat.id);
   }
@@ -47,7 +49,8 @@ class _ChatMessageViewState extends State<ChatMessageView> {
   @override
   void dispose() {
     super.dispose();
-    // GlobalValue.activeChatReceiverGid = '';
+    GeneralManager.activeChatReceiverGid = '';
+    print('chat_message dispose: ${GeneralManager.activeChatReceiverGid}');
     FirebaseService.instance!.updateUserState(true, currentCahtId: null);
   }
 
@@ -323,11 +326,11 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () {
+                IconButton(
+                  onPressed: () {
                     viewModel.sendMessage();
                   },
-                  child: Icon(
+                  icon: Icon(
                     MdiIcons.send,
                     color: Color(0xff919195),
                     size: 20,
@@ -602,13 +605,13 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         icon = Icons.file_copy;
     }
     return CircleAvatar(
-          backgroundColor: Color(0xffacacac).withOpacity(0.2),
-          radius: 20,
-          child: Icon(
-            Icons.picture_as_pdf,
-            color: Colors.grey.shade800,
-          ),
-        );
+      backgroundColor: Color(0xffacacac).withOpacity(0.2),
+      radius: 20,
+      child: Icon(
+        Icons.picture_as_pdf,
+        color: Colors.grey.shade800,
+      ),
+    );
   }
 
   Widget singleContact(String userId, Map isReadMap) {

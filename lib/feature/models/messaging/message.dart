@@ -75,7 +75,7 @@ class Message extends BaseModel {
   @override
   Map<String, dynamic> toJson() => _$MessageToJson(this);
 
-  void initSender() async {
+  Future initSender() async {
     // var senderUser  = await GeneralManager.authS.getUserById(sender!);
     var senderUser  = await FirebaseService.instance!.getUser(sender!);;
     senderName = senderUser.fullName;

@@ -1,4 +1,4 @@
-enum NotificationType { standart, chat }
+enum NotificationType { standart, chat, question, activity}
 
 extension IntToNotificationTypeExtension on int {
   NotificationType get intToNotificationType {
@@ -7,6 +7,10 @@ extension IntToNotificationTypeExtension on int {
         return NotificationType.standart;
       case 1:
         return NotificationType.chat;
+      case 2:
+        return NotificationType.question;
+      case 3:
+        return NotificationType.activity;
       default:
         return NotificationType.standart;
     }

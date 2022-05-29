@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
@@ -8,7 +7,7 @@ import 'package:mobuni_v2/core/extension/date_time_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/messaging/chat.dart';
 import 'package:mobuni_v2/feature/views/chat/chat_group_info/chat_group_info_view.dart';
-import 'package:mobuni_v2/feature/views/chat/chat_home/big_image_view.dart';
+import 'package:mobuni_v2/feature/views/chat/chat_home/widgets/big_image_view.dart';
 import 'package:mobuni_v2/feature/views/chat/chat_message/chat_message_view.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 
@@ -74,28 +73,19 @@ class _ChatCardState extends State<ChatCard> {
                                         chat: widget.chat, isCreated: false));
                               }
                             },
-                            child: Badge(
-                              showBadge: badgeNumber > 0,
-                              badgeContent: Text(
-                                badgeNumber.toString(),
-                                style: TextStyle(
-                                  color: context.colors.onSecondary,
-                                ),
-                              ),
-                              child: Hero(
-                                tag: widget.chat.id!,
-                                transitionOnUserGestures: true,
-                                child: UserPhoto(
-                                  currentUser: false,
-                                  size: context.dynamicValue(0.05),
-                                  assetPath:
-                                      widget.chat.type == ChatType.GROUP.index
-                                          ? 'assets/ic_group_chat.png'
-                                          : null,
-                                  url: widget.chat.type == ChatType.GROUP.index
-                                      ? widget.chat.groupPhoto
-                                      : widget.chat.receiverUser!.image,
-                                ),
+                            child: Hero(
+                              tag: widget.chat.id!,
+                              transitionOnUserGestures: true,
+                              child: UserPhoto(
+                                currentUser: false,
+                                size: context.dynamicValue(0.05),
+                                assetPath:
+                                    widget.chat.type == ChatType.GROUP.index
+                                        ? 'assets/ic_group_chat.png'
+                                        : null,
+                                url: widget.chat.type == ChatType.GROUP.index
+                                    ? widget.chat.groupPhoto
+                                    : widget.chat.receiverUser!.image,
                               ),
                             ),
                           ),
@@ -165,7 +155,7 @@ class _ChatCardState extends State<ChatCard> {
                                             '${widget.chat.lastMessage?.senderName} : ',
                                             fontSize: 15,
                                             fontWeight: badgeNumber > 0
-                                                ? FontWeight.w600
+                                                ? FontWeight.w800
                                                 : FontWeight.w400,
                                             color: context.colors.primary),
                                       ),
@@ -218,16 +208,30 @@ class _ChatCardState extends State<ChatCard> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
-                            Text(
+                            CustomText(
                               widget.chat.lastMessage != null
                                   ? widget
                                       .chat.lastMessage!.time!.formatDateToTime
                                   : '',
+                                  
                               style: TextStyle(
-                                  color: context.colors.primary,
-                                  fontWeight: FontWeight.w400,
+                                color: badgeNumber > 0  ? context.theme.primaryColor :  context.colors.primary,
+                                  fontWeight: badgeNumber > 0
+                                                  ? FontWeight.w600
+                                                  : FontWeight.w400,
                                   letterSpacing: -0.2),
                             ),
+                            if(badgeNumber > 0)
+                            CircleAvatar(
+                              backgroundColor: context.theme.primaryColor,
+                              radius: context.dynamicValue(0.015),
+                              child: CustomText(
+                                  badgeNumber.toString(),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  
+                                ),
+                            )
                             //badgeWidget
                           ],
                         ),

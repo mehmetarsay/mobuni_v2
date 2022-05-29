@@ -25,4 +25,6 @@ class GeneralManager {
 
   static AuthService get authS => locator<AuthService>();
   static NavigationService get navigationS => locator<NavigationService>();
+
+  static String activeChatReceiverGid = '';
 }

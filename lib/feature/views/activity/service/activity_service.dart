@@ -1,3 +1,4 @@
+import 'package:mobuni_v2/core/base/models/base_response/empty_response.dart';
 import 'package:mobuni_v2/core/base/models/pagination_model/pagination_model.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
@@ -29,4 +30,13 @@ class ActivityService {
         data: data,
         isFile: true,
       );
+
+  getActivitySize({required int universityId,required DateTime dateTime}) async {
+    return await _networkManager!.request(
+      method: ReqTypes.get,
+      path: ApiConstants.getActivityCountsByUniversityId,
+      model: EmptyModel(),
+      queryParameters: {'universityId': universityId,'dateTime':dateTime},
+    );
+  }
 }

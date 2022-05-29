@@ -46,7 +46,9 @@ class QuestionsViewModel extends BaseViewModel {
   init() async {
     setInitialised(false);
     data = await Hive.openBox(HiveBox.data.name);
-    await data.put(HiveBoxKey.questions.name, []);
+    if(!data.containsKey(HiveBoxKey.questions.name)){
+      await data.put(HiveBoxKey.questions.name, []);
+    }
     setInitialised(true);
     timer = Timer.periodic(Duration(seconds: 100), (Timer t) {
       newQuestionSzieCalculate();

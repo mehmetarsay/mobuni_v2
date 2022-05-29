@@ -41,7 +41,9 @@ class ActivityViewModel extends BaseViewModel {
   init() async {
     setInitialised(false);
     data = await Hive.openBox(HiveBox.data.name);
-    await data.put(HiveBoxKey.activities.name, []);
+    if(!data.containsKey(HiveBoxKey.activities.name)){
+      await data.put(HiveBoxKey.activities.name, []);
+    }
     setInitialised(true);
     timer = Timer.periodic(Duration(seconds: 100), (Timer t) {
       newActivitySzieCalculate();

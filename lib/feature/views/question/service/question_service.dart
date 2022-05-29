@@ -37,12 +37,12 @@ class QuestionService {
         isFile: true,
       );
 
-  getQuestionSize({required int universityId}) async {
+  getQuestionSize({required int universityId,required DateTime dateTime}) async {
     return await _networkManager!.request(
       method: ReqTypes.get,
       path: ApiConstants.questionCountsByUniversityId,
       model: EmptyModel(),
-      queryParameters: {'universityId': universityId},
+      queryParameters: {'universityId': universityId,'dateTime':dateTime},
     );
   }
 

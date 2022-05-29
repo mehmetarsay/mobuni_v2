@@ -4,5 +4,7 @@ enum HiveBox {
 
 enum HiveBoxKey {
   questions,
-  activities
+  activities,
+  questionsUpdateDate,
+  activitiesUpdateDate,
 }

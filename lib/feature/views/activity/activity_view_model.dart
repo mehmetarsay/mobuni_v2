@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/constants/enum/hive_enum.dart';
@@ -6,20 +9,27 @@ import 'package:mobuni_v2/core/utils/helpers.dart';
 import 'package:mobuni_v2/feature/models/activity/activity_model.dart';
 import 'package:mobuni_v2/feature/views/activity/service/activity_service.dart';
 import 'package:stacked/stacked.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart' as refresh;
 
 class ActivityViewModel extends BaseViewModel {
   ActivityService activityService = locator<ActivityService>();
+  refresh.RefreshController refreshController =
+  refresh.RefreshController(initialRefresh: true);
 
-  ScrollController scrollController = ScrollController();
-  int pageIndex = 1;
-  bool hasNextPage = false;
-
-  bool _isLoadMoreRunning = false;
-  bool get isLoadMoreRunning => _isLoadMoreRunning;
-  set isLoadMoreRunning(bool value) {
-    _isLoadMoreRunning = value;
+  int _newQuestionSize = 0;
+  int get newActivitySize => _newQuestionSize;
+  set newActivitySize(int value) {
+    _newQuestionSize = value;
     notifyListeners();
   }
+  Timer? timer;
+  @override
+  dispose() {
+    if (timer != null) timer!.cancel();
+    super.dispose();
+  }
+  int pageIndex = 1;
+  bool hasNextPage = false;
 
   late Box _data;
   Box get data => _data;
@@ -29,19 +39,33 @@ class ActivityViewModel extends BaseViewModel {
   }
 
   init() async {
+    setInitialised(false);
     data = await Hive.openBox(HiveBox.data.name);
-    await fetchActivities();
-    scrollController.addListener(_loadMore);
+    setInitialised(true);
+    timer = Timer.periodic(Duration(seconds: 100), (Timer t) {
+      newActivitySzieCalculate();
+    });
+    notifyListeners();
   }
 
-  Future fetchActivities() async {
-    if (data.containsKey(HiveBoxKey.activities.name)) {
-      setBusy(false);
+  Future newActivitySzieCalculate() async {
+    if(data.get(HiveBoxKey.activitiesUpdateDate.name)!=null){
+      DateTime? dateTime = DateTime.tryParse(data.get(HiveBoxKey.activitiesUpdateDate.name));
+      ///TODO fdü db saatini normale alınca kaldırılacak
+      dateTime = dateTime!.subtract(Duration(hours: 3));
+      ///TODO fdü bu methodun filtresini genişletecek sonra değişecek
+      newActivitySize = await activityService.getActivitySize(universityId: 1,dateTime: dateTime);
+      return newActivitySize;
     }
-    if (await checkInternet()) {
-      await getActivities;
+    else{
+      newActivitySize = 0;
     }
-    setBusy(false);
+
+  }
+
+
+  onTapNewActivity() async {
+    refreshController.requestRefresh();
   }
 
   Future get getActivities async {
@@ -62,13 +86,28 @@ class ActivityViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-    void _loadMore() async {
-    if (!_isLoadMoreRunning &&
-        scrollController.position.extentAfter < 100 &&
-        hasNextPage) {
-      isLoadMoreRunning = true;
+  Future onRefresh() async {
+    pageIndex = 1;
+    newActivitySize = 0;
+    refreshController.resetNoData();
+    if (await checkInternet()) {
       await getActivities;
-      isLoadMoreRunning = false;
+      await data.put(HiveBoxKey.activitiesUpdateDate.name, DateTime.now().toString());
+      refreshController.refreshCompleted();
+      Fluttertoast.showToast(msg: 'Etkinlikler Güncel');
+    }
+    else{
+      refreshController.refreshFailed();
+    }
+
+  }
+  Future onLoading() async {
+    if(hasNextPage){
+      await getActivities;
+      refreshController.loadComplete();
+    }
+    else{
+      refreshController.loadNoData();
     }
   }
 }

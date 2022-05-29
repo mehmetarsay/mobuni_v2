@@ -66,6 +66,8 @@ dependencies:
   date_time_picker: ^2.1.0
   onesignal_flutter: ^3.3.1  
   hive_flutter: ^1.1.0
+  pull_to_refresh: ^2.0.0
+
 
 
 dev_dependencies:

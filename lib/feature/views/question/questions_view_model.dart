@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:mobuni_v2/core/constants/enum/hive_enum.dart';
+import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/core/utils/helpers.dart';
 import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart' as refresh;
 import 'package:stacked/stacked.dart';
 
 import '../../../app/app.locator.dart';
@@ -12,7 +15,8 @@ import '../../../app/app.locator.dart';
 class QuestionsViewModel extends BaseViewModel {
   QuestionService questionService = locator<QuestionService>();
   var indicator = new GlobalKey<RefreshIndicatorState>();
-  ScrollController scrollController = ScrollController();
+  refresh.RefreshController refreshController =
+  refresh.RefreshController(initialRefresh: true);
 
   int _newQuestionSize = 0;
   int get newQuestionSize => _newQuestionSize;
@@ -38,59 +42,20 @@ class QuestionsViewModel extends BaseViewModel {
   int pageIndex = 1;
   bool hasNextPage = false;
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-  set isLoading(bool value) {
-    _isLoading = value;
-    notifyListeners();
-  }
-
-  bool _isLoadMoreRunning = false;
-  bool get isLoadMoreRunning => _isLoadMoreRunning;
-  set isLoadMoreRunning(bool value) {
-    _isLoadMoreRunning = value;
-    notifyListeners();
-  }
 
   init() async {
-    isLoading = true;
+    setInitialised(false);
     data = await Hive.openBox(HiveBox.data.name);
-    await fetchQuestions();
-    scrollController.addListener(_loadMore);
-    timer = Timer.periodic(Duration(seconds: 30), (Timer t) {
+    setInitialised(true);
+    timer = Timer.periodic(Duration(seconds: 100), (Timer t) {
       newQuestionSzieCalculate();
     });
-    await newQuestionSzieCalculate().then((value) async {
-      if (value != 0) {
-        await getQuestions();
-      }
-    });
     notifyListeners();
-  }
-
-  Future fetchQuestions() async {
-    if (data.containsKey(HiveBoxKey.questions.name)) {
-      isLoading = false;
-    }
-    if (await checkInternet()) {
-      await getAllQuestions;
-    }
-    isLoading = false;
-  }
-
-  void _loadMore() async {
-    if (!_isLoadMoreRunning &&
-        scrollController.position.extentAfter < 100 &&
-        hasNextPage) {
-      isLoadMoreRunning = true;
-      await getAllQuestions;
-      isLoadMoreRunning = false;
-    }
   }
 
   Future get getAllQuestions async {
     var result = await questionService.questionGetByUniversityId(
-      universityId: 1,
+      universityId: GeneralManager.user.university!.id!,
       pageIndex: pageIndex,
     );
     hasNextPage = result.hasNextPage;
@@ -98,35 +63,52 @@ class QuestionsViewModel extends BaseViewModel {
     if (list == null || pageIndex == 1) list = [];
     (list as List).addAll(result.items);
     await data.put(HiveBoxKey.questions.name, list);
+
     pageIndex++;
   }
 
   Future newQuestionSzieCalculate() async {
-    var questionSize = await questionService.getQuestionSize(universityId: 1);
-    newQuestionSize = questionSize - questionService.questions!.length;
-    return newQuestionSize;
+    if(data.get(HiveBoxKey.questionsUpdateDate.name)!=null){
+      DateTime? dateTime = DateTime.tryParse(data.get(HiveBoxKey.questionsUpdateDate.name));
+      ///TODO fdü db saatini normale alınca kaldırılacak
+      dateTime = dateTime!.subtract(Duration(hours: 3));
+      newQuestionSize = await questionService.getQuestionSize(universityId: GeneralManager.user.university!.id!,dateTime: dateTime);
+      return newQuestionSize;
+    }
+    else{
+      newQuestionSize = 0;
+    }
+
   }
 
   onTapNewQuestions() async {
-    scrollController
-        .animateTo(-20,
-            duration: const Duration(milliseconds: 50), curve: Curves.linear)
-        .then((value) {
-      indicator.currentState!.show();
-    });
-    onRefresh();
-    notifyListeners();
+   refreshController.requestRefresh();
   }
 
   Future onRefresh() async {
-    var res = await getQuestions();
+    pageIndex = 1;
     newQuestionSize = 0;
-    notifyListeners();
-    return res;
+    refreshController.resetNoData();
+    if (await checkInternet()) {
+      await getAllQuestions;
+      await data.put(HiveBoxKey.questionsUpdateDate.name, DateTime.now().toString());
+      refreshController.refreshCompleted();
+      Fluttertoast.showToast(msg: 'Sorular Güncel');
+    }
+    else{
+      refreshController.refreshFailed();
+    }
+
+  }
+  Future onLoading() async {
+    if(hasNextPage){
+      await getAllQuestions;
+      refreshController.loadComplete();
+    }
+    else{
+      refreshController.loadNoData();
+    }
   }
 
-  Future getQuestions() async {
-    // newQuestionSize = 0;
-    // return await questionService.questionGetByUniversityId(universityId: 1);
-  }
+
 }

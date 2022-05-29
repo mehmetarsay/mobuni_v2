@@ -24,7 +24,7 @@ class ActivityView extends StatelessWidget {
   }
 
   Widget builder(BuildContext context, ActivityViewModel vm, Widget? child) {
-    return Scaffold(
+    return vm.initialised ?Scaffold(
       appBar: CustomAppBar(title: 'Etkinlikler'),
       floatingActionButton: FloatingActionButton(
         heroTag: 'activity',
@@ -70,15 +70,14 @@ class ActivityView extends StatelessWidget {
             ),
         ],
       )
-    );
+    ):Container();
   }
 
   Widget listActivities(ActivityViewModel viewModel) {
     return ValueListenableBuilder<Box>(
       valueListenable: viewModel.data.listenable(),
       builder: (context, box, childWidget) {
-        return box.containsKey(HiveBoxKey.activities.name)
-            ? SmartRefresher(
+        return SmartRefresher(
           controller: viewModel.refreshController,
           onRefresh: viewModel.onRefresh,
           onLoading: viewModel.onLoading,
@@ -120,8 +119,7 @@ class ActivityView extends StatelessWidget {
                     );
                   },
                 ),
-            )
-            : SizedBox();
+            );
       },
     );
   }

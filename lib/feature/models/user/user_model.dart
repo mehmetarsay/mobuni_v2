@@ -22,7 +22,8 @@ class UserModel extends BaseModel {
     this.universityId,
     this.departmentId,
     this.university,
-    this.department
+    this.department,
+    this.isUniversityStudent,
   });
 
   @HiveField(0)
@@ -51,6 +52,8 @@ class UserModel extends BaseModel {
   UniversityModel? university;
   @HiveField(12)
   DeaprtmentModel? department;
+  @HiveField(13)
+  bool? isUniversityStudent;
   
   String get fullName => '$name $surname';
 

@@ -76,8 +76,20 @@ class RegisterView extends StatelessWidget {
                 validator: Validators.notEmpty,
                 isPassword: true,
               ),
+              CheckboxListTile(
+                title: CustomText(
+                  'I am university student',
+                  color: context.colors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+                activeColor: Color(0xff204F83),
+                value: vm.isUniversityStudent,
+                onChanged: (value) => vm.isUniversityStudent = value!,
+                contentPadding: EdgeInsets.symmetric(horizontal: 35),
+              ),
               Visibility(
-                visible: !vm.isHighSchool,
+                visible: vm.isUniversityStudent,
                 child: Column(
                   children: [
                     CustomDropdown(
@@ -94,18 +106,6 @@ class RegisterView extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              CheckboxListTile(
-                title: CustomText(
-                  'I am high school student',
-                  color: context.colors.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-                activeColor: Color(0xff204F83),
-                value: vm.isHighSchool,
-                onChanged: (value) => vm.isHighSchool = value!,
-                contentPadding: EdgeInsets.symmetric(horizontal: 35),
               ),
               SizedBox(height: 20),
               CustomButton(

@@ -50,6 +50,7 @@ class RegisterViewModel extends BaseViewModel {
       Fluttertoast.showToast(msg: 'Lütfen gerekli alanları doldurunuz');
       return;
     }
+    
     if (isUniversityStudent) {
       if (universityId == -1) {
         Fluttertoast.showToast(msg: 'Lütfen üniversite seçiniz');
@@ -62,6 +63,10 @@ class RegisterViewModel extends BaseViewModel {
     }
     if (password.text != passwordAgain.text) {
       Fluttertoast.showToast(msg: 'Şifreler eşleşmiyor');
+      return;
+    }
+    if(password.text.length < 8) {
+      Fluttertoast.showToast(msg: 'Şifre en az 8 karakter olmalıdır');
       return;
     }
 

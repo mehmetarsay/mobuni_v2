@@ -30,7 +30,7 @@ class ActivityModelAdapter extends TypeAdapter<ActivityModel> {
       activityStartTime: fields[10] as DateTime?,
       activityEndTime: fields[11] as DateTime?,
       commentCount: fields[12] as int?,
-      likeCount: fields[13] as int?,
+      joinedCount: fields[13] as int?,
       maxUser: fields[14] as int?,
       ticketPrice: fields[15] as int?,
       isActive: fields[16] as bool?,
@@ -72,7 +72,7 @@ class ActivityModelAdapter extends TypeAdapter<ActivityModel> {
       ..writeByte(12)
       ..write(obj.commentCount)
       ..writeByte(13)
-      ..write(obj.likeCount)
+      ..write(obj.joinedCount)
       ..writeByte(14)
       ..write(obj.maxUser)
       ..writeByte(15)
@@ -132,7 +132,7 @@ ActivityModel _$ActivityModelFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['activityEndTime'] as String),
       commentCount: json['commentCount'] as int?,
-      likeCount: json['likeCount'] as int?,
+      joinedCount: json['joinedCount'] as int? ?? 0,
       maxUser: json['maxUser'] as int?,
       ticketPrice: json['ticketPrice'] as int?,
       isActive: json['isActive'] as bool?,
@@ -167,7 +167,7 @@ Map<String, dynamic> _$ActivityModelToJson(ActivityModel instance) {
       'activityStartTime', instance.activityStartTime?.toIso8601String());
   writeNotNull('activityEndTime', instance.activityEndTime?.toIso8601String());
   writeNotNull('commentCount', instance.commentCount);
-  writeNotNull('likeCount', instance.likeCount);
+  writeNotNull('joinedCount', instance.joinedCount);
   writeNotNull('maxUser', instance.maxUser);
   writeNotNull('ticketPrice', instance.ticketPrice);
   writeNotNull('isActive', instance.isActive);

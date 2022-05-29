@@ -20,6 +20,7 @@ class CustomTextFormField extends StatefulWidget {
   final bool? isNumber;
   final int maxLines;
   final String? title;
+  final int? maxLength;
 
   const CustomTextFormField({
     BuildContext? context,
@@ -37,7 +38,8 @@ class CustomTextFormField extends StatefulWidget {
     this.validator,
     this.isNumber = false,
     this.maxLines =1,
-    this.title
+    this.title,
+    this.maxLength
   }) : super(key: key);
 
   @override
@@ -79,6 +81,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           ),),
           SizedBox(height: 5,),
           TextFormField(
+            maxLength: widget.maxLength,
             autofocus: false,
             obscureText: passwordVisible,
             readOnly: widget.readOnly!,

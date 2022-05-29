@@ -25,7 +25,13 @@ class ActivityView extends StatelessWidget {
 
   Widget builder(BuildContext context, ActivityViewModel vm, Widget? child) {
     return vm.initialised ?Scaffold(
-      appBar: CustomAppBar(title: 'Etkinlikler'),
+      appBar: CustomAppBar(title: 'Etkinlikler',actions: [
+        IconButton(onPressed: (){
+          vm.filterBottomSheet(context).then((value) {
+            vm.refreshController.requestRefresh();
+          });
+        }, icon: Icon(Icons.filter_list_sharp))
+      ],),
       floatingActionButton: FloatingActionButton(
         heroTag: 'activity',
         backgroundColor: Theme.of(context).primaryColor,

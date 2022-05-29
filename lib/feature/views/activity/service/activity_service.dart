@@ -13,15 +13,16 @@ import 'package:stacked/stacked_annotations.dart';
 class ActivityService {
   final NetworkManager? _networkManager = GeneralManager.networkM;
 
-  Future activityGetAll({required int pageIndex,Map queryParameters = const {}}) async =>
-      await _networkManager!.request(
+  Future activityGetAll({required int pageIndex, int? universityId, List? categories}) async => await _networkManager!.request(
         method: ReqTypes.get,
         path: ApiConstants.activity,
         model: PaginationModel<ActivityModel>(),
         queryParameters: {
-          'PageIndex' : pageIndex,
-          'PageSize' : Constants.pageSize,
-        }
+          'PageIndex': pageIndex,
+          'PageSize': Constants.pageSize,
+          'UniversityId': universityId,
+           'Categories': categories,
+        },
       );
 
   Future activityPost(dynamic data) async => await _networkManager!.request(
@@ -32,19 +33,25 @@ class ActivityService {
         isFile: true,
       );
 
-  getActivitySize({required int universityId,required DateTime dateTime}) async {
+  getActivitySize({required int universityId, required DateTime dateTime}) async {
     return await _networkManager!.request(
       method: ReqTypes.get,
       path: ApiConstants.getActivityCountsByUniversityId,
       model: EmptyModel(),
-      queryParameters: {'universityId': universityId,'dateTime':dateTime},
+      queryParameters: {'universityId': universityId, 'dateTime': dateTime},
     );
   }
 
-  Future getAllCategory() async =>
-      _networkManager!.request(
-        method:ReqTypes.get,
+  Future getAllCategory() async => _networkManager!.request(
+        method: ReqTypes.get,
         path: ApiConstants.activityCategory,
         model: ActivityCategoryModel(),
+      );
+
+  Future joinActivity({required int activityId}) async => await _networkManager!.request(
+        method: ReqTypes.post,
+        path: ApiConstants.joinOrLeave,
+        model: ActivityModel(),
+        data: {'activityId': activityId},
       );
 }

@@ -23,7 +23,7 @@ class ActivityModel extends BaseModel {
     this.activityStartTime,
     this.activityEndTime,
     this.commentCount,
-    this.likeCount,
+    this.joinedCount=0,
     this.maxUser,
     this.ticketPrice,
     this.isActive,
@@ -60,7 +60,7 @@ class ActivityModel extends BaseModel {
   @HiveField(12)
   int? commentCount;
   @HiveField(13)
-  int? likeCount;
+  int? joinedCount;
   @HiveField(14)
   int? maxUser;
   @HiveField(15)

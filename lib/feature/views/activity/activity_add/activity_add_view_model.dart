@@ -7,8 +7,10 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
+import 'package:mobuni_v2/core/constants/enum/hive_enum.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
 import 'package:mobuni_v2/feature/models/activity/activity_model.dart';
 import 'package:mobuni_v2/feature/models/activity_category/activity_category_model.dart';
 import 'package:mobuni_v2/feature/views/activity/service/activity_service.dart';
@@ -39,7 +41,11 @@ class ActivityAddViewModel extends BaseViewModel {
   List<ActivityCategoryModel> categories = [];
 
   init() async {
-    categories = GeneralManager.hiveM.hive.get('category');
+    categories = GeneralManager.hiveM.hive.get(HiveBoxKey.categories.name)??[];
+    if(categories.isEmpty){
+      getCategory();
+    }
+
   }
 
   getImage(BuildContext context) async {
@@ -160,5 +166,15 @@ class ActivityAddViewModel extends BaseViewModel {
     } finally {
       context.loaderOverlay.hide();
     }
+  }
+
+  getCategory()async{
+    List<ActivityCategoryModel> categoryList =  await locator<ActivityService>().getAllCategory();
+    categories = categoryList;
+    saveCategory(categoryList);
+  }
+  void saveCategory(List<ActivityCategoryModel> categories){
+    locator<HiveManager>().hive.delete(HiveBoxKey.categories.name);
+    locator<HiveManager>().hive.put(HiveBoxKey.categories.name, categories);
   }
 }

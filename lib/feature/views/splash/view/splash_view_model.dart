@@ -20,7 +20,6 @@ class SplashViewModel extends BaseViewModel {
 
     Future.delayed(Duration(seconds: 3)).then((value)async {
       if (authService.isLogin) {
-        // await getCategory();
         navigationService.pushNamedAndRemoveUntil(Routes.homeView);
       } else {
         navigationService.pushNamedAndRemoveUntil(Routes.loginView);
@@ -29,8 +28,5 @@ class SplashViewModel extends BaseViewModel {
 
   }
 
-  getCategory()async{
-    List<ActivityCategoryModel> categoryList = await authService.getAllCategory();
-    authService.saveCategory(categoryList);
-  }
+
 }

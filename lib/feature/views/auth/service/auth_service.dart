@@ -1,6 +1,7 @@
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
+import 'package:mobuni_v2/core/constants/enum/hive_enum.dart';
 import 'package:mobuni_v2/core/constants/enum/req_types.dart';
 import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
 import 'package:mobuni_v2/core/manager/network_manager.dart';
@@ -20,14 +21,11 @@ class AuthService {
     _hiveService!.hive.put(Constants.authToken, token);
     _networkManager!.setHeaderToken(token!);
     _hiveService!.hive.put(Constants.user, user);
+    locator<HiveManager>().hive.delete(HiveBoxKey.categories.name);
     UserModel userq = _hiveService!.hive.get(Constants.user);
     print(userq);
   }
 
-  void saveCategory(List<ActivityCategoryModel> categories){
-    _hiveService!.hive.delete('category');
-    _hiveService!.hive.put('category', categories);
-  }
 
   void get deleteToken {
     _hiveService!.hive.delete(Constants.authToken);
@@ -82,12 +80,7 @@ class AuthService {
           queryParameters: {'UserId': id}
       );
 
-  Future getAllCategory() async =>
-      _networkManager!.request(
-          method:ReqTypes.get,
-          path: ApiConstants.activityCategory,
-          model: ActivityCategoryModel(),
-      );
+
 }
 
 

@@ -46,7 +46,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       builder: (context, viewModel, child) => Scaffold(
-        //appBar: CustomAppBar(title: 'MobUni'),
         // body: getViewForIndex(viewModel.currentTabIndex),
         body: IndexedStack(
           children: [

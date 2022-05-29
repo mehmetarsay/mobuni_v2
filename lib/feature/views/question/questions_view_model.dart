@@ -42,8 +42,21 @@ class QuestionsViewModel extends BaseViewModel {
   int pageIndex = 1;
   bool hasNextPage = false;
 
+  int universityId = GeneralManager.user.universityId  ?? 1;
+  List universityList = [];
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
+  set isLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
 
   init() async {
+    isLoading = true;
+    universityList = await GeneralManager.authS.getAllUniversity();
+    isLoading = false;
+    
     setInitialised(false);
     data = await Hive.openBox(HiveBox.data.name);
     if(!data.containsKey(HiveBoxKey.questions.name)){
@@ -58,7 +71,7 @@ class QuestionsViewModel extends BaseViewModel {
 
   Future get getAllQuestions async {
     var result = await questionService.questionGetByUniversityId(
-      universityId: GeneralManager.user.university!.id!,
+      universityId: universityId,
       pageIndex: pageIndex,
     );
     hasNextPage = result.hasNextPage;
@@ -74,7 +87,7 @@ class QuestionsViewModel extends BaseViewModel {
       DateTime? dateTime = DateTime.tryParse(data.get(HiveBoxKey.questionsUpdateDate.name));
       ///TODO fdü db saatini normale alınca kaldırılacak
       dateTime = dateTime!.subtract(Duration(hours: 3));
-      newQuestionSize = await questionService.getQuestionSize(universityId: GeneralManager.user.university!.id!,dateTime: dateTime);
+      newQuestionSize = await questionService.getQuestionSize(universityId: universityId,dateTime: dateTime);
       return newQuestionSize;
     }
     else{

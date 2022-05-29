@@ -39,17 +39,28 @@ class QuestionAddViewModel extends BaseViewModel {
     _imagesInit = value;
     notifyListeners();
   }
-  UniversityModel _selectUnivercity = GeneralManager.user.university!;
 
-  UniversityModel get selectUnivercity => _selectUnivercity;
+  // UniversityModel _selectUnivercity = GeneralManager.user.university!;
+  // UniversityModel get selectUnivercity => _selectUnivercity;
+  // set selectUnivercity(UniversityModel value) {
+  //   _selectUnivercity = value;
+  //   notifyListeners();
+  // }
 
-  set selectUnivercity(UniversityModel value) {
-    _selectUnivercity = value;
+  int universityId = GeneralManager.user.universityId  ?? 1;
+  List universityList = [];
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
+  set isLoading(bool value) {
+    _isLoading = value;
     notifyListeners();
   }
 
   init() async {
     await imagesLoad();
+    isLoading = true;
+    universityList = await GeneralManager.authS.getAllUniversity();
+    isLoading = false;
   }
 
   Future imagesLoad() async {
@@ -87,7 +98,7 @@ class QuestionAddViewModel extends BaseViewModel {
       if (selectImage != null)
         'Image': await MultipartFile.fromFile(selectImage!.path),
       'Text': '\"${controller.text}\"',
-      'UniversityId': selectUnivercity.id,
+      'UniversityId': universityId,
     });
     var response = await locator<QuestionService>().questionPost(data);
     if (response is QuestionModel) {

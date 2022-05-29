@@ -9,7 +9,8 @@ class CustomDropdown extends StatefulWidget {
     required this.items,
     this.isLoading = true,
     this.voidCallback,
-    this.initId
+    this.initId,
+    this.isDisable = false,
   }) : super(key: key);
 
   final String labelText;
@@ -17,6 +18,7 @@ class CustomDropdown extends StatefulWidget {
   final isLoading;
   final Function(Object? value)? voidCallback;
   final int ? initId;
+  final bool isDisable;
 
   @override
   State<CustomDropdown> createState() => _CustomDropdownState();
@@ -59,7 +61,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                       );
                     },
                   ).toList(),
-                  onChanged: (val) {
+                  onChanged: widget.isDisable ? null :  (val) {
                     print(val);
                     if (widget.voidCallback != null) {
                       widget.voidCallback!.call(val);

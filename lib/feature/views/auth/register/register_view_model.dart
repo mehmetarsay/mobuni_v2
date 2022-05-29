@@ -72,8 +72,8 @@ class RegisterViewModel extends BaseViewModel {
       userName: userName.text,
       email: email.text,
       password: password.text,
-      universityId: universityId,
-      departmentId: departmentId,
+      universityId: isUniversityStudent ? universityId : null,
+      departmentId: isUniversityStudent ? departmentId : null,
       userType: UserTyoe.normal.index,
       isUniversityStudent: isUniversityStudent
     );

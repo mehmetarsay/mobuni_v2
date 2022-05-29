@@ -5,4 +5,4 @@
 ## Uygulama Hakkında
 
 - Üniversite içi duyuru etkinlik vb paylaşımını sağlar.
-- Liselilerin tercih dönemi üniversite seçimine yardımcı olur.
+- Diğer kullanıcıların ise Üniversiteler ve Üniversitelerin bölümleri hakkında bilgi sahibi olmasını sağlar.

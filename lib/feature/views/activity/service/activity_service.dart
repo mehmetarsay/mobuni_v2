@@ -21,7 +21,7 @@ class ActivityService {
           'PageIndex': pageIndex,
           'PageSize': Constants.pageSize,
           'UniversityId': universityId,
-           'Categories': categories,
+           // 'Categories': categories,
         },
       );
 

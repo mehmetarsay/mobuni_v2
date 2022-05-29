@@ -117,6 +117,19 @@ class ActivityAddViewModel extends BaseViewModel {
   }
 
   save(BuildContext context) async {
+    if (title.text.isEmpty) {
+      Fluttertoast.showToast(msg: 'Başlık boş olamaz');
+      return;
+    }
+    var list = [];
+    for(var i in categories){
+      if(i.isSelected)
+        list.add(i.id);
+    }
+    if(list.isEmpty){
+      Fluttertoast.showToast(msg: 'En az bir kategori seçin');
+      return;
+    }
     AwesomeDialog(
       context: context,
       animType: AnimType.SCALE,
@@ -132,6 +145,7 @@ class ActivityAddViewModel extends BaseViewModel {
         ),
       ),
       btnOkOnPress: () {
+
         shareActivity(context);
       },
       btnOkColor: context.theme.primaryColor,
@@ -145,11 +159,6 @@ class ActivityAddViewModel extends BaseViewModel {
 
   shareActivity(BuildContext context) async {
     try {
-      if (title.text.isEmpty) {
-        Fluttertoast.showToast(msg: 'Başlık boş olamaz');
-        return;
-      }
-
       context.loaderOverlay.show();
       var data = FormData.fromMap({
         if (imageFile != null)

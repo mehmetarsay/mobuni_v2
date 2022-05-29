@@ -68,6 +68,8 @@ class ActivityAddView extends StatelessWidget {
                       hintText: 'Başlık',
                       title: 'Başlık*',
                       validator: Validators.notEmpty,
+                      maxLength: 150,
+
                     ),
                     SizedBox(
                       height: 10,
@@ -78,6 +80,7 @@ class ActivityAddView extends StatelessWidget {
                       title: 'Açıklama*',
                       maxLines: 5,
                       validator: Validators.notEmpty,
+                      maxLength: 400,
                     ),
                     SizedBox(
                       height: 10,

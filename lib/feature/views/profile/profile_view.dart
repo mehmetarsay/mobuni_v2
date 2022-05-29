@@ -22,10 +22,9 @@ class ProfileView extends StatelessWidget {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       viewModelBuilder: () => ProfileViewModel(),
       onModelReady: (model) => model.init(userId),
-      builder: (context, vm, child) => vm.initialised
-          ? SafeArea(
+      builder: (context, vm, child) => SafeArea(
               child: Scaffold(
-                body: CustomScrollView(
+                body:vm.initialised? CustomScrollView(
                   controller: vm.controller,
                   physics: BouncingScrollPhysics(),
                   slivers: <Widget>[
@@ -68,12 +67,12 @@ class ProfileView extends StatelessWidget {
                       ),
                     )
                   ],
+                ) : Center(
+                  child: CircularProgressIndicator(),
                 ),
               ),
             )
-          : Center(
-        child: CircularProgressIndicator(),
-      ),
+
     );
   }
 

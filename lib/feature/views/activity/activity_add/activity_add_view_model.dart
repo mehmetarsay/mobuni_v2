@@ -41,7 +41,12 @@ class ActivityAddViewModel extends BaseViewModel {
   List<ActivityCategoryModel> categories = [];
 
   init() async {
-    categories = GeneralManager.hiveM.hive.get(HiveBoxKey.categories.name)??[];
+    try{
+      categories = GeneralManager.hiveM.hive.get(HiveBoxKey.categories.name)??[];
+    }
+    catch(e){
+      categories = [];
+    }
     if(categories.isEmpty){
       getCategory();
     }
@@ -172,6 +177,7 @@ class ActivityAddViewModel extends BaseViewModel {
     List<ActivityCategoryModel> categoryList =  await locator<ActivityService>().getAllCategory();
     categories = categoryList;
     saveCategory(categoryList);
+    notifyListeners();
   }
   void saveCategory(List<ActivityCategoryModel> categories){
     locator<HiveManager>().hive.delete(HiveBoxKey.categories.name);

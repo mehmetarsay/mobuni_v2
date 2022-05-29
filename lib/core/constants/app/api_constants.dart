@@ -26,5 +26,6 @@ class ApiConstants {
   static String userById = 'User/GetByUserId';
   static String activityCategory = 'ActivityCategory';
   static String activity = 'Activity';
+  static String joinOrLeave = 'Activity/JoinOrLeave';
   static String getActivityCountsByUniversityId = 'Activity/GetActivityCountsByUniversityId';
 }

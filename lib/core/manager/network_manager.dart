@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,6 +7,7 @@ import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/base/models/base_response/empty_response.dart';
 import 'package:mobuni_v2/core/constants/app/api_constants.dart';
 import 'package:mobuni_v2/core/constants/app/constants.dart';
+import 'package:mobuni_v2/core/constants/app/private_constants.dart';
 import 'package:mobuni_v2/core/manager/hive/hive_manager.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -16,20 +18,28 @@ import 'package:dio/dio.dart';
 
 @LazySingleton()
 class NetworkManager {
-  // NetworkManager() {
-  //   NetworkManager.init();
-  // }
 
-  final Dio dio = Dio(BaseOptions(
-    baseUrl: ApiConstants.baseUrl,
-    contentType: 'application/json',
-    headers: {
-      'Authorization':
-          'Bearer ${locator<HiveManager>().hive.get(Constants.authToken)}',
-      "Accept": "application/json",
-    },
-  ));
-  
+  final Dio dio = Dio(
+    BaseOptions(
+      baseUrl: ApiConstants.baseUrl,
+      contentType: 'application/json',
+      headers: {
+        'Authorization':
+            'Bearer ${locator<HiveManager>().hive.get(Constants.authToken)}',
+        "Accept": "application/json",
+      },
+    ),
+  );
+
+  final Dio dioOneSignal = Dio(
+    BaseOptions(
+      baseUrl: PrivateConstants.onesignalUrl,
+      headers: {
+        'Authorization': 'Basic ${PrivateConstants.onesignalRestApiKey}'
+      },
+    ),
+  );
+
   void setHeaderToken(String authToken) {
     dio.options.headers = {
       'Authorization': 'Bearer $authToken',
@@ -37,16 +47,23 @@ class NetworkManager {
     };
   }
 
-  // NetworkManager.init() {
-  //   dio = Dio(BaseOptions(
-  //     baseUrl: ApiConstants.baseUrl,
-  //     contentType: 'application/json',
-  //     headers: {
-  //       // 'Authorization': 'Bearer ${SharedPreferencesService.getToken()}',
-  //       "Accept": "application/json",
-  //     },
-  //   ));
-  // }
+  Future<bool> pushNotification(Map<String, dynamic> data) async {
+    // print(jsonEncode(data));
+    var response = await dioOneSignal.post('', data: data);
+    try {
+      if (response.statusCode == HttpStatus.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioError catch (e) {
+      print(e);
+      return false;
+    } catch (error) {
+      print(error);
+      return false;
+    }
+  }
 
   Future request<T extends BaseModel>(
       {required ReqTypes method,
@@ -70,7 +87,8 @@ class NetworkManager {
           ));
 
       if (kDebugMode) {
-        print('$path -> ${(DateTime.now().difference(time)).inMilliseconds} ms');
+        print(
+            '$path -> ${(DateTime.now().difference(time)).inMilliseconds} ms');
       }
       if (response.statusCode == 200) {
         if (isBaseResponse) {
@@ -87,6 +105,7 @@ class NetworkManager {
         );
       }
     } on DioError catch (dioError) {
+      print('asd');
       return _showError(
         '$path ${method.name}',
         'Error: ${dioError.error} | Status Message: ${dioError.message}',
@@ -111,9 +130,10 @@ class NetworkManager {
   ) {
     String? message;
     if (responseData != null) {
-      if(responseData == ''){
-        message = 'Sunucu ile ilgili bir hata oluştu. Lütfen daha sonra tekrar deneyiniz';
-      }else {
+      if (responseData == '') {
+        message =
+            'Sunucu ile ilgili bir hata oluştu. Lütfen daha sonra tekrar deneyiniz';
+      } else {
         message = responseData!['message'];
       }
     }
@@ -129,7 +149,7 @@ class NetworkManager {
     final baseResponse = BaseResponse.fromJson(data);
     if (baseResponse.success!) {
       if (baseResponse.data != null) {
-        if(model is EmptyModel){
+        if (model is EmptyModel) {
           return baseResponse.data;
         }
         if (baseResponse.data is List) {

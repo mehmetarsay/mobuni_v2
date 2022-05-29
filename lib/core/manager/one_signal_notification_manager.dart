@@ -1,7 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/core/components/progress/custom_progress_widget.dart';
 import 'package:mobuni_v2/core/constants/app/private_constants.dart';
+import 'package:mobuni_v2/core/constants/enum/notifications_enum.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
-import 'package:mobuni_v2/feature/models/user/user_model.dart';
+import 'package:mobuni_v2/feature/views/chat/chat_message/chat_message_view.dart';
+import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
+import 'package:mobuni_v2/feature/views/unavailabile_view.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OneSignalNotificationManager {
@@ -81,10 +86,10 @@ class OneSignalNotificationManager {
       // Bildirimi Görüntüle, bildirimi görüntülememek için boş parametre iletin
       print('setNotificationWillShowInForegroundHandler worked');
       var additionalData = event.notification.additionalData!;
-      // final type =
-      //     (additionalData['notificationType'] as int).intToNotificationType;
-      // if (additionalData['senderUserGid'] != GlobalValue.user!.gid) {
-      //   if (type == NotificationType.CHAT) {
+      final type =
+          (additionalData['notificationType'] as int).intToNotificationType;
+      // if (additionalData['senderUserGid'] != GeneralManager.user.id) {
+      //   if (type == NotificationType.chat) {
       //     if (additionalData['senderUserGid'] !=
       //         GlobalValue.activeChatReceiverGid) {
       //       event.complete(null);
@@ -107,8 +112,90 @@ class OneSignalNotificationManager {
       // Her bildirim açıldığında/düğmeye basıldığında çağrılır.
       print('setNotificationOpenedHandler worked');
 
-      // await navigateView(result.notification.additionalData!);
+      await navigateView(result.notification.additionalData!);
     });
   }
+
+  // void showForegroundMessage(
+  //     String title, String body, Map<String, dynamic> data) {
+  //   var userImage = data['userImage'];
+  //   showTopSnackBar(
+  //     _context,
+  //     Material(
+  //       borderRadius: BorderRadius.all(Radius.circular(10)),
+  //       color: _context.themeData.primaryColor.withOpacity(0.9),
+  //       child: Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: [
+  //             UserAvatar(userImage),
+  //             SizedBox(width: _context.dynamicWidth(0.02)),
+  //             Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 CustomText(title,
+  //                     fontSize: 14,
+  //                     color: Colors.black,
+  //                     fontWeight: FontWeight.w800),
+  //                 CustomText(body,
+  //                     fontSize: 11,
+  //                     color: Colors.black,
+  //                     fontWeight: FontWeight.w800),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //     onTap: () async {
+  //       print('onTap');
+  //       await navigateView(data);
+  //       // singleton.onClickNotification(message.data);
+  //     },
+  //   );
+  // }
+
+  Future navigateView(Map<String, dynamic> data) async {
+    final type = (data['notificationType'] as int).intToNotificationType;
+    final gid = data['gid'];
+    // final bool isComment = data['isComment'] ?? false;
+    unawaited(showDialog(
+        context: _context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: ProgressIndicatorWidget(),
+          );
+        }));
+    switch (type) {
+      case NotificationType.chat:
+        var result = await FirebaseService.instance!.getChatWithChatId(gid);
+        if (result != null) {
+          GeneralManager.navigationS.back();
+          await GeneralManager.navigationS.navigateToView(ChatMessageView(
+            chat: result,
+            isCreated: false,
+          ));
+        } else {}
+        break;
+      default:
+        GeneralManager.navigationS.back();
+        await GeneralManager.navigationS.navigateToView(UnAvailableView());
+    }
+  }
+
+  // Future<void> navigateCommentView(bool isComment, String gid,
+  //     CommentType commentType, String? title) async {
+  //   if (isComment) {
+  //     await _context.navigateTo(CommentsView(
+  //       gid: gid,
+  //       type: commentType,
+  //       title: title,
+  //     ));
+  //   }
+  // }
 
 }

@@ -43,7 +43,7 @@ class ChatMediaPreviewViewModel extends StreamViewModel {
     (data as QuerySnapshot<Map<String, dynamic>>).docs.map((e) {
       var userChatInfo = UserChatInfo.fromJson(e.data());
       if (userChatInfo.currentChatId != chat!.id) {
-        userList.add(userChatInfo.userGid);
+        userList.add(userChatInfo.userId);
       }
     }).toList();
     return userList;

@@ -188,7 +188,7 @@ class _ChatContactViewState extends State<ChatContactView> {
                   currentUser: false,
                   size: context.dynamicValue(0.05),
                 ),
-                userChatInfo != null && userChatInfo.isOnline!
+                userChatInfo != null && userChatInfo.isOnline != null && userChatInfo.isOnline!
                     ? Positioned(
                         bottom: 1,
                         right: 1,

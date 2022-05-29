@@ -164,7 +164,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                       : viewModel.chat.type == ChatType.SINGLE.index &&
                               viewModel.dataReady('userState') &&
                               viewModel.lastSeen != null
-                          ? CustomText(viewModel.lastSeen!.customFormatDate,
+                          ? CustomText('viewModel.lastSeen!.customFormatDate',
                               fontSize: 15, color: Colors.white)
                           : SizedBox()
                 ],
@@ -229,7 +229,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                               viewModel.lastSeen != null
                           ? CustomText(viewModel.lastSeen!.customFormatDate,
                               fontSize: 12,
-                              color: context.colors.tertiary.withOpacity(0.7))
+                              color: context.colors.primary.withOpacity(0.7))
                           : SizedBox()
                 ],
               ),
@@ -457,7 +457,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                     widget.chat.type == ChatType.GROUP.index)
                   CustomText(
                     message.senderName,
-                    color: context.colors.onSecondary,
+                    color: Colors.white,
                   ),
                 if (message.messageType == MessageType.IMAGE.index &&
                     message.imageList!.isNotEmpty)
@@ -611,9 +611,9 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         );
   }
 
-  Widget singleContact(String userGid, Map isReadMap) {
+  Widget singleContact(String userId, Map isReadMap) {
     var user = GeneralManager.userDummy;
-    // GeneralManager.userList!.firstWhere((element) => element.gid == userGid);
+    // GeneralManager.userList!.firstWhere((element) => element.gid == userId);
     return Container(
       margin: EdgeInsets.only(top: 16), //Spacing.top(16),
       child: Row(
@@ -631,7 +631,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
             ),
           ),
           Icon(
-            isReadMap[userGid] ? MdiIcons.checkAll : MdiIcons.check,
+            isReadMap[userId] ? MdiIcons.checkAll : MdiIcons.check,
             size: 14,
           )
         ],

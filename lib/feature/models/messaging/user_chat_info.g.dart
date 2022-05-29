@@ -7,7 +7,7 @@ part of 'user_chat_info.dart';
 // **************************************************************************
 
 UserChatInfo _$UserChatInfoFromJson(Map<String, dynamic> json) => UserChatInfo(
-      userGid: json['userGid'] as String?,
+      userId: json['userId'] as String?,
       isOnline: json['isOnline'] as bool?,
       lastSeen: dateTimeFromTimestamp(json['lastSeen'] as Timestamp?),
       currentChatId: json['currentChatId'] as String?,
@@ -18,7 +18,7 @@ UserChatInfo _$UserChatInfoFromJson(Map<String, dynamic> json) => UserChatInfo(
 
 Map<String, dynamic> _$UserChatInfoToJson(UserChatInfo instance) =>
     <String, dynamic>{
-      'userGid': instance.userGid,
+      'userId': instance.userId,
       'isOnline': instance.isOnline,
       'lastSeen': dateTimeToTimestamp(instance.lastSeen),
       'currentChatId': instance.currentChatId,

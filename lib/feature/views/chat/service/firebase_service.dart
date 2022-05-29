@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_pickers/image_pickers.dart';
@@ -11,6 +10,7 @@ import 'package:mobuni_v2/core/constants/enum/chat_enums.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/messaging/chat.dart';
 import 'package:mobuni_v2/feature/models/messaging/message.dart';
+import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:ntp/ntp.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,6 +27,15 @@ class FirebaseService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
+  Future<UserModel> getUser(String userId) async {
+    var ds = await _firebaseFirestore
+        .collection(FirebaseConstants.user)
+        .doc(userId)
+        .get();
+    return UserModel.fromJson(ds.data() as Map<String, dynamic>);
+  }
+
+  /// Giriş yapmış kullanıcının aktiflik, son görülme ve aktif chat bilgilerini günceller
   Future updateUserState(bool isOnline, {String? currentCahtId}) async {
     var docRef = await _firebaseFirestore
         .collection(FirebaseConstants.user)
@@ -35,7 +44,8 @@ class FirebaseService {
     var data = {
       'isOnline': isOnline,
       'currentChatId': currentCahtId,
-      'lastSeen': Timestamp.now()
+      'lastSeen': Timestamp.now(),
+      'userId': GeneralManager.user.id
     };
     if (docRef.data() != null) {
       await docRef.reference.update(data);
@@ -44,32 +54,33 @@ class FirebaseService {
     }
   }
 
-  Future getModelSubscriberOneSignalList(String model, String gid,
-      {bool isMyUser = true}) async {
-    var userList = await getModelSubscriberUser(model, gid);
-    if (isMyUser) {
-      if ((userList as List).contains(GeneralManager.user.id)) {
-        userList.remove(GeneralManager.user.id);
-      }
-    }
-    return await getOneSignalIdList(userList);
-  }
+  // ///
+  // Future getModelSubscriberOneSignalList(String model, String gid,
+  //     {bool isMyUser = true}) async {
+  //   var userList = await getModelSubscriberUser(model, gid);
+  //   if (isMyUser) {
+  //     if ((userList as List).contains(GeneralManager.user.id)) {
+  //       userList.remove(GeneralManager.user.id);
+  //     }
+  //   }
+  //   return await getOneSignalIdList(userList);
+  // }
 
-  /// Verilen kullanıcı listesindeki tüm kullanıcıların one signal id listesini getirir
-  Future getOneSignalIdList(List userList) async {
-    var list = [];
-    if (userList.isNotEmpty) {
-      var result = await _firebaseFirestore
-          .collection(FirebaseConstants.user)
-          .where('userGid', whereIn: userList)
-          .get();
-      result.docs
-          .map((e) => list.addAll(e.data()['oneSignalIdList'] ?? []))
-          .toList();
-    }
-    print(list);
-    return list;
-  }
+  // /// Verilen kullanıcı listesindeki tüm kullanıcıların one signal id listesini getirir
+  // Future getOneSignalIdList(List userList) async {
+  //   var list = [];
+  //   if (userList.isNotEmpty) {
+  //     var result = await _firebaseFirestore
+  //         .collection(FirebaseConstants.user)
+  //         .where('userId', whereIn: userList)
+  //         .get();
+  //     result.docs
+  //         .map((e) => list.addAll(e.data()['oneSignalIdList'] ?? []))
+  //         .toList();
+  //   }
+  //   print(list);
+  //   return list;
+  // }
 
   /// Bir modelin kayıtlı abone kullanıcı listesini getirir
   Future getModelSubscriberUser(String model, String gid) async {
@@ -79,80 +90,80 @@ class FirebaseService {
         : [];
   }
 
-  /// Bir modelin kayıtlı abone kullanıcı listesine ekleme veya çıkarma yapar
-  Future updateModelSubscriberUser(String model, String gid,
-      {List? userList, isAdd = true}) async {
-    var docRef = await _firebaseFirestore.collection(model).doc(gid).get();
-    var subscriberUserList =
-        docRef.data() != null ? docRef.data()!['subscriberUserList'] ?? [] : [];
-    var subscriberUserSet = <dynamic>{};
-    subscriberUserSet.addAll(subscriberUserList);
-    if (isAdd) {
-      if (userList == null) {
-        subscriberUserSet.add(GeneralManager.user.id!);
-      } else {
-        subscriberUserSet.addAll(userList);
-      }
-    } else {
-      subscriberUserSet.remove(GeneralManager.user.id!);
-    }
-    await docRef.reference
-        .set({'gid': gid, 'subscriberUserList': subscriberUserSet.toList()});
-  }
+  // /// Bir modelin kayıtlı abone kullanıcı listesine ekleme veya çıkarma yapar
+  // Future updateModelSubscriberUser(String model, String gid,
+  //     {List? userList, isAdd = true}) async {
+  //   var docRef = await _firebaseFirestore.collection(model).doc(gid).get();
+  //   var subscriberUserList =
+  //       docRef.data() != null ? docRef.data()!['subscriberUserList'] ?? [] : [];
+  //   var subscriberUserSet = <dynamic>{};
+  //   subscriberUserSet.addAll(subscriberUserList);
+  //   if (isAdd) {
+  //     if (userList == null) {
+  //       subscriberUserSet.add(GeneralManager.user.id!);
+  //     } else {
+  //       subscriberUserSet.addAll(userList);
+  //     }
+  //   } else {
+  //     subscriberUserSet.remove(GeneralManager.user.id!);
+  //   }
+  //   await docRef.reference
+  //       .set({'gid': gid, 'subscriberUserList': subscriberUserSet.toList()});
+  // }
 
-  /// Bir kullanıcının kayıtlı one signal id listesini getirir
-  Future<dynamic> getUserOneSignalIdList(String userGid) async {
-    var result = await _firebaseFirestore
-        .collection(FirebaseConstants.user)
-        .doc(userGid)
-        .get();
-    if (result != null) {
-      var resultList = (result.data() ?? {})['oneSignalIdList'] ?? [];
-      var newList = <String>[];
-      (resultList as List).forEach((element) {
-        newList.add(element);
-      });
-      return newList;
-    } else {
-      return <String>[];
-    }
-  }
+  // /// Bir kullanıcının kayıtlı one signal id listesini getirir
+  // Future<dynamic> getUserOneSignalIdList(String userId) async {
+  //   var result = await _firebaseFirestore
+  //       .collection(FirebaseConstants.user)
+  //       .doc(userId)
+  //       .get();
+  //   if (result != null) {
+  //     var resultList = (result.data() ?? {})['oneSignalIdList'] ?? [];
+  //     var newList = <String>[];
+  //     (resultList as List).forEach((element) {
+  //       newList.add(element);
+  //     });
+  //     return newList;
+  //   } else {
+  //     return <String>[];
+  //   }
+  // }
 
-  /// Bir kullanıcının kayıtlı one signal id listesine ekleme veya çıkarma yapar
-  void updateUserOneSignalId(String oneSignalId, {isAdd = true}) async {
-    var docRef = await _firebaseFirestore
-        .collection(FirebaseConstants.user)
-        .doc(GeneralManager.user.id)
-        .get();
-    var list =
-        docRef.data() != null ? docRef.data()!['oneSignalIdList'] ?? [] : [];
-    var set = <dynamic>{};
-    set.addAll(list);
-    if (isAdd) {
-      set.add(oneSignalId);
-    } else {
-      set.remove(oneSignalId);
-    }
-    var data = {
-      'userGid': GeneralManager.user.id,
-      'oneSignalIdList': set.toList()
-    };
-    if (docRef.data() != null) {
-      await docRef.reference.update(data);
-    } else {
-      await docRef.reference.set(data);
-    }
-  }
+  // /// Bir kullanıcının kayıtlı one signal id listesine ekleme veya çıkarma yapar
+  // void updateUserOneSignalId(String oneSignalId, {isAdd = true}) async {
+  //   var docRef = await _firebaseFirestore
+  //       .collection(FirebaseConstants.user)
+  //       .doc(GeneralManager.user.id)
+  //       .get();
+  //   var list =
+  //       docRef.data() != null ? docRef.data()!['oneSignalIdList'] ?? [] : [];
+  //   var set = <dynamic>{};
+  //   set.addAll(list);
+  //   if (isAdd) {
+  //     set.add(oneSignalId);
+  //   } else {
+  //     set.remove(oneSignalId);
+  //   }
+  //   var data = {
+  //     'userId': GeneralManager.user.id,
+  //     'oneSignalIdList': set.toList()
+  //   };
+  //   if (docRef.data() != null) {
+  //     await docRef.reference.update(data);
+  //   } else {
+  //     await docRef.reference.set(data);
+  //   }
+  // }
 
-  /// Kullanıcının bulunduğu sohbetleri listeler
-  Stream<QuerySnapshot<Map<String, dynamic>>> getChats(String userGid) {
+  /// Kullanıcının bulunduğu sohbetleri listeler. Akış sağlar
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChats(String userId) {
     return _firebaseFirestore
         .collection(FirebaseConstants.chat)
         .orderBy('updateTime', descending: true)
-        .where('users', arrayContainsAny: [userGid]).snapshots();
+        .where('users', arrayContainsAny: [userId]).snapshots();
   }
 
-  /// ChatId ile chat bilgilerini getirir
+  /// [chatId] ile chat bilgilerini getirir
   Future<Chat?> getChatWithChatId(String chatId) async {
     var result = await _firebaseFirestore
         .collection(FirebaseConstants.chat)
@@ -167,6 +178,7 @@ class FirebaseService {
     }
   }
 
+  /// [chatId] ile mesajları listeler. Akışı sağlar
   Stream<DocumentSnapshot<Map<String, dynamic>>> streamChat(String chatId) {
     return _firebaseFirestore
         .collection(FirebaseConstants.chat)
@@ -176,7 +188,7 @@ class FirebaseService {
 
   Future<Chat> getChat(List<String> userList, ChatType chatType,
       {String? groupName, String? groupDesc}) async {
-    // var userList = [userGid, receiverId];
+    // var userList = [userId, receiverId];
     var querySnapshot;
     if (userList.length == 2) {
       userList.sort((a, b) => a.compareTo(b));
@@ -217,10 +229,10 @@ class FirebaseService {
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getUserChatInfo(
-      String userGid) {
+      String userId) {
     return _firebaseFirestore
         .collection(FirebaseConstants.user)
-        .doc(userGid)
+        .doc(userId)
         .snapshots();
   }
 
@@ -228,7 +240,7 @@ class FirebaseService {
     userList.remove(GeneralManager.user.id);
     return _firebaseFirestore
         .collection(FirebaseConstants.user)
-        .where('userGid', whereIn: userList)
+        .where('userId', whereIn: userList)
         .snapshots();
   }
 
@@ -262,7 +274,7 @@ class FirebaseService {
     if (inactiveUsersInThis.isNotEmpty) {
       inactiveUsersInThis.forEach((element) {
         if (element != GeneralManager.user.id) {
-          chat.unReadInfo!.putIfAbsent(element, () => UnReadInfo())!.counter;
+          chat.unReadInfo!.putIfAbsent(element, () => UnReadInfo())!.counter();
         }
       });
     }

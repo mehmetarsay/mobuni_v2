@@ -1,9 +1,11 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:mobuni_v2/core/constants/enum/chat_enums.dart';
+import 'package:mobuni_v2/core/constants/enum/notifications_enum.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/messaging/chat.dart';
 import 'package:mobuni_v2/feature/models/messaging/message.dart';
 import 'package:mobuni_v2/feature/models/messaging/user_chat_info.dart';
+import 'package:mobuni_v2/feature/service/notification_service.dart';
 import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
 
 import '../chat_media_preview/chat_media_preview_view.dart';
@@ -146,7 +148,7 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
         .map((e) {
       var userChatInfo = UserChatInfo.fromJson(e.data());
       if (userChatInfo.currentChatId != chat.id) {
-        userList.add(userChatInfo.userGid);
+        userList.add(userChatInfo.userId);
       }
     }).toList();
     return userList;
@@ -159,16 +161,16 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
       if (!message.isReadMessage &&
           (message.receiverList ?? []).contains(GeneralManager.user.id)) {
         // message.read;
-        message.updateReadWithUserGid(GeneralManager.user.id!);
+        message.updateReadWithuserId(GeneralManager.user.id!);
         (documentSnapshot as DocumentSnapshot)
             .reference
             .update(message.toJson());
         var tempChat = streamChat;
-        if (tempChat!.lastMessage != null &&
+        if (tempChat != null && tempChat.lastMessage != null &&
             tempChat.lastMessage!.id == message.id) {
           print('Chat son mesajı güncellendi');
           tempChat.lastMessage = message;
-          updateStreamChat(tempChat);
+          // updateStreamChat(tempChat);
         }
       }
 
@@ -189,8 +191,9 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
       var receiverList = chat.users!.map((e) => e).toList();
       receiverList.remove(GeneralManager.user.id);
       var isReadList = <String, bool>{};
-      receiverList
-          .forEach((element) => isReadList.putIfAbsent(element, () => false));
+      receiverList.forEach((element) => 
+      isReadList.putIfAbsent(element, () => false));
+      print('aaaa');
       var msg = Message(
           id: Uuid().v1(),
           message: messageText,
@@ -198,65 +201,28 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
           sender: GeneralManager.user.id,
           receiverList: receiverList,
           isReadMap: isReadList,
-          time: await NTP.now());
+          time: DateTime.now());
+          print('debug sendMessage');
       await FirebaseService.instance!
           .sendChatMessage(chat.id!, msg, inactiveUsersInThisChat);
       // scrollToBottom(isDelayed: false);
-      // NotificationService.instance!.pushNotification(
-      //     chat.type == ChatType.SINGLE.index
-      //         ? '${GeneralManager.user.fullName}:'
-      //         : chat.groupName!,
-      //     chat.type == ChatType.SINGLE.index
-      //         ? messageText
-      //         : '${GeneralManager.user.fullName}: $messageText',
-      //     NotificationType.CHAT,
-      //     data: {
-      //       'gid': chat.id,
-      //       'userImage': GeneralManager.user.image,
-      //       'chatType': chat.type
-      //     },
-      //     pushAllSubscribed: false,
-      //     userList: usersOneSignalIdList,
-      //     group: 'chat');
+      NotificationService.instance!.pushNotification(
+          chat.type == ChatType.SINGLE.index
+              ? '${GeneralManager.user.fullName}:'
+              : chat.groupName!,
+          chat.type == ChatType.SINGLE.index
+              ? messageText
+              : '${GeneralManager.user.fullName}: $messageText',
+          NotificationType.chat,
+          data: {
+            'gid': chat.id,
+            'userImage': GeneralManager.user.image,
+            'chatType': chat.type
+          },
+          pushAllSubscribed: false,
+          userList: receiverList,
+          group: 'chat');
     }
-  }
-
-  Future sendDemandAndProperty(String gid, int index, String text) async {
-    var messageText = chatTextController.text;
-    chatTextController.clear();
-    var receiverList = chat.users!.map((e) => e).toList();
-    receiverList.remove(GeneralManager.user.id);
-    var isReadList = <String, bool>{};
-    receiverList
-        .forEach((element) => isReadList.putIfAbsent(element, () => false));
-    var msg = Message(
-        id: Uuid().v1(),
-        message: messageText,
-        messageType: index,
-        sender: GeneralManager.user.id,
-        receiverList: receiverList,
-        isReadMap: isReadList,
-        time: await NTP.now(),
-        gid: gid);
-    await FirebaseService.instance!
-        .sendChatMessage(chat.id!, msg, inactiveUsersInThisChat);
-    // scrollToBottom(isDelayed: false);
-    // NotificationService.instance!.pushNotification(
-    //     chat.type == ChatType.SINGLE.index
-    //         ? '${GeneralManager.user.fullName}:'
-    //         : chat.groupName!,
-    //     chat.type == ChatType.SINGLE.index
-    //         ? 'Yeni bir ' + text + ' linki gönderdi'
-    //         : '${GeneralManager.user.fullName}: ${' Yeni bir ' + text + 'linki gönderdi'}',
-    //     NotificationType.CHAT,
-    //     data: {
-    //       'gid': chat.id,
-    //       'userImage': GeneralManager.user.image,
-    //       'chatType': chat.type
-    //     },
-    //     pushAllSubscribed: false,
-    //     userList: usersOneSignalIdList,
-    //     group: 'chat');
   }
 
   void sendFile(String fileName, String filePath) async {
@@ -280,16 +246,16 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
       chatTextController.clear();
       await FirebaseService.instance!
           .sendChatFileMessage(chat.id!, msg, inactiveUsersInThisChat);
-      // NotificationService.instance!.pushNotification(
-      //     chat.type == ChatType.SINGLE.index
-      //         ? '${GeneralManager.user.fullName}:'
-      //         : chat.groupName!,
-      //     '${chat.type == ChatType.SINGLE.index ? '' : '${GeneralManager.user.fullName}: '}1 Dosya',
-      //     NotificationType.CHAT,
-      //     data: {'gid': chat.id},
-      //     pushAllSubscribed: false,
-      //     userList: usersOneSignalIdList,
-      //     group: 'chat');
+      NotificationService.instance!.pushNotification(
+          chat.type == ChatType.SINGLE.index
+              ? '${GeneralManager.user.fullName}:'
+              : chat.groupName!,
+          '${chat.type == ChatType.SINGLE.index ? '' : '${GeneralManager.user.fullName}: '}1 Dosya',
+          NotificationType.chat,
+          data: {'gid': chat.id},
+          pushAllSubscribed: false,
+          userList: receiverList,
+          group: 'chat');
       isExpanded = !isExpanded;
       if (!showMenu) showMenu = true;
       chatTextController.clear();

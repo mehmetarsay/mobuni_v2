@@ -101,7 +101,7 @@ class ChatContactViewModel extends StreamViewModel {
         for (var element
             in (data as QuerySnapshot<Map<String, dynamic>>).docs) {
           var currentUserChatInfo = UserChatInfo.fromJson(element.data());
-          if (currentUserChatInfo.userGid == user.id) {
+          if (currentUserChatInfo.userId == user.id) {
             userChatInfo = currentUserChatInfo;
             break;
           }

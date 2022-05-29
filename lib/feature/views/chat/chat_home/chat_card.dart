@@ -32,17 +32,6 @@ class _ChatCardState extends State<ChatCard> {
         ((widget.chat.unReadInfo![GeneralManager.user.id] ?? UnReadInfo())
                 .unReadMessage) ??
             0;
-    // initUser();
-  }
-
-  void initUser() {
-    //  widget.chat.receiverUserInit;
-    widget.chat.receiverUser = GeneralManager.userDummy;
-    if (this.mounted)
-      setState(() {
-        print('initUser');
-        isLoading = false;
-      });
   }
 
   @override

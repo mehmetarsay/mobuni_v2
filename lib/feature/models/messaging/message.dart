@@ -1,6 +1,7 @@
 
 import 'package:mobuni_v2/core/base/models/base_model/base_model.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
 
 import '../../utils/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,8 +55,8 @@ class Message extends BaseModel {
     return true;
   }
 
-  void updateReadWithUserGid(String userGid) {
-    isReadMap!.update(userGid, (value) => true, ifAbsent: () => true);
+  void updateReadWithuserId(String userId) {
+    isReadMap!.update(userId, (value) => true, ifAbsent: () => true);
   }
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -75,7 +76,8 @@ class Message extends BaseModel {
   Map<String, dynamic> toJson() => _$MessageToJson(this);
 
   void initSender() async {
-    var senderUser  = await GeneralManager.authS.getUserById(sender!);
+    // var senderUser  = await GeneralManager.authS.getUserById(sender!);
+    var senderUser  = await FirebaseService.instance!.getUser(sender!);;
     senderName = senderUser.fullName;
     // for (var user in GeneralManager.userList!) {
     //   user as User;

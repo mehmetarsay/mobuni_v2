@@ -3,6 +3,7 @@ import 'package:mobuni_v2/core/constants/enum/chat_enums.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:mobuni_v2/feature/utils/helpers.dart';
+import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
 
 import 'message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,21 +37,23 @@ class Chat extends BaseModel {
   String? groupPhoto;
   String? groupFounder;
 
+  /// Bireysel mesajlaşma ise karşıdaki alıcı bilgilerini tutar
   @JsonKey(ignore: true)
   String? receiverUserId;
-  // @JsonKey(ignore: true)
+  @JsonKey(ignore: true)
   UserModel? receiverUser;
 
-  Chat(
-      {this.id,
-      this.type,
-      this.users,
-      this.unReadInfo,
-      this.updateTime,
-      this.groupName,
-      this.groupDesc,
-      this.groupPhoto,
-      this.groupFounder});
+  Chat({
+    this.id,
+    this.type,
+    this.users,
+    this.unReadInfo,
+    this.updateTime,
+    this.groupName,
+    this.groupDesc,
+    this.groupPhoto,
+    this.groupFounder,
+  });
 
   factory Chat.fromJson(Map<String, dynamic> json) {
     var chat = _$ChatFromJson(json);
@@ -74,24 +77,10 @@ class Chat extends BaseModel {
       for (var i in users!) {
         if (i != GeneralManager.user.id) receiverUserId = i;
       }
-      receiverUser  = await GeneralManager.authS.getUserById(receiverUserId!);
+      // receiverUser = await GeneralManager.authS.getUserById(receiverUserId!);
+      receiverUser = await FirebaseService.instance!.getUser(receiverUserId!);
     }
   }
-  // void get receiverUserInit {
-  //   // if (type == ChatType.SINGLE.index) {
-  //   //   var receiverUserGid;
-  //   //   for (var i in users!) {
-  //   //     if (i != GeneralManager.user.id) receiverUserGid = i;
-  //   //   }
-  //   //   for (var user in GeneralManager.userList!) {
-  //   //     user as User;
-  //   //     if (receiverUserGid == user.id) {
-  //   //       receiverUser = user;
-  //   //       break;
-  //   //     }
-  //   //   }
-  //   // }
-  // }
 }
 
 Map<String, dynamic>? messageToJson(Message? message) {
@@ -109,7 +98,11 @@ class UnReadInfo extends BaseModel {
 
   UnReadInfo({this.unReadMessage});
 
-  void get counter => unReadMessage = (unReadMessage ?? 0) + 1;
+  void counter() {
+    print('counter' + unReadMessage.toString() );
+    this.unReadMessage = (unReadMessage ?? 0) + 1;
+  }
+
   void get counterClear => unReadMessage = 0;
 
   factory UnReadInfo.fromJson(Map<String, dynamic> json) =>

@@ -32,14 +32,14 @@ class ChatGroupInfoViewModel extends BaseViewModel {
   // List<dynamic> get getGroupUsers {
   //   var list = [];
 
-  //   for (var userGid in chat.users!) {
+  //   for (var userId in chat.users!) {
   //     var user = GeneralManager.userDummy;
-  //     // GeneralManager.userList!.firstWhere((element) => (element as User).gid == userGid);
+  //     // GeneralManager.userList!.firstWhere((element) => (element as User).gid == userId);
   //     user as UserModel;
   //     var userChatInfo;
   //     for (var element in (data as QuerySnapshot<Map<String, dynamic>>).docs) {
   //       var currentUserChatInfo = UserChatInfo.fromJson(element.data());
-  //       if (currentUserChatInfo.userGid == user.id) {
+  //       if (currentUserChatInfo.userId == user.id) {
   //         userChatInfo = currentUserChatInfo;
   //         break;
   //       }
@@ -51,7 +51,8 @@ class ChatGroupInfoViewModel extends BaseViewModel {
 
   Future getUsers(List users) async {
     for(var i in users){
-      var user = await GeneralManager.authS.getUserById(i);
+      // var user = await GeneralManager.authS.getUserById(i);
+      var user = await FirebaseService.instance!.getUser(i);;
       _users.add(user);
     }
     notifyListeners();
@@ -136,8 +137,8 @@ class ChatGroupInfoViewModel extends BaseViewModel {
     }
   }
 
-  Future deleteUserGroup(String userGid) async {
-    chat.users!.removeWhere((element) => element == userGid);
+  Future deleteUserGroup(String userId) async {
+    chat.users!.removeWhere((element) => element == userId);
     chat.users!.add(GeneralManager.user.id!);
     await FirebaseService.instance!.userDeleteGroup(chat.id, chat.users);
     Navigator.pop(context);

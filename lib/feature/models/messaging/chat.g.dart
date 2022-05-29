@@ -24,13 +24,9 @@ Chat _$ChatFromJson(Map<String, dynamic> json) => Chat(
       groupDesc: json['groupDesc'] as String?,
       groupPhoto: json['groupPhoto'] as String?,
       groupFounder: json['groupFounder'] as String?,
-    )
-      ..lastMessage = json['lastMessage'] == null
-          ? null
-          : Message.fromJson(json['lastMessage'] as Map<String, dynamic>)
-      ..receiverUser = json['receiverUser'] == null
-          ? null
-          : UserModel.fromJson(json['receiverUser'] as Map<String, dynamic>);
+    )..lastMessage = json['lastMessage'] == null
+        ? null
+        : Message.fromJson(json['lastMessage'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$ChatToJson(Chat instance) => <String, dynamic>{
       'id': instance.id,
@@ -43,7 +39,6 @@ Map<String, dynamic> _$ChatToJson(Chat instance) => <String, dynamic>{
       'groupDesc': instance.groupDesc,
       'groupPhoto': instance.groupPhoto,
       'groupFounder': instance.groupFounder,
-      'receiverUser': instance.receiverUser,
     };
 
 UnReadInfo _$UnReadInfoFromJson(Map<String, dynamic> json) => UnReadInfo(

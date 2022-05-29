@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/core/components/dropdown/custom_dropdown.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
@@ -7,7 +8,6 @@ import 'package:mobuni_v2/feature/views/question/subviews/question_add/question_
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 
 class QuestionAddView extends StatelessWidget {
@@ -95,12 +95,20 @@ class QuestionAddView extends StatelessWidget {
                       SizedBox(
                         height: 20,
                       ),
-                      Center(
+                      GeneralManager.user.isUniversityStudent! ?  Center(
                         child: CustomText(
-                          '${vm.selectUnivercity.name} Sor',
+                          '${GeneralManager.user.university!.name} Sor',
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
+                      ) : CustomDropdown(
+                        initId: vm.universityId,
+                        labelText: 'University',
+                        items: vm.universityList,
+                        isLoading: vm.isLoading,
+                        voidCallback: (value) {
+                          vm.universityId = value as int;
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

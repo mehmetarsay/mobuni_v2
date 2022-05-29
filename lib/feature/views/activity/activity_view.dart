@@ -30,7 +30,7 @@ class ActivityView extends StatelessWidget {
           vm.filterBottomSheet(context).then((value) {
             vm.refreshController.requestRefresh();
           });
-        }, icon: Icon(Icons.filter_list_sharp))
+        }, icon: Icon(Icons.filter_list_sharp)),
       ],),
       floatingActionButton: FloatingActionButton(
         heroTag: 'activity',

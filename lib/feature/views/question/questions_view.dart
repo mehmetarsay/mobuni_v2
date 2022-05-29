@@ -53,6 +53,7 @@ class QuestionsView extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          heroTag: 'question',
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () async {
             return await context.navigationService

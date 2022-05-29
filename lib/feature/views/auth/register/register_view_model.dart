@@ -30,11 +30,11 @@ class RegisterViewModel extends BaseViewModel {
   int departmentId = -1;
   List universityList = [];
   List departmentList = [];
-  var _isHighSchool = false;
-  get isHighSchool => _isHighSchool;
+  var _isUniversityStudent = true;
+  get isUniversityStudent => _isUniversityStudent;
 
-  set isHighSchool(var value) {
-    _isHighSchool = value;
+  set isUniversityStudent(var value) {
+    _isUniversityStudent = value;
     notifyListeners();
   }
 
@@ -50,7 +50,7 @@ class RegisterViewModel extends BaseViewModel {
       Fluttertoast.showToast(msg: 'Lütfen gerekli alanları doldurunuz');
       return;
     }
-    if (!isHighSchool) {
+    if (isUniversityStudent) {
       if (universityId == -1) {
         Fluttertoast.showToast(msg: 'Lütfen üniversite seçiniz');
         return;
@@ -74,7 +74,8 @@ class RegisterViewModel extends BaseViewModel {
       password: password.text,
       universityId: universityId,
       departmentId: departmentId,
-      userType:isHighSchool ? UserTyoe.highscool.index : UserTyoe.university.index,
+      userType: UserTyoe.normal.index,
+      isUniversityStudent: isUniversityStudent
     );
     print(user.toJson());
     var response = await _authService.register(user);

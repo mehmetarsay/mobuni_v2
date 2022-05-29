@@ -30,13 +30,14 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       departmentId: fields[10] as int?,
       university: fields[11] as UniversityModel?,
       department: fields[12] as DeaprtmentModel?,
+      isUniversityStudent: fields[13] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(11)
       ..write(obj.university)
       ..writeByte(12)
-      ..write(obj.department);
+      ..write(obj.department)
+      ..writeByte(13)
+      ..write(obj.isUniversityStudent);
   }
 
   @override
@@ -100,6 +103,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           ? null
           : DeaprtmentModel.fromJson(
               json['department'] as Map<String, dynamic>),
+      isUniversityStudent: json['isUniversityStudent'] as bool?,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) {
@@ -124,5 +128,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) {
   writeNotNull('departmentId', instance.departmentId);
   writeNotNull('university', instance.university);
   writeNotNull('department', instance.department);
+  writeNotNull('isUniversityStudent', instance.isUniversityStudent);
   return val;
 }

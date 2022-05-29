@@ -1,1 +1,1 @@
-enum UserTyoe { admin, university, highscool }
+enum UserTyoe { admin, normal }

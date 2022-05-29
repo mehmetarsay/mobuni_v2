@@ -45,7 +45,7 @@ class FirebaseService {
       'isOnline': isOnline,
       'currentChatId': currentCahtId,
       'lastSeen': Timestamp.now(),
-      'userId': GeneralManager.user.id
+      'id': GeneralManager.user.id
     };
     if (docRef.data() != null) {
       await docRef.reference.update(data);
@@ -72,7 +72,7 @@ class FirebaseService {
   //   if (userList.isNotEmpty) {
   //     var result = await _firebaseFirestore
   //         .collection(FirebaseConstants.user)
-  //         .where('userId', whereIn: userList)
+  //         .where('id', whereIn: userList)
   //         .get();
   //     result.docs
   //         .map((e) => list.addAll(e.data()['oneSignalIdList'] ?? []))
@@ -145,7 +145,7 @@ class FirebaseService {
   //     set.remove(oneSignalId);
   //   }
   //   var data = {
-  //     'userId': GeneralManager.user.id,
+  //     'id': GeneralManager.user.id,
   //     'oneSignalIdList': set.toList()
   //   };
   //   if (docRef.data() != null) {
@@ -224,7 +224,6 @@ class FirebaseService {
         .doc(chatId)
         .collection(FirebaseConstants.messaging)
         .orderBy('time')
-        .limitToLast(20)
         .snapshots();
   }
 
@@ -240,7 +239,7 @@ class FirebaseService {
     userList.remove(GeneralManager.user.id);
     return _firebaseFirestore
         .collection(FirebaseConstants.user)
-        .where('userId', whereIn: userList)
+        .where('id', whereIn: userList)
         .snapshots();
   }
 

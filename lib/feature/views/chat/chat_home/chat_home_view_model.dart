@@ -48,11 +48,6 @@ class ChatHomeViewModel extends StreamViewModel<List<Chat>> {
           var futures = query.docs.map(
             (doc) async {
               var data = doc.data();
-              // if(data.containsKey('referenceUsers')){
-              //   var b = data['referenceUsers'][0];
-              //   var x = await (b as DocumentReference).get();
-              //   print(b.runtimeType);
-              // }
               var chat = Chat.fromJson(data);
               await chat.receiverUserInit;
               return chat;

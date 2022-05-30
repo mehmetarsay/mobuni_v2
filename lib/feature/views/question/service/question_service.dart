@@ -16,7 +16,7 @@ class QuestionService {
   final NetworkManager? _networkManager = locator<NetworkManager>();
 
   Future questionGetByUniversityId(
-          {required int universityId, required int pageIndex}) async =>
+          {required int universityId, required int pageIndex, required bool isUniversityStudent}) async =>
       await _networkManager!.request(
         method: ReqTypes.get,
         path: ApiConstants.questionGetByUniversityId,
@@ -24,7 +24,8 @@ class QuestionService {
         queryParameters: {
           'universityId': universityId,
           'PageIndex': pageIndex,
-          'PageSize': Constants.pageSize
+          'PageSize': Constants.pageSize,
+          'isUniversityStudent' : isUniversityStudent,
         },
       );
   //  Fluttertoast.showToast(msg: 'Sorular güncel');

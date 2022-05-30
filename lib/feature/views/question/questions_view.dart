@@ -132,6 +132,7 @@ class QuestionsView extends StatelessWidget {
                             viewModel.refreshController.requestRefresh();
                           },
                         ),
+                      SizedBox(height: 10),
                       ListView.builder(
                         primary: false,
                         shrinkWrap: true,

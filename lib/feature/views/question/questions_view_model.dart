@@ -73,6 +73,7 @@ class QuestionsViewModel extends BaseViewModel {
     var result = await questionService.questionGetByUniversityId(
       universityId: universityId,
       pageIndex: pageIndex,
+      isUniversityStudent: GeneralManager.user.isUniversityStudent!
     );
     hasNextPage = result.hasNextPage;
     var list = data.get(HiveBoxKey.questions.name);

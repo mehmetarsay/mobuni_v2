@@ -9,7 +9,6 @@ import 'package:mobuni_v2/core/constants/app/constants.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/questions/question_model.dart';
-import 'package:mobuni_v2/feature/models/university/university_model.dart';
 import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
@@ -40,15 +39,12 @@ class QuestionAddViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  // UniversityModel _selectUnivercity = GeneralManager.user.university!;
-  // UniversityModel get selectUnivercity => _selectUnivercity;
-  // set selectUnivercity(UniversityModel value) {
-  //   _selectUnivercity = value;
-  //   notifyListeners();
-  // }
 
   int universityId = GeneralManager.user.universityId  ?? 1;
+  int? departmentId;
+  List departmentList = [];
   List universityList = [];
+
   bool _isLoading = true;
   bool get isLoading => _isLoading;
   set isLoading(bool value) {
@@ -60,6 +56,7 @@ class QuestionAddViewModel extends BaseViewModel {
     await imagesLoad();
     isLoading = true;
     universityList = await GeneralManager.authS.getAllUniversity();
+    departmentList = await GeneralManager.authS.getAllDepartment();
     isLoading = false;
   }
 
@@ -99,6 +96,8 @@ class QuestionAddViewModel extends BaseViewModel {
         'Image': await MultipartFile.fromFile(selectImage!.path),
       'Text': '\"${controller.text}\"',
       'UniversityId': universityId,
+      'DepartmentId' : departmentId,
+      'IsUniversityStudent' : GeneralManager.user.isUniversityStudent
     });
     var response = await locator<QuestionService>().questionPost(data);
     if (response is QuestionModel) {

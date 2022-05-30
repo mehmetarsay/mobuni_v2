@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
@@ -13,7 +12,8 @@ import 'package:timeago/timeago.dart' as timeago;
 
 // ignore: must_be_immutable
 class QuestionSingleView extends StatefulWidget {
-  QuestionSingleView({Key? key, required this.questionModel, this.onTap}) : super(key: key);
+  QuestionSingleView({Key? key, required this.questionModel, this.onTap})
+      : super(key: key);
   final QuestionModel questionModel;
   Function()? onTap;
 
@@ -32,8 +32,9 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: (){
-              context.navigationService.navigateToView(ProfileView(userId: widget.questionModel.userId));
+            onTap: () {
+              context.navigationService.navigateToView(
+                  ProfileView(userId: widget.questionModel.userId));
             },
             child: UserPhoto(
               url: widget.questionModel.user!.image,
@@ -59,7 +60,28 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(widget.questionModel.text!),
                     )),
-                if (widget.questionModel.image != null && widget.questionModel.image != '') photoWidget(),
+                if (!widget.questionModel.user!.isUniversityStudent!)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        CustomText(
+                          widget.questionModel.university!.name,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        CustomText(
+                          widget.questionModel.department != null
+                              ? widget.questionModel.department!.name
+                              : 'Genel',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ],
+                    ),
+                  ),
+                if (widget.questionModel.image != null &&
+                    widget.questionModel.image != '')
+                  photoWidget(),
                 SizedBox(
                   height: 25,
                 ),
@@ -84,7 +106,8 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
           children: [
             LikeButton(
               onTap: (val) async {
-                locator<QuestionService>().setQuestionLike(questionId: widget.questionModel.id!);
+                locator<QuestionService>()
+                    .setQuestionLike(questionId: widget.questionModel.id!);
                 if (widget.questionModel.isLiked) {
                   widget.questionModel.likeCount--;
                 } else {
@@ -97,13 +120,19 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
               size: 20,
               animationDuration: Duration(milliseconds: 150),
               isLiked: widget.questionModel.isLiked,
-              circleColor: CircleColor(start: Theme.of(context).primaryColor, end: Theme.of(context).primaryColor),
-              bubblesColor: BubblesColor(dotPrimaryColor: Theme.of(context).primaryColor, dotSecondaryColor: Colors.grey),
+              circleColor: CircleColor(
+                  start: Theme.of(context).primaryColor,
+                  end: Theme.of(context).primaryColor),
+              bubblesColor: BubblesColor(
+                  dotPrimaryColor: Theme.of(context).primaryColor,
+                  dotSecondaryColor: Colors.grey),
             ),
             SizedBox(
               width: 4,
             ),
-            if (widget.questionModel.likeCount > 0) CustomText('${widget.questionModel.likeCount} beğenme', color: Colors.grey)
+            if (widget.questionModel.likeCount > 0)
+              CustomText('${widget.questionModel.likeCount} beğenme',
+                  color: Colors.grey)
           ],
         ),
         SizedBox(
@@ -121,7 +150,9 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
               SizedBox(
                 width: 4,
               ),
-              if (widget.questionModel.commentCount > 0) CustomText('${widget.questionModel.commentCount} cevap', color: Colors.grey)
+              if (widget.questionModel.commentCount > 0)
+                CustomText('${widget.questionModel.commentCount} cevap',
+                    color: Colors.grey)
             ],
           ),
         ),
@@ -135,7 +166,10 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
       children: [
         CustomText(
           timeago.format(widget.questionModel.createdTime!).toString(),
-          style: TextStyle(color: context.colors.onBackground, fontSize: 13, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              color: context.colors.onBackground,
+              fontSize: 13,
+              fontWeight: FontWeight.w500),
         ),
       ],
     );
@@ -145,11 +179,11 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: CachedImage(
-            imageUrl: widget.questionModel.image!,
-            height: context.height / 3.5,
-            width: context.width / 1.1,
-            borderRadiusGeometry: BorderRadius.all(Radius.circular(10)),
-          ),
+        imageUrl: widget.questionModel.image!,
+        height: context.height / 3.5,
+        width: context.width / 1.1,
+        borderRadiusGeometry: BorderRadius.all(Radius.circular(10)),
+      ),
     );
   }
 }

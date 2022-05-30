@@ -9,7 +9,6 @@ import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
 
-
 class QuestionAddView extends StatelessWidget {
   const QuestionAddView({Key? key}) : super(key: key);
 
@@ -31,7 +30,8 @@ class QuestionAddView extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          if(vm.controller.text.isNotEmpty||vm.selectImage!=null){
+                          if (vm.controller.text.isNotEmpty ||
+                              vm.selectImage != null) {
                             AwesomeDialog(
                               context: context,
                               animType: AnimType.SCALE,
@@ -42,21 +42,20 @@ class QuestionAddView extends StatelessWidget {
                                   child: Text(
                                     'Girmiş olduğunuz bilgiler silinecek. Çıkmak istediğinize emin misiniz?',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(fontStyle: FontStyle.italic),
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
                                   ),
-                                ),),
+                                ),
+                              ),
                               btnOkOnPress: () {
                                 context.navigationService.back();
                               },
                               btnOkColor: context.theme.primaryColor,
-                              btnCancelOnPress: (){
-                              },
+                              btnCancelOnPress: () {},
                               btnOkText: 'Evet',
                               btnCancelText: 'Geri',
-
                             )..show();
-                          }
-                          else{
+                          } else {
                             context.navigationService.back();
                           }
                         },
@@ -68,7 +67,10 @@ class QuestionAddView extends StatelessWidget {
                       InkWell(
                         onTap: () => vm.shareQuestion(context),
                         child: Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30)), color: Theme.of(context).primaryColor),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                              color: Theme.of(context).primaryColor),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: CustomText(
@@ -95,21 +97,36 @@ class QuestionAddView extends StatelessWidget {
                       SizedBox(
                         height: 20,
                       ),
-                      GeneralManager.user.isUniversityStudent! ?  Center(
-                        child: CustomText(
-                          '${GeneralManager.user.university!.name} Sor',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ) : CustomDropdown(
-                        initId: vm.universityId,
-                        labelText: 'University',
-                        items: vm.universityList,
-                        isLoading: vm.isLoading,
-                        voidCallback: (value) {
-                          vm.universityId = value as int;
-                        },
-                      ),
+                      GeneralManager.user.isUniversityStudent!
+                          ? Center(
+                              child: CustomText(
+                                '${GeneralManager.user.university!.name} Sor',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                CustomDropdown(
+                                  initId: vm.universityId,
+                                  labelText: 'University',
+                                  items: vm.universityList,
+                                  isLoading: vm.isLoading,
+                                  voidCallback: (value) {
+                                    vm.universityId = value as int;
+                                  },
+                                ),
+                                CustomDropdown(
+                                  initId: vm.departmentId,
+                                  labelText: 'Department',
+                                  items: vm.departmentList,
+                                  isLoading: vm.isLoading,
+                                  voidCallback: (value) {
+                                    vm.departmentId = value as int;
+                                  },
+                                ),
+                              ],
+                            ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -117,7 +134,9 @@ class QuestionAddView extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: UserPhoto(size: 50,),
+                              child: UserPhoto(
+                                size: 50,
+                              ),
                             ),
                             Expanded(
                               child: SingleChildScrollView(
@@ -125,17 +144,21 @@ class QuestionAddView extends StatelessWidget {
                                   children: [
                                     TextFormField(
                                       controller: vm.controller,
-                                      maxLines: vm.selectImage!=null?5 :10,
-                                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Soru Sor'),
+                                      maxLines: vm.selectImage != null ? 5 : 10,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Soru Sor'),
                                       autofocus: true,
                                     ),
-                                    if(vm.selectImage!=null)selectPhoto(context,vm),
-                                    SizedBox(height: 100,)
+                                    if (vm.selectImage != null)
+                                      selectPhoto(context, vm),
+                                    SizedBox(
+                                      height: 100,
+                                    )
                                   ],
                                 ),
                               ),
                             ),
-
                           ],
                         ),
                       ),
@@ -155,7 +178,7 @@ class QuestionAddView extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: vm.images.length,
                       itemBuilder: (BuildContext context, int index) {
-                        if(index==0){
+                        if (index == 0) {
                           return Row(
                             children: [
                               Container(
@@ -164,25 +187,29 @@ class QuestionAddView extends StatelessWidget {
                                   child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: GestureDetector(
-                                        onTap: () async{
+                                        onTap: () async {
                                           vm.imageCamera();
                                         },
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           child: Container(
                                             color: Colors.grey,
                                             child: Icon(
-                                                Icons.camera_alt,
-                                              color: Theme.of(context).primaryColorLight,
+                                              Icons.camera_alt,
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
                                             ),
                                           ),
                                         ),
                                       ))),
-                          photoView(vm.images.elementAt(index), context, vm),
+                              photoView(
+                                  vm.images.elementAt(index), context, vm),
                             ],
                           );
                         }
-                        return photoView(vm.images.elementAt(index), context, vm);
+                        return photoView(
+                            vm.images.elementAt(index), context, vm);
                       },
                     ),
                   ),
@@ -202,8 +229,8 @@ class QuestionAddView extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () async{
-               vm.selectImage = await entity.file;
+              onTap: () async {
+                vm.selectImage = await entity.file;
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -221,7 +248,7 @@ class QuestionAddView extends StatelessWidget {
       children: [
         Container(
             height: context.height / 3,
-            width: context.width ,
+            width: context.width,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.file(
@@ -233,10 +260,13 @@ class QuestionAddView extends StatelessWidget {
           right: 0,
           top: 0,
           child: GestureDetector(
-              onTap: (){
-                vm.selectImage =null;
+              onTap: () {
+                vm.selectImage = null;
               },
-              child: Icon(Icons.cancel,color: Colors.white,)),
+              child: Icon(
+                Icons.cancel,
+                color: Colors.white,
+              )),
         )
       ],
     );

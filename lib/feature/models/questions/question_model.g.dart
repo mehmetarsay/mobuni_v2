@@ -29,13 +29,16 @@ class QuestionModelAdapter extends TypeAdapter<QuestionModel> {
       user: fields[9] as UserModel?,
       university: fields[10] as UniversityModel?,
       isLiked: fields[11] as bool,
+      departmentId: fields[12] as int?,
+      department: fields[13] as DeaprtmentModel?,
+      isUniversityStudent: fields[14] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, QuestionModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -59,7 +62,13 @@ class QuestionModelAdapter extends TypeAdapter<QuestionModel> {
       ..writeByte(10)
       ..write(obj.university)
       ..writeByte(11)
-      ..write(obj.isLiked);
+      ..write(obj.isLiked)
+      ..writeByte(12)
+      ..write(obj.departmentId)
+      ..writeByte(13)
+      ..write(obj.department)
+      ..writeByte(14)
+      ..write(obj.isUniversityStudent);
   }
 
   @override
@@ -100,6 +109,12 @@ QuestionModel _$QuestionModelFromJson(Map<String, dynamic> json) =>
           : UniversityModel.fromJson(
               json['university'] as Map<String, dynamic>),
       isLiked: json['isLiked'] as bool? ?? false,
+      departmentId: json['departmentId'] as int?,
+      department: json['department'] == null
+          ? null
+          : DeaprtmentModel.fromJson(
+              json['department'] as Map<String, dynamic>),
+      isUniversityStudent: json['isUniversityStudent'] as bool?,
     );
 
 Map<String, dynamic> _$QuestionModelToJson(QuestionModel instance) {
@@ -123,5 +138,8 @@ Map<String, dynamic> _$QuestionModelToJson(QuestionModel instance) {
   writeNotNull('user', instance.user);
   writeNotNull('university', instance.university);
   val['isLiked'] = instance.isLiked;
+  writeNotNull('departmentId', instance.departmentId);
+  writeNotNull('department', instance.department);
+  writeNotNull('isUniversityStudent', instance.isUniversityStudent);
   return val;
 }

@@ -99,7 +99,7 @@ class ProfileRedesignView extends StatelessWidget {
                       readOnly: true,
                     ),
                     Visibility(
-                      visible: GeneralManager.user.userType==1,
+                      visible: GeneralManager.user.isUniversityStudent!,
                       child: Column(
                         children: [
                           CustomDropdown(

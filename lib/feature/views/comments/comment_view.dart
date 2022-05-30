@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/app/app.dart';
 import 'package:mobuni_v2/core/constants/enum/activity_or_question_enum.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
@@ -10,6 +11,7 @@ import 'package:mobuni_v2/feature/views/activity/widgets/activity_single_view.da
 import 'package:mobuni_v2/feature/views/comments/comment_view_model.dart';
 import 'package:mobuni_v2/feature/views/comments/widget/comment_write_widget.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
+import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
 import 'package:mobuni_v2/feature/views/comments/widget/comment_widget.dart';
 import 'package:stacked/stacked.dart';
 
@@ -23,60 +25,68 @@ class CommentView extends StatelessWidget {
     return ViewModelBuilder<CommentViewModel>.reactive(
       viewModelBuilder: () => CommentViewModel(),
       onModelReady: (model) => model.init(context, question: questionModel,activity: activityModel),
-      builder: (context, vm, child) => vm.initialised
-          ? SafeArea(
-              child: Scaffold(
-                appBar: AppBar(
-                ),
-                  body: CommentBoxRfct(
-                userImage: GeneralManager.user.image==''?null:GeneralManager.user.image,
-                labelText: 'Cevap yaz...',
-                withBorder: false,
-                errorText: 'Boş cevap gönderilemez',
-                child: Padding(
-                  padding: vm.generalType==GeneralType.QuestionType ? EdgeInsets.all(8.0) : EdgeInsets.zero,
-                  child: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                    child: vm.generalType==GeneralType.QuestionType?Column(
-                      children: [
-                        QuestionSingleView(
-                          questionModel: questionModel!,
-                        ),
-                        Divider(),
-                        getCommentWidget(vm),
+      builder: (context, vm, child) =>
+          WillPopScope(
+            onWillPop: () async{
+              context.navigationService.back(result: vm.activity);
+              return true;
+            },
+            child: SafeArea(
+                child: Scaffold(
+                  appBar: AppBar(),
+                    body: vm.initialised?CommentBoxRfct(
+                  userImage: GeneralManager.user.image==''?null:GeneralManager.user.image,
+                  labelText: 'Cevap yaz...',
+                  withBorder: false,
+                  errorText: 'Boş cevap gönderilemez',
+                  child: Padding(
+                    padding:  vm.generalType==GeneralType.QuestionType ? EdgeInsets.all(8.0) : EdgeInsets.zero,
+                    child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: vm.generalType==GeneralType.QuestionType?Column(
+                        children: [
+                          QuestionSingleView(
+                            questionModel: questionModel!,
+                          ),
+                          Divider(),
+                          getCommentWidget(vm),
 
-                      ],
-                    ):
-                    Column(
-                      children: [
-                        ActivitySingleView(
-                          activity: vm.activity!,
-                        ),
-                        Divider(),
-                        getCommentWidget(vm),
-                      ],
+                        ],
+                      ):
+                      Column(
+                        children: [
+                          ActivitySingleView(
+                            activity: vm.activity!,
+                            onTapJoin: (val){
+                              vm.activity = val;
+                              vm.notifyListeners();
+                            },
+                          ),
+                          Divider(),
+                          getCommentWidget(vm),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                header: Container(),
-                focusNode: vm.focusNode,
-                sendButtonMethod: vm.sendComment,
-                formKey: vm.formKey,
-                commentController: vm.commentController,
-                backgroundColor: context.theme.primaryColorLight,
-                textColor: context.theme.primaryColorDark,
-                sendWidget: vm.commentSend
-                    ? Icon(Icons.send_sharp, size: 30, color: context.theme.primaryColorDark)
-                    : Container(
-                        height: 20,
-                        width: 20,
-                        child: Center(
-                          child: CircularProgressIndicator(),
+                  header: Container(),
+                  focusNode: vm.focusNode,
+                  sendButtonMethod: vm.sendComment,
+                  formKey: vm.formKey,
+                  commentController: vm.commentController,
+                  backgroundColor: context.theme.primaryColorLight,
+                  textColor: context.theme.primaryColorDark,
+                  sendWidget: vm.commentSend
+                      ? Icon(Icons.send_sharp, size: 30, color: context.theme.primaryColorDark)
+                      : Container(
+                          height: 20,
+                          width: 20,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
-                      ),
-              )),
-            )
-          : Container(),
+                ):Container()),
+              ),
+          ),
     );
   }
 

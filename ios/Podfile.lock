@@ -782,6 +782,19 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - onesignal_flutter (3.3.1):
+    - Flutter
+    - OneSignalXCFramework (= 3.11.1)
+  - OneSignalXCFramework (3.11.1):
+    - OneSignalXCFramework/OneSignalCore (= 3.11.1)
+    - OneSignalXCFramework/OneSignalExtension (= 3.11.1)
+    - OneSignalXCFramework/OneSignalOutcomes (= 3.11.1)
+  - OneSignalXCFramework/OneSignalCore (3.11.1)
+  - OneSignalXCFramework/OneSignalExtension (3.11.1):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalOutcomes
+  - OneSignalXCFramework/OneSignalOutcomes (3.11.1):
+    - OneSignalXCFramework/OneSignalCore
   - path_provider_ios (0.0.1):
     - Flutter
   - permission_handler_apple (9.0.4):
@@ -813,6 +826,8 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - image_pickers (from `.symlinks/plugins/image_pickers/ios`)
+  - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
+  - OneSignalXCFramework (< 4.0, >= 3.4.3)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
@@ -840,6 +855,7 @@ SPEC REPOS:
     - leveldb-library
     - Libuv-gRPC
     - nanopb
+    - OneSignalXCFramework
     - PromisesObjC
     - SDWebImage
     - SwiftyGif
@@ -865,6 +881,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   image_pickers:
     :path: ".symlinks/plugins/image_pickers/ios"
+  onesignal_flutter:
+    :path: ".symlinks/plugins/onesignal_flutter/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler_apple:
@@ -905,6 +923,8 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  onesignal_flutter: 8f17fbc764b033117d2c878db635c3cd4911ff04
+  OneSignalXCFramework: 8bdcaa3b7f6082565bf29c5481435376a33e94f2
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
@@ -916,6 +936,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   ZLPhotoBrowser-objc: c7657d3bc85ae231884e058d0e3638f619164736
 
-PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
+PODFILE CHECKSUM: fe97b54296f830a67017fc542048f2f0147c636a
 
 COCOAPODS: 1.11.3

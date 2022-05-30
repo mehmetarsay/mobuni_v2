@@ -50,7 +50,7 @@ class ProfileView extends StatelessWidget {
                             ),
                             pinned: true,
                             automaticallyImplyLeading: false,
-                            expandedHeight: context.height / 2.02,
+                            expandedHeight: context.height / 2,
                             flexibleSpace: FlexibleSpaceBar(
                               centerTitle: true,
                               collapseMode: CollapseMode.parallax,
@@ -99,6 +99,10 @@ class ProfileView extends StatelessWidget {
                                       return ActivitySingleView(
                                         activity:
                                             vm.activities!.elementAt(index),
+                                        onTapJoin: (val){
+                                          vm.activities![index] = val;
+                                          vm.notifyListeners();
+                                        },
                                       );
                                     },
                                     childCount: vm.activities!.length,

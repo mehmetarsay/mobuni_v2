@@ -180,7 +180,7 @@ class ActivityViewModel extends BaseViewModel {
               bool b = false;
               return StatefulBuilder(
                   builder: (BuildContext context, setState) => Container(
-                        height: context.height / 3,
+                        height: context.height / 2.4,
                         child: Column(
                           children: [
                             SizedBox(

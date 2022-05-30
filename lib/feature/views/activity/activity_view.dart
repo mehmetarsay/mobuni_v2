@@ -5,6 +5,7 @@ import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/enum/hive_enum.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
+import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/activity/activity_add/activity_add_view.dart';
 import 'package:mobuni_v2/feature/views/activity/activity_view_model.dart';
 import 'package:mobuni_v2/feature/views/activity/widgets/activity_single_view.dart';
@@ -32,7 +33,7 @@ class ActivityView extends StatelessWidget {
           });
         }, icon: Icon(Icons.filter_list_sharp)),
       ],),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: GeneralManager.user.isUniversityStudent!?FloatingActionButton(
         heroTag: 'activity',
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () async {
@@ -48,7 +49,7 @@ class ActivityView extends StatelessWidget {
           Icons.add,
           color: Colors.white,
         ),
-      ),
+      ):Container(),
       body: Stack(
         children: [
           listActivities(vm),
@@ -93,19 +94,19 @@ class ActivityView extends StatelessWidget {
             builder: (BuildContext context,LoadStatus? mode){
               Widget body ;
               if(mode==LoadStatus.idle){
-                body =  Text("pull up load");
+                body =  Text("");
               }
               else if(mode==LoadStatus.loading){
                 body =  CupertinoActivityIndicator();
               }
               else if(mode == LoadStatus.failed){
-                body = Text("Load Failed!Click retry!");
+                body = Text("");
               }
               else if(mode == LoadStatus.canLoading){
-                body = Text("release to load more");
+                body = Text("");
               }
               else{
-                body = Text("No more Data");
+                body = Text("");
               }
               return Container(
                 height: 55.0,
@@ -121,6 +122,12 @@ class ActivityView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return ActivitySingleView(
                       activity: box.get(HiveBoxKey.activities.name)[index],
+                      onTapJoin: (val){
+                       List list = box.get(HiveBoxKey.activities.name);
+                       list[index] = val;
+                       viewModel.data.put(HiveBoxKey.activities.name, list);
+                       viewModel.notifyListeners();
+                      },
                     );
                   },
                 ),

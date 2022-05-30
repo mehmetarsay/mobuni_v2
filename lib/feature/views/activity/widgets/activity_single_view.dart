@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/components/image/cached_image.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
@@ -13,9 +14,10 @@ import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ActivitySingleView extends StatefulWidget {
-   ActivitySingleView({Key? key, required this.activity})
+   ActivitySingleView({Key? key, required this.activity,required this.onTapJoin})
       : super(key: key);
   ActivityModel activity;
+  dynamic onTapJoin;
 
   @override
   State<ActivitySingleView> createState() => _ActivitySingleViewState();
@@ -71,6 +73,7 @@ class _ActivitySingleViewState extends State<ActivitySingleView> {
                     context.navigationService.navigateToView(
                       CommentView(activityModel: widget.activity),
                     )!.then((value) async{
+                      widget.onTapJoin(value);
                     });
                   },
                   child: Row(
@@ -151,7 +154,7 @@ class _ActivitySingleViewState extends State<ActivitySingleView> {
                     // fontWeight: FontWeight.w500,
                   ),
                 ),
-                Row(
+                if(widget.activity.joinedCount! < widget.activity.maxUser!||widget.activity.maxUser==0)Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
@@ -172,10 +175,11 @@ class _ActivitySingleViewState extends State<ActivitySingleView> {
                               ),
                             ),),
                           btnOkOnPress: () async{
-                            ActivityModel res =  await locator<ActivityService>().joinActivity(activityId: widget.activity.id!);
-                            setState(() {
-                              widget.activity = res;
-                            });
+                            ActivityModel? res =  await locator<ActivityService>().joinActivity(activityId: widget.activity.id!);
+                            if(res!=null){
+                              widget.onTapJoin(res);
+                            }
+
                           },
                           btnOkColor: context.theme.primaryColor,
                           btnCancelOnPress: (){
@@ -188,14 +192,14 @@ class _ActivitySingleViewState extends State<ActivitySingleView> {
                       },
                       child: CustomText(
                         !widget.activity.isJoined!?
-                        'Katıl\n${widget.activity.joinedCount}/${widget.activity.maxUser}':
-                        'Ayrıl\n${widget.activity.joinedCount}/${widget.activity.maxUser}',
+                        'Katıl\n${widget.activity.joinedCount}${widget.activity.maxUser!=0?'/${widget.activity.maxUser}':''}':
+                        'Ayrıl\n${widget.activity.joinedCount}${widget.activity.maxUser!=0?'/${widget.activity.maxUser}':''}',
                         textAlign: TextAlign.center,
-                        color: context.theme.primaryColorDark  ,
+                        color: Colors.white,
                         fontWeight: FontWeight.w700,
                       ),
                       style: ElevatedButton.styleFrom(
-                          primary:widget.activity.isJoined! ? context.theme.primaryColor:context.theme.canvasColor),
+                          primary:widget.activity.isJoined! ? context.theme.primaryColor:Colors.green.shade900),
                     ),
                   ],
                 ),

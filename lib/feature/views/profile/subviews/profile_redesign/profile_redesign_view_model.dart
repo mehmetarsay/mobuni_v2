@@ -42,10 +42,12 @@ class ProfileRedesignViewModel extends BaseViewModel {
     userName.text = GeneralManager.user.userName!;
     email.text = GeneralManager.user.email!;
     isLoading = true;
-    universityList = await _authService.getAllUniversity();
-    departmentList = await _authService.getAllDepartment();
-    universityId = GeneralManager.user.universityId!;
-    departmentId = GeneralManager.user.departmentId!;
+   if(GeneralManager.user.isUniversityStudent!){
+     universityList = await _authService.getAllUniversity();
+     departmentList = await _authService.getAllDepartment();
+     universityId = GeneralManager.user.universityId!;
+     departmentId = GeneralManager.user.departmentId!;
+   }
     isLoading = false;
   }
 

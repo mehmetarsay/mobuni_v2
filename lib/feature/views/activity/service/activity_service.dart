@@ -21,7 +21,8 @@ class ActivityService {
           'PageIndex': pageIndex,
           'PageSize': Constants.pageSize,
           'UniversityId': universityId,
-           // 'Categories': categories,
+            // 'Categories': categories,
+          'IsExternal':GeneralManager.user.isUniversityStudent!?null:true,
         },
       );
 

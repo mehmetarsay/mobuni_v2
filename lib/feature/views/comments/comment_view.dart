@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:mobuni_v2/app/app.dart';
 import 'package:mobuni_v2/core/constants/enum/activity_or_question_enum.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
@@ -11,7 +10,6 @@ import 'package:mobuni_v2/feature/views/activity/widgets/activity_single_view.da
 import 'package:mobuni_v2/feature/views/comments/comment_view_model.dart';
 import 'package:mobuni_v2/feature/views/comments/widget/comment_write_widget.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
-import 'package:mobuni_v2/feature/views/splash/view/splash_view_model.dart';
 import 'package:mobuni_v2/feature/views/comments/widget/comment_widget.dart';
 import 'package:stacked/stacked.dart';
 
@@ -36,7 +34,7 @@ class CommentView extends StatelessWidget {
                 withBorder: false,
                 errorText: 'Boş cevap gönderilemez',
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: vm.generalType==GeneralType.QuestionType ? EdgeInsets.all(8.0) : EdgeInsets.zero,
                   child: SingleChildScrollView(
                     physics: BouncingScrollPhysics(),
                     child: vm.generalType==GeneralType.QuestionType?Column(

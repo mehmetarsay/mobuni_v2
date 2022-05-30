@@ -55,4 +55,11 @@ class ActivityService {
         model: ActivityModel(),
         data: {'activityId': activityId},
       );
+
+  Future activityGet({required int activityId}) async => await _networkManager!.request(
+        method: ReqTypes.get,
+        path: ApiConstants.activity,
+        model: ActivityModel(),
+        queryParameters: {'id' : activityId}
+      );
 }

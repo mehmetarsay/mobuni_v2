@@ -40,7 +40,7 @@ class CommentView extends StatelessWidget {
                   withBorder: false,
                   errorText: 'Boş cevap gönderilemez',
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:  vm.generalType==GeneralType.QuestionType ? EdgeInsets.all(8.0) : EdgeInsets.zero,
                     child: SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
                       child: vm.generalType==GeneralType.QuestionType?Column(

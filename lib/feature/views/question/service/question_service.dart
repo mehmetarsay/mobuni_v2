@@ -54,4 +54,15 @@ class QuestionService {
       queryParameters: {'questionId': questionId},
     );
   }
+
+  Future questionGetByQuestionId(
+          {required int questionId}) async =>
+      await _networkManager!.request(
+        method: ReqTypes.get,
+        path: ApiConstants.questionGetByQuestionId,
+        model: QuestionModel(),
+        queryParameters: {
+          'id': questionId
+        },
+      );
 }

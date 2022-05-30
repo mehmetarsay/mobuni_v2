@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mobuni_v2/app/app.locator.dart';
 import 'package:mobuni_v2/core/components/progress/custom_progress_widget.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/app/private_constants.dart';
 import 'package:mobuni_v2/core/constants/enum/notifications_enum.dart';
 import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
+import 'package:mobuni_v2/feature/views/activity/service/activity_service.dart';
 import 'package:mobuni_v2/feature/views/chat/chat_message/chat_message_view.dart';
 import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
+import 'package:mobuni_v2/feature/views/comments/comment_view.dart';
+import 'package:mobuni_v2/feature/views/question/service/question_service.dart';
 import 'package:mobuni_v2/feature/views/unavailabile_view.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -23,7 +27,7 @@ class OneSignalNotificationManager {
 
   late BuildContext _context;
 
-    static void initializeAppSplash() async {
+  static void initializeAppSplash() async {
     _instance?._initialize();
   }
 
@@ -40,8 +44,9 @@ class OneSignalNotificationManager {
   void _initialize() async {
     await OneSignal.shared.setLogLevel(OSLogLevel.none, OSLogLevel.none);
     await OneSignal.shared.setAppId(PrivateConstants.onesignalAppId);
-    if(GeneralManager.isSignUser) {
-      await OneSignal.shared.setExternalUserId(GeneralManager.user.id.toString());
+    if (GeneralManager.isSignUser) {
+      await OneSignal.shared
+          .setExternalUserId(GeneralManager.user.id.toString());
     }
     // await OneSignal.shared.setLanguage('en');
     // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt.
@@ -165,6 +170,7 @@ class OneSignalNotificationManager {
   Future navigateView(Map<String, dynamic> data) async {
     final type = (data['notificationType'] as int).intToNotificationType;
     final gid = data['gid'];
+    final dataId = int.parse(data['dataId']);
     // final bool isComment = data['isComment'] ?? false;
     unawaited(showDialog(
         context: _context,
@@ -176,32 +182,50 @@ class OneSignalNotificationManager {
             child: ProgressIndicatorWidget(),
           );
         }));
-    switch (type) {
-      case NotificationType.chat:
-        var result = await FirebaseService.instance!.getChatWithChatId(gid);
-        if (result != null) {
-          GeneralManager.navigationS.back();
-          await GeneralManager.navigationS.navigateToView(ChatMessageView(
-            chat: result,
-            isCreated: false,
-          ));
-        } else {}
-        break;
-      default:
+    if (type == NotificationType.chat) {
+      var result = await FirebaseService.instance!.getChatWithChatId(gid);
+      if (result != null) {
         GeneralManager.navigationS.back();
-        await GeneralManager.navigationS.navigateToView(UnAvailableView());
+        await GeneralManager.navigationS.navigateToView(ChatMessageView(
+          chat: result,
+          isCreated: false,
+        ));
+      } else {}
+    } else if (type == NotificationType.questionLike ||
+        type == NotificationType.questionComment ||
+        type == NotificationType.questionCommentLike) {
+          var question = await locator<QuestionService>().questionGetByQuestionId(questionId: dataId);
+          GeneralManager.navigationS.back();
+          if(question != null) {
+            await GeneralManager.navigationS.navigateToView(CommentView(questionModel: question));
+          }
+    } else if (type == NotificationType.activityLike ||
+        type == NotificationType.activityComment ||
+        type == NotificationType.activityCommentLike ||
+        type == NotificationType.activityJoined) {
+          var activityList = await locator<ActivityService>().activityGet(activityId: dataId);
+          GeneralManager.navigationS.back();
+          if(activityList != null && activityList.isNotEmpty) {
+            await GeneralManager.navigationS.navigateToView(CommentView(activityModel: activityList.first));
+          }
+    } else {
+      GeneralManager.navigationS.back();
+      await GeneralManager.navigationS.navigateToView(UnAvailableView());
     }
+    // switch (type) {
+    //   case NotificationType.chat:
+    //     var result = await FirebaseService.instance!.getChatWithChatId(gid);
+    //     if (result != null) {
+    //       GeneralManager.navigationS.back();
+    //       await GeneralManager.navigationS.navigateToView(ChatMessageView(
+    //         chat: result,
+    //         isCreated: false,
+    //       ));
+    //     } else {}
+    //     break;
+    //   default:
+    //     GeneralManager.navigationS.back();
+    //     await GeneralManager.navigationS.navigateToView(UnAvailableView());
+    // }
   }
-
-  // Future<void> navigateCommentView(bool isComment, String gid,
-  //     CommentType commentType, String? title) async {
-  //   if (isComment) {
-  //     await _context.navigateTo(CommentsView(
-  //       gid: gid,
-  //       type: commentType,
-  //       title: title,
-  //     ));
-  //   }
-  // }
-
 }

@@ -53,16 +53,16 @@ class QuestionsViewModel extends BaseViewModel {
 
 
   init() async {
-    isLoading = true;
-    universityList = await GeneralManager.authS.getAllUniversity();
-    isLoading = false;
-    
     setInitialised(false);
     data = await Hive.openBox(HiveBox.data.name);
     if(!data.containsKey(HiveBoxKey.questions.name)){
       await data.put(HiveBoxKey.questions.name, []);
     }
     setInitialised(true);
+    notifyListeners();
+    isLoading = true;
+    universityList = await GeneralManager.authS.getAllUniversity();
+    isLoading = false;
     timer = Timer.periodic(Duration(seconds: 100), (Timer t) {
       newQuestionSzieCalculate();
     });

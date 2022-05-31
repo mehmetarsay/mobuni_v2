@@ -7,6 +7,7 @@ import 'package:mobuni_v2/feature/models/questions/question_model.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
 import 'package:mobuni_v2/feature/views/profile/service/profile_service.dart';
 import 'package:stacked/stacked.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart' as refresh;
 
 
 
@@ -16,6 +17,9 @@ class ProfileViewModel extends BaseViewModel {
   ProfileService profileService = locator<ProfileService>();
 
   GeneralType _selectListType = GeneralType.QuestionType;
+
+  refresh.RefreshController refreshController =
+  refresh.RefreshController(initialRefresh: false);
 
   GeneralType get selectListType => _selectListType;
 
@@ -65,5 +69,6 @@ class ProfileViewModel extends BaseViewModel {
       activities =[];
     }
     SetQALoading(true);
+    refreshController.refreshCompleted();
   }
 }

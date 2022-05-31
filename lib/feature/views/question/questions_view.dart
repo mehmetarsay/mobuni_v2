@@ -136,7 +136,7 @@ class QuestionsView extends StatelessWidget {
                       ListView.builder(
                         primary: false,
                         shrinkWrap: true,
-                        padding: EdgeInsets.only(left: 12, right: 12),
+                        padding: EdgeInsets.only(left: 6, right: 6),
                         itemCount: box.get(HiveBoxKey.questions.name).length,
                         itemBuilder: (context, index) {
                           return QuestionSingleView(
@@ -151,7 +151,10 @@ class QuestionsView extends StatelessWidget {
                                 ),
                               )!
                                   .then((value) async {
-                                // await viewModel.getQuestions();
+                                List list = box.get(HiveBoxKey.questions.name);
+                                list[index] = value;
+                                viewModel.data.put(HiveBoxKey.questions.name, list);
+                                viewModel.notifyListeners();
                               });
                             },
                           );

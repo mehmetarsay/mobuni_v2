@@ -1,4 +1,6 @@
+import 'dart:io';
 
+import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:mobuni_v2/app/app.dart';
 import 'package:mobuni_v2/core/constants/enum/activity_or_question_enum.dart';
@@ -16,56 +18,68 @@ import 'package:mobuni_v2/feature/views/comments/widget/comment_widget.dart';
 import 'package:stacked/stacked.dart';
 
 class CommentView extends StatelessWidget {
-  const CommentView({Key? key, this.questionModel,this.activityModel}) : super(key: key);
+  const CommentView({Key? key, this.questionModel, this.activityModel}) : super(key: key);
   final QuestionModel? questionModel;
   final ActivityModel? activityModel;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CommentViewModel>.reactive(
-      viewModelBuilder: () => CommentViewModel(),
-      onModelReady: (model) => model.init(context, question: questionModel,activity: activityModel),
-      builder: (context, vm, child) =>
-          WillPopScope(
-            onWillPop: () async{
-              context.navigationService.back(result: vm.activity);
-              return true;
+        viewModelBuilder: () => CommentViewModel(),
+        onModelReady: (model) => model.init(context, question: questionModel, activity: activityModel),
+        builder: (context, vm, child) {
+          return ConditionalWillPopScope(
+            onWillPop: () async {
+              if (vm.generalType == GeneralType.QuestionType) {
+                context.navigationService.back(result: vm.question);
+              } else {
+                context.navigationService.back(result: vm.activity);
+              }
+              return false;
             },
-            child: SafeArea(
-                child: Scaffold(
-                  appBar: AppBar(),
-                    body: vm.initialised?CommentBoxRfct(
-                  userImage: GeneralManager.user.image==''?null:GeneralManager.user.image,
+            shouldAddCallback: true,
+            child: view(vm, context),
+          );
+        });
+  }
+
+  SafeArea view(CommentViewModel vm, BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(),
+          body: vm.initialised
+              ? CommentBoxRfct(
+                  userImage: GeneralManager.user.image == '' ? null : GeneralManager.user.image,
                   labelText: 'Cevap yaz...',
                   withBorder: false,
                   errorText: 'Boş cevap gönderilemez',
                   child: Padding(
-                    padding:  vm.generalType==GeneralType.QuestionType ? EdgeInsets.all(8.0) : EdgeInsets.zero,
+                    padding: vm.generalType == GeneralType.QuestionType ? EdgeInsets.all(8.0) : EdgeInsets.zero,
                     child: SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
-                      child: vm.generalType==GeneralType.QuestionType?Column(
-                        children: [
-                          QuestionSingleView(
-                            questionModel: questionModel!,
-                          ),
-                          Divider(),
-                          getCommentWidget(vm),
-
-                        ],
-                      ):
-                      Column(
-                        children: [
-                          ActivitySingleView(
-                            activity: vm.activity!,
-                            onTapJoin: (val){
-                              vm.activity = val;
-                              vm.notifyListeners();
-                            },
-                          ),
-                          Divider(),
-                          getCommentWidget(vm),
-                        ],
-                      ),
+                      child: vm.generalType == GeneralType.QuestionType
+                          ? Column(
+                              children: [
+                                QuestionSingleView(
+                                  questionModel: questionModel!,
+                                ),
+                                Divider(),
+                                getCommentWidget(vm),
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                ActivitySingleView(
+                                  activity: vm.activity!,
+                                  onTapJoin: (val) {
+                                    vm.activity = val;
+                                    vm.notifyListeners();
+                                  },
+                                ),
+                                Divider(),
+                                getCommentWidget(vm),
+                              ],
+                            ),
                     ),
                   ),
                   header: Container(),
@@ -84,9 +98,8 @@ class CommentView extends StatelessWidget {
                             child: CircularProgressIndicator(),
                           ),
                         ),
-                ):Container()),
-              ),
-          ),
+                )
+              : Container()),
     );
   }
 
@@ -95,20 +108,19 @@ class CommentView extends StatelessWidget {
       future: vm.getComment(),
       builder: (context, AsyncSnapshot<List<CommentModel>> comments) {
         if (comments.hasData) {
-          if(comments.data!.isEmpty){
+          if (comments.data!.isEmpty) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 50,),
+                SizedBox(
+                  height: 50,
+                ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     vm.focusNode.requestFocus();
                   },
                   child: Column(
-                    children: [
-                      Text('İlk cevabı sen yaz...'),
-                      Icon(Icons.arrow_circle_down_rounded)
-                    ],
+                    children: [Text('İlk cevabı sen yaz...'), Icon(Icons.arrow_circle_down_rounded)],
                   ),
                 )
               ],
@@ -119,7 +131,6 @@ class CommentView extends StatelessWidget {
             shrinkWrap: true,
             padding: const EdgeInsets.only(left: 20, top: 15),
             itemCount: comments.data!.length,
-
             itemBuilder: (BuildContext context, int index) {
               return CommentWidget(
                 commentModel: comments.data!.elementAt(index),
@@ -130,7 +141,9 @@ class CommentView extends StatelessWidget {
         } else {
           return Column(
             children: [
-              SizedBox(height: 25,),
+              SizedBox(
+                height: 25,
+              ),
               Center(
                 child: CircularProgressIndicator(),
               ),

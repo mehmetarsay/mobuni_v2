@@ -16,7 +16,11 @@ class _CustomPhotoViewState extends State<CustomPhotoView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      // onTap: (){
+      //   context.navigationService.back();
+      // },
+      onVerticalDragDown: (details){
+        if(details.globalPosition.dy<300)
         context.navigationService.back();
       },
       child: Container(
@@ -26,6 +30,7 @@ class _CustomPhotoViewState extends State<CustomPhotoView> {
         child: Hero(
           tag: widget.imageTag,
           child: InteractiveViewer(
+
             child: CachedImage(
               imageUrl: widget.imageUrl,
               onTapShowImage: false,

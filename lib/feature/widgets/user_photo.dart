@@ -67,37 +67,39 @@ class UserPhoto extends StatelessWidget {
             );
     } else {
       return url != null && url != ''
-          ? CachedNetworkImage(
-              imageUrl: url!,
-              imageBuilder: (context, imageProvider) => Container(
-                width: size,
-                height: size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+          ? GestureDetector(
+            child: CachedNetworkImage(
+                imageUrl: url!,
+                imageBuilder: (context, imageProvider) => Container(
+                  width: size,
+                  height: size,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image:
+                        DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                  ),
                 ),
-              ),
-              placeholder: (context, url) => Shimmer.fromColors(
-                highlightColor: context.theme.primaryColorLight.withOpacity(0.1),
-                baseColor: context.theme.primaryColorDark.withOpacity(0.1),
-                child: Container(
+                placeholder: (context, url) => Shimmer.fromColors(
+                  highlightColor: context.theme.primaryColorLight.withOpacity(0.1),
+                  baseColor: context.theme.primaryColorDark.withOpacity(0.1),
+                  child: Container(
+                    width: size,
+                    height: size,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
                   width: size,
                   height: size,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                   ),
+                  child: Icon(Icons.error),
                 ),
               ),
-              errorWidget: (context, url, error) => Container(
-                width: size,
-                height: size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.error),
-              ),
-            )
+          )
           : Container(
               width: size,
               height: size,

@@ -9,6 +9,7 @@ import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/views/activity/activity_add/activity_add_view.dart';
 import 'package:mobuni_v2/feature/views/activity/activity_view_model.dart';
 import 'package:mobuni_v2/feature/views/activity/widgets/activity_single_view.dart';
+import 'package:mobuni_v2/feature/views/comments/comment_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:stacked/stacked.dart';
 
@@ -123,10 +124,20 @@ class ActivityView extends StatelessWidget {
                     return ActivitySingleView(
                       activity: box.get(HiveBoxKey.activities.name)[index],
                       onTapJoin: (val){
-                       List list = box.get(HiveBoxKey.activities.name);
-                       list[index] = val;
-                       viewModel.data.put(HiveBoxKey.activities.name, list);
-                       viewModel.notifyListeners();
+                        List list = box.get(HiveBoxKey.activities.name);
+                        list[index] = val;
+                        viewModel.data.put(HiveBoxKey.activities.name, list);
+                        viewModel.notifyListeners();
+                      },
+                      onTap: (){
+                        context.navigationService.navigateToView(
+                          CommentView(activityModel: box.get(HiveBoxKey.activities.name)[index]),
+                        )!.then((value) async{
+                          List list = box.get(HiveBoxKey.activities.name);
+                          list[index] = value;
+                          viewModel.data.put(HiveBoxKey.activities.name, list);
+                          viewModel.notifyListeners();
+                        });
                       },
                     );
                   },

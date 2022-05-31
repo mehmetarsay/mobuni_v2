@@ -46,13 +46,19 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
             width: 6,
           ),
           Container(
-            width: context.width / 1.3,
+            width: context.dynamicWidth(0.75),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.questionModel.user!.userName!,
-                  style: Theme.of(context).textTheme.headline1,
+                GestureDetector(
+                  onTap: (){
+                    context.navigationService.navigateToView(
+                        ProfileView(userId: widget.questionModel.userId));
+                  },
+                  child: Text(
+                    widget.questionModel.user!.userName!,
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
                 ),
                 GestureDetector(
                     onTap: widget.onTap ?? () {},

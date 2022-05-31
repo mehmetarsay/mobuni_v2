@@ -6,11 +6,16 @@ import 'package:mobuni_v2/core/extension/context_extension.dart';
 import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/core/theme/theme_notifier.dart';
 import 'package:mobuni_v2/feature/views/activity/widgets/activity_single_view.dart';
+import 'package:mobuni_v2/feature/views/comments/comment_view.dart';
 import 'package:mobuni_v2/feature/views/profile/profile_view_model.dart';
+import 'package:mobuni_v2/feature/views/profile/subviews/photo_change/photo_change_view.dart';
+import 'package:mobuni_v2/feature/views/profile/widget/profile_empty_widget.dart';
 import 'package:mobuni_v2/feature/views/question/widgets/question_single/question_single_view.dart';
+import 'package:mobuni_v2/feature/widgets/photo/photo_view.dart';
 import 'package:mobuni_v2/feature/widgets/user_photo.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:stacked/stacked.dart';
 
 class ProfileView extends StatelessWidget {
@@ -25,94 +30,108 @@ class ProfileView extends StatelessWidget {
         builder: (context, vm, child) => SafeArea(
               child: Scaffold(
                 body: vm.initialised
-                    ? CustomScrollView(
-                        controller: vm.controller,
-                        physics: BouncingScrollPhysics(),
-                        slivers: <Widget>[
-                          SliverAppBar(
-                            centerTitle: false,
-                            leading: userId != null
-                                ? IconButton(
-                                    onPressed: () {
-                                      context.navigationService.back();
-                                    },
-                                    icon: Icon(Icons.arrow_back_ios),
-                                  )
-                                : Container(),
-                            title: CustomText(
-                              vm.selectListType == GeneralType.ActivityType
-                                  ? 'Etkinlikler'
-                                  : 'Sorular',
-                              style: TextStyle(
-                                  color: context.theme.primaryColorDark,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            pinned: true,
-                            automaticallyImplyLeading: false,
-                            expandedHeight: context.height / 2,
-                            flexibleSpace: FlexibleSpaceBar(
-                              centerTitle: true,
-                              collapseMode: CollapseMode.parallax,
-                              background: sliverBackroundWidget(context, vm),
-                            ),
-                            actions: [
-                              Visibility(
-                                visible: true,
-                                child: IconButton(
-                                    icon: Icon(Icons.logout),
-                                    onPressed: () async {
-                                      GeneralManager.authS.deleteToken;
-                                      GeneralManager.navigationS
-                                          .pushNamedAndRemoveUntil(
-                                              Routes.loginView);
-                                      await OneSignal.shared
-                                          .setExternalUserId('');
-                                    }),
+                    ? SmartRefresher(
+                      controller: vm.refreshController,
+                      enablePullDown: true,
+                      onRefresh: vm.getQuestionAndActivity,
+                      child: CustomScrollView(
+                          controller: vm.controller,
+                          physics: BouncingScrollPhysics(),
+                          slivers: <Widget>[
+                            SliverAppBar(
+                              centerTitle: false,
+                              leading: userId != null
+                                  ? IconButton(
+                                      onPressed: () {
+                                        context.navigationService.back();
+                                      },
+                                      icon: Icon(Icons.arrow_back_ios),
+                                    )
+                                  : Container(),
+                              title: CustomText(
+                                vm.selectListType == GeneralType.ActivityType
+                                    ? 'Etkinlikler'
+                                    : 'Sorular',
+                                style: TextStyle(
+                                    color: context.theme.primaryColorDark,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
                               ),
-                              IconButton(
-                                icon: Icon(
-                                  context.watch<ThemeNotifier>().darkTheme!
-                                      ? Icons.light_mode
-                                      : Icons.dark_mode,
+                              pinned: true,
+                              automaticallyImplyLeading: false,
+                              expandedHeight: context.height / 2,
+                              flexibleSpace: FlexibleSpaceBar(
+                                centerTitle: true,
+                                collapseMode: CollapseMode.parallax,
+                                background: sliverBackroundWidget(context, vm),
+                              ),
+                              actions: [
+                                Visibility(
+                                  visible: userId==null,
+                                  child: IconButton(
+                                      icon: Icon(Icons.logout),
+                                      onPressed: () async {
+                                        GeneralManager.authS.deleteToken;
+                                        GeneralManager.navigationS
+                                            .pushNamedAndRemoveUntil(
+                                                Routes.loginView);
+                                        await OneSignal.shared
+                                            .setExternalUserId('');
+                                      }),
                                 ),
-                                onPressed: () =>
-                                    context.read<ThemeNotifier>().toggleTheme(),
-                              ),
-                            ],
-                          ),
-                          vm.selectListType == GeneralType.QuestionType
-                              ? SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                    (_, int index) {
-                                      return QuestionSingleView(
-                                        questionModel:
-                                            vm.questions!.elementAt(index),
-                                      );
-                                    },
-                                    childCount: vm.questions!.length,
+                                Visibility(
+                                  visible:  userId==null,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      context.watch<ThemeNotifier>().darkTheme!
+                                          ? Icons.light_mode
+                                          : Icons.dark_mode,
+                                    ),
+                                    onPressed: () =>
+                                        context.read<ThemeNotifier>().toggleTheme(),
                                   ),
-                                )
-                              : SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                    (_, int index) {
-                                      return ActivitySingleView(
-                                        activity:
-                                            vm.activities!.elementAt(index),
-                                        onTapJoin: (val){
-                                          vm.activities![index] = val;
-                                          vm.notifyListeners();
-                                        },
-                                      );
-                                    },
-                                    childCount: vm.activities!.length,
-                                  ),
-                                )
-                        ],
-                      )
-                    : Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                                ),
+                              ],
+                            ),
+                            vm.selectListType == GeneralType.QuestionType
+                                ? SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (_, int index) {
+                                        return QuestionSingleView(
+                                          questionModel:
+                                              vm.questions!.elementAt(index),
+                                        );
+                                      },
+                                      childCount: vm.questions!.length,
+                                    ),
+                                  )
+                                : SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (_, int index) {
+                                        return ActivitySingleView(
+                                          activity:
+                                              vm.activities!.elementAt(index),
+                                          onTapJoin: (val){
+                                            vm.activities![index] = val;
+                                            vm.notifyListeners();
+                                          },
+                                          onTap: (){
+                                            context.navigationService.navigateToView(
+                                              CommentView(activityModel:vm.activities![index] ),
+                                            )!.then((value) async{
+                                              vm.activities![index] = value;
+                                              vm.notifyListeners();
+                                            });
+                                          },
+                                        );
+                                      },
+                                      childCount: vm.activities!.length,
+                                    ),
+                                  )
+                          ],
+                        ),
+                    )
+                    : ProfileEmmptyWidget()
               ),
             ));
   }
@@ -138,9 +157,31 @@ class ProfileView extends StatelessWidget {
             /// profil fotoğrafı
             Stack(
               children: [
-                UserPhoto(
-                  size: context.height / 6,
-                  url: vm.viewUser.image,
+                GestureDetector(
+                  onTap: ()async{
+                    if(userId!=null){
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder: (BuildContext context, _, __) =>
+                              CustomPhotoView(
+                                imageUrl: vm.viewUser.image!,
+                                imageTag: vm.viewUser.image!,
+                              ),
+                        ),
+                      );
+                    }
+                    else{
+                      await context.navigationService.navigateToView(PhotoChangeView(imageUrl:GeneralManager.user.image))!.then((value) {
+                        vm.notifyListeners();
+                      });
+                    }
+                  },
+                  child: UserPhoto(
+                    size: context.height / 6,
+                    url: vm.viewUser.image,
+                    currentUser: userId==null,
+                  ),
                 ),
                 if (userId == null)
                   Positioned(

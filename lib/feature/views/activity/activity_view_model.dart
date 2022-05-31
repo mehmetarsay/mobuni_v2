@@ -165,6 +165,8 @@ class ActivityViewModel extends BaseViewModel {
     }
   }
 
+
+
   ///Filter
   List<ActivityCategoryModel> categories = [];
   List universityList = [];

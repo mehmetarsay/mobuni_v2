@@ -7,7 +7,6 @@ import 'package:image_pickers/image_pickers.dart';
 import 'package:mobuni_v2/feature/models/messaging/message.dart';
 import 'package:mobuni_v2/feature/models/messaging/user_chat_info.dart';
 import 'package:mobuni_v2/feature/views/chat/service/firebase_service.dart';
-import 'package:ntp/ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:uuid/uuid.dart';
 
@@ -28,7 +27,7 @@ class ChatMediaPreviewViewModel extends StreamViewModel {
   ChatMediaPreviewViewModel(this.context, this.chat, this.mediaList);
 
   // @override
-  // // TODO: implement stream
+  // TODO: implement stream
   // Stream<DocumentSnapshot<Map<String, dynamic>>> get stream =>
   //     FirebaseService.instance!.getUserChatInfo(chat!.receiverUser!.gid!);
 
@@ -43,7 +42,7 @@ class ChatMediaPreviewViewModel extends StreamViewModel {
     (data as QuerySnapshot<Map<String, dynamic>>).docs.map((e) {
       var userChatInfo = UserChatInfo.fromJson(e.data());
       if (userChatInfo.currentChatId != chat!.id) {
-        userList.add(userChatInfo.userId);
+        userList.add(userChatInfo.id);
       }
     }).toList();
     return userList;
@@ -76,7 +75,7 @@ class ChatMediaPreviewViewModel extends StreamViewModel {
           sender: GeneralManager.user.id,
           receiverList: receiverList,
           isReadMap: isReadList,
-          time: await NTP.now());
+          time: DateTime.now());
       await FirebaseService.instance!.sendChatImageMessage(
           chat!.id!, msg, mediaList!, inactiveUsersInThisChat);
       isLoading = false;

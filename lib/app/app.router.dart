@@ -188,9 +188,8 @@ class CommentViewArguments {
 class CustomPhotoViewArguments {
   final Key? key;
   final String imageUrl;
-  final String imageTag;
-  CustomPhotoViewArguments(
-      {this.key, required this.imageUrl, required this.imageTag});
+  final String? imageTag;
+  CustomPhotoViewArguments({this.key, required this.imageUrl, this.imageTag});
 }
 
 /// ChatHomeView arguments holder class

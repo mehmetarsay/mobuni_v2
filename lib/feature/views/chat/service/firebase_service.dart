@@ -11,7 +11,6 @@ import 'package:mobuni_v2/core/manager/general_manager.dart';
 import 'package:mobuni_v2/feature/models/messaging/chat.dart';
 import 'package:mobuni_v2/feature/models/messaging/message.dart';
 import 'package:mobuni_v2/feature/models/user/user_model.dart';
-import 'package:ntp/ntp.dart';
 import 'package:uuid/uuid.dart';
 
 class FirebaseService {
@@ -204,7 +203,7 @@ class FirebaseService {
           id: docRef.id,
           type: chatType.index,
           users: userList,
-          updateTime: await NTP.now(),
+          updateTime: DateTime.now(),
           groupName: groupName,
           groupDesc: groupDesc,
           groupFounder: GeneralManager.user.id!);
@@ -278,7 +277,7 @@ class FirebaseService {
       });
     }
     chat.lastMessage = message;
-    chat.updateTime = await NTP.now();
+    chat.updateTime = DateTime.now();
     await chatRef.reference.update(chat.toJson());
   }
 

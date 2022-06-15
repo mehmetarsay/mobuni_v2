@@ -22,8 +22,7 @@ class QuestionsView extends StatelessWidget {
     return ViewModelBuilder<QuestionsViewModel>.reactive(
       onModelReady: (vm) => vm.init(),
       viewModelBuilder: () => QuestionsViewModel(),
-      builder: (context, vm, child) => vm.initialised
-          ? Scaffold(
+      builder: (context, vm, child) =>  Scaffold(
               appBar: CustomAppBar(
                 title: 'Sorular',
                 actions: [
@@ -52,7 +51,8 @@ class QuestionsView extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              body: Stack(
+              body: vm.initialised
+          ? Stack(
                 children: [
                   listQuestions(vm, context),
                   if (vm.newQuestionSize != 0)
@@ -81,9 +81,9 @@ class QuestionsView extends StatelessWidget {
                       ),
                     ),
                 ],
-              ),
+              ) : Container(),
             )
-          : Container(),
+          ,
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobuni_v2/app/app.router.dart';
 import 'package:mobuni_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:mobuni_v2/core/components/text/custom_text.dart';
 import 'package:mobuni_v2/core/constants/enum/hive_enum.dart';
@@ -33,6 +34,12 @@ class ActivityView extends StatelessWidget {
             vm.refreshController.requestRefresh();
           });
         }, icon: Icon(Icons.filter_list_sharp)),
+        IconButton(
+                      icon: Icon(Icons.message),
+                      onPressed: () {
+                        GeneralManager.navigationS
+                            .navigateTo(Routes.chatHomeView);
+                      })
       ],),
       floatingActionButton: GeneralManager.user.isUniversityStudent!?FloatingActionButton(
         heroTag: 'activity',

@@ -25,7 +25,7 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 0, top: 5, bottom: 0),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 0),
       child: Container(
           child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -45,58 +45,60 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
           SizedBox(
             width: 6,
           ),
-          Container(
-            width: context.dynamicWidth(0.75),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: (){
-                    context.navigationService.navigateToView(
-                        ProfileView(userId: widget.questionModel.userId));
-                  },
-                  child: Text(
-                    widget.questionModel.user!.userName!,
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                ),
-                GestureDetector(
-                    onTap: widget.onTap ?? () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(widget.questionModel.text!),
-                    )),
-                if (!widget.questionModel.user!.isUniversityStudent!)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        CustomText(
-                          widget.questionModel.university!.name,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        CustomText(
-                          widget.questionModel.department != null
-                              ? widget.questionModel.department!.name
-                              : 'Genel',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ],
+          Expanded(
+            child: Container(
+              // width: context.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      context.navigationService.navigateToView(
+                          ProfileView(userId: widget.questionModel.userId));
+                    },
+                    child: Text(
+                      widget.questionModel.user!.userName!,
+                      style: Theme.of(context).textTheme.headline1,
                     ),
                   ),
-                if (widget.questionModel.image != null &&
-                    widget.questionModel.image != '')
-                  photoWidget(),
-                SizedBox(
-                  height: 25,
-                ),
-                likeCommentWidget(context),
-                timeWidget(context),
-                SizedBox(
-                  height: 15,
-                ),
-              ],
+                  GestureDetector(
+                      onTap: widget.onTap ?? () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(widget.questionModel.text!),
+                      )),
+                  if (!widget.questionModel.user!.isUniversityStudent!)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          CustomText(
+                            widget.questionModel.university!.name,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          CustomText(
+                            widget.questionModel.department != null
+                                ? widget.questionModel.department!.name
+                                : 'Genel',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (widget.questionModel.image != null &&
+                      widget.questionModel.image != '')
+                    photoWidget(),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  likeCommentWidget(context),
+                  timeWidget(context),
+                  SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -186,7 +188,7 @@ class _QuestionSingleViewState extends State<QuestionSingleView> {
       padding: const EdgeInsets.only(top: 10),
       child: CachedImage(
         imageUrl: widget.questionModel.image!,
-        height: context.height / 3.5,
+        height: context.height / 2.5,
         width: context.width / 1.1,
         borderRadiusGeometry: BorderRadius.all(Radius.circular(10)),
       ),

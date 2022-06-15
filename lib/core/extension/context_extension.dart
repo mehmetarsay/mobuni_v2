@@ -7,7 +7,7 @@ extension ContextExtension on BuildContext {
 }
 
 extension MediaQueryExtension on BuildContext {
-  double get height => mediaQuery.size.height;
+  double get height => mediaQuery.size.height > mediaQuery.size.width ? mediaQuery.size.height : mediaQuery.size.width;
   double get width => mediaQuery.size.width;
 
   double get screenHeight =>
@@ -82,3 +82,12 @@ extension NavigateExtension on BuildContext {
   // Future navigateNamedAndRemoveUntil(String routeName) async =>
   //     Navigator.pushNamedAndRemoveUntil(this, routeName, (r) => false);
 }
+
+extension IntExtension on int {
+  int get besKati => this * 5;
+}
+
+void test(){
+  print(7.besKati);
+}
+

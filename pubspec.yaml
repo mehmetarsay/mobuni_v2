@@ -58,7 +58,6 @@ dependencies:
   material_design_icons_flutter: ^5.0.6595
   badges: ^2.0.2
   date_format: ^2.0.6
-  ntp: ^2.0.0
   image_pickers: ^2.0.0+2
   url_launcher: ^6.1.2
   file_picker: ^4.5.1
@@ -70,6 +69,8 @@ dependencies:
   modal_bottom_sheet: ^2.0.1
   top_snackbar_flutter: ^1.1.1
   cupertino_will_pop_scope: ^1.2.0
+  timezone: ^0.8.0
+  flutter_native_timezone: ^2.0.0
 
 
 

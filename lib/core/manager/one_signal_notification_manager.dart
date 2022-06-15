@@ -170,7 +170,7 @@ class OneSignalNotificationManager {
   Future navigateView(Map<String, dynamic> data) async {
     final type = (data['notificationType'] as int).intToNotificationType;
     final gid = data['gid'];
-    final dataId = int.parse(data['dataId']);
+    final dataId = data['dataId'] != null ? int.parse(data['dataId']) : 0;
     // final bool isComment = data['isComment'] ?? false;
     unawaited(showDialog(
         context: _context,

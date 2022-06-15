@@ -37,7 +37,7 @@ class LoginView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTitle(title: 'MobUni', size: 36),
-                      CustomTitle(title: 'Welcome'),
+                      CustomTitle(title: 'Hoşgeldiniz'),
                     ],
                   ),
                 ),
@@ -52,13 +52,13 @@ class LoginView extends StatelessWidget {
                   ),
                   CustomTextFormField(
                     controller: vm.password,
-                    hintText: 'Password',
+                    hintText: 'Şifre',
                     isPassword: true,
                     validator: Validators.notEmpty,
                   ),
                   SizedBox(height: 20),
                   CustomButton(
-                    text: 'Sign In',
+                    text: 'Giriş Yap',
                     onPressed: () => vm.login(context),
                   ),
                   Padding(
@@ -66,9 +66,9 @@ class LoginView extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomTextButton(text: 'Forgot Your Password?'),
+                        CustomTextButton(text: 'Şifrenizi mi unuttunuz?'),
                         CustomTextButton(
-                          text: 'Sign Up',
+                          text: 'Kayıt Ol',
                           onPressed: () => context.navigationService
                               .navigateToView(RegisterView()),
                         )

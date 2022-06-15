@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:image_pickers/image_pickers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:uuid/uuid.dart';
-import 'package:ntp/ntp.dart';
 
 class ChatMessageViewModel extends MultipleStreamViewModel {
   late BuildContext context;
@@ -149,7 +148,7 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
         .map((e) {
       var userChatInfo = UserChatInfo.fromJson(e.data());
       if (userChatInfo.currentChatId != chat.id) {
-        userList.add(userChatInfo.userId);
+        userList.add(userChatInfo.id);
       }
     }).toList();
     return userList;
@@ -243,7 +242,7 @@ class ChatMessageViewModel extends MultipleStreamViewModel {
           isReadMap: isReadList,
           fileName: fileName,
           filePath: filePath,
-          time: await NTP.now());
+          time: DateTime.now());
       chatTextController.clear();
       await FirebaseService.instance!
           .sendChatFileMessage(chat.id!, msg, inactiveUsersInThisChat);

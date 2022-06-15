@@ -38,47 +38,47 @@ class RegisterView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTitle(title: 'MobUni', size: 36),
-                      CustomTitle(title: 'Register'),
+                      CustomTitle(title: 'Kayıt Ol'),
                     ],
                   ),
                 ),
               ),
               CustomTextFormField(
                 controller: vm.name,
-                hintText: 'Name',
+                hintText: 'İsim',
                 validator: Validators.notEmpty,
               ),
               CustomTextFormField(
                 controller: vm.surname,
-                hintText: 'Surname',
+                hintText: 'Soyisim',
                 validator: Validators.notEmpty,
               ),
               CustomTextFormField(
                 controller: vm.userName,
-                hintText: 'Username',
+                hintText: 'Kullanıcı Adı',
                 validator: Validators.notEmpty,
               ),
               CustomTextFormField(
                 controller: vm.email,
-                hintText: 'Email Address',
+                hintText: 'Email Adresi',
                 validator: Validators.emailValidator,
                 textInputType: TextInputType.emailAddress,
               ),
               CustomTextFormField(
                 controller: vm.password,
-                hintText: 'Password',
+                hintText: 'Şifre',
                 validator: Validators.notEmpty,
                 isPassword: true,
               ),
               CustomTextFormField(
                 controller: vm.passwordAgain,
-                hintText: 'Password again',
+                hintText: 'Şifre tekrar',
                 validator: Validators.notEmpty,
                 isPassword: true,
               ),
               CheckboxListTile(
                 title: CustomText(
-                  'I am university student',
+                  'Üniversite öğrencisiyim',
                   color: context.colors.primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -93,13 +93,13 @@ class RegisterView extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomDropdown(
-                      labelText: 'University',
+                      labelText: 'Üniversite',
                       items: vm.universityList,
                       isLoading: vm.isLoading,
                       voidCallback: (value) => vm.universityId = value as int,
                     ),
                     CustomDropdown(
-                      labelText: 'Department',
+                      labelText: 'Bölüm',
                       items: vm.departmentList,
                       isLoading: vm.isLoading,
                       voidCallback: (value) => vm.departmentId = value as int,
@@ -109,7 +109,7 @@ class RegisterView extends StatelessWidget {
               ),
               SizedBox(height: 20),
               CustomButton(
-                text: 'Register',
+                text: 'Kayıt Ol',
                 onPressed: () => vm.register(context),
               ),
             ],

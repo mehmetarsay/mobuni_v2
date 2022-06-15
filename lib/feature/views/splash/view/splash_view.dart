@@ -12,7 +12,7 @@ class SplashView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         body: Scaffold(
           body: Center(
-            child: Text('Mobuni'),
+            child: Image.asset('assets/logo_new.png'),
           ),
         ),
       ),

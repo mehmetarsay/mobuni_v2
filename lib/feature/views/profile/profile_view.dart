@@ -40,6 +40,7 @@ class ProfileView extends StatelessWidget {
                           slivers: <Widget>[
                             SliverAppBar(
                               centerTitle: false,
+                              
                               leading: userId != null
                                   ? IconButton(
                                       onPressed: () {
@@ -47,7 +48,7 @@ class ProfileView extends StatelessWidget {
                                       },
                                       icon: Icon(Icons.arrow_back_ios),
                                     )
-                                  : Container(),
+                                  : null,
                               title: CustomText(
                                 vm.selectListType == GeneralType.ActivityType
                                     ? 'Etkinlikler'
@@ -59,7 +60,7 @@ class ProfileView extends StatelessWidget {
                               ),
                               pinned: true,
                               automaticallyImplyLeading: false,
-                              expandedHeight: context.height / 2,
+                              expandedHeight: context.height / 1.9,
                               flexibleSpace: FlexibleSpaceBar(
                                 centerTitle: true,
                                 collapseMode: CollapseMode.parallax,
@@ -153,7 +154,6 @@ class ProfileView extends StatelessWidget {
             SizedBox(
               height: context.height / 20,
             ),
-
             /// profil fotoğrafı
             Stack(
               children: [
@@ -166,7 +166,7 @@ class ProfileView extends StatelessWidget {
                           pageBuilder: (BuildContext context, _, __) =>
                               CustomPhotoView(
                                 imageUrl: vm.viewUser.image!,
-                                imageTag: vm.viewUser.image!,
+                                imageTag: vm.viewUser.image.hashCode.toString(),
                               ),
                         ),
                       );

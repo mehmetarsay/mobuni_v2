@@ -99,7 +99,7 @@ class UnReadInfo extends BaseModel {
   UnReadInfo({this.unReadMessage});
 
   void counter() {
-    print('counter' + unReadMessage.toString() );
+    // print('counter' + unReadMessage.toString() );
     this.unReadMessage = (unReadMessage ?? 0) + 1;
   }
 

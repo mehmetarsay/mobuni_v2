@@ -7,7 +7,7 @@ part 'user_chat_info.g.dart';
 
 @JsonSerializable()
 class UserChatInfo extends BaseModel{
-  String? userId;
+  String? id;
   bool? isOnline;
   @JsonKey(fromJson: dateTimeFromTimestamp, toJson: dateTimeToTimestamp, disallowNullValue: false)
   DateTime? lastSeen;
@@ -15,7 +15,7 @@ class UserChatInfo extends BaseModel{
   List<String>? oneSignalIdList;
 
   UserChatInfo(
-      {this.userId,
+      {this.id,
       this.isOnline,
       this.lastSeen,
       this.currentChatId,
